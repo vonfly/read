@@ -21,6 +21,8 @@ Android Developer Agent 逐文件实现
 对照 Spec 验收标准逐条人工验收
         ↓
 通过后归档 spec + plan 文件
+        ↓
+推送到 GitHub
 ```
 
 ---
@@ -128,6 +130,55 @@ Android Developer Agent 会自动触发，按项目规范生成完整代码。
 将以下文件移至 docs/features/done/ 目录：
 - docs/features/[功能名]-spec.md
 - docs/features/[功能名]-plan.md
+```
+
+---
+
+## Step 5：推送到 GitHub
+
+功能验收通过后，将代码推送到远程仓库：
+
+**提交规范：**
+
+```
+feat([模块名]): 简短描述
+
+## 新增功能
+- 功能点1
+- 功能点2
+
+## 技术实现
+- 使用的技术/架构
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+```
+
+**推送命令：**
+
+```bash
+# 查看变更
+git status
+
+# 添加所有文件
+git add .
+
+# 提交（使用规范格式）
+git commit -m "feat(booklist): 实现书架列表功能
+
+## 新增功能
+- 书架列表展示（3列网格布局）
+- 继续阅读卡片
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
+
+# 推送到远程
+git push origin main
+```
+
+**或者直接让 AI 执行：**
+
+```
+推送代码到 GitHub
 ```
 
 ---
