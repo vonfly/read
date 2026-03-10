@@ -17,6 +17,7 @@ import com.vonfly.read.ui.theme.Background
 @Composable
 fun BookListScreen(
     onNavigateToReader: (String) -> Unit,
+    onNavigateToStore: () -> Unit,
     viewModel: BookListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,6 +48,12 @@ fun BookListScreen(
             onBookLongPress = viewModel::onBookLongPress,
             onDeleteConfirm = viewModel::onDeleteConfirm,
             onDeleteDismiss = viewModel::onDeleteDismiss,
+            onTabClick = { tabIndex ->
+                when (tabIndex) {
+                    1 -> onNavigateToStore()
+                    // 2 -> onNavigateToProfile() // TODO: 我的页面
+                }
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)

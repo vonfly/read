@@ -1,7 +1,9 @@
 package com.vonfly.read.di
 
 import com.vonfly.read.data.repository.BookRepositoryImpl
+import com.vonfly.read.data.repository.StoreRepositoryImpl
 import com.vonfly.read.domain.repository.BookRepository
+import com.vonfly.read.domain.repository.StoreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -26,4 +28,13 @@ abstract class RepositoryModule {
     abstract fun bindBookRepository(
         impl: BookRepositoryImpl
     ): BookRepository
+
+    /**
+     * 绑定书城仓库接口到实现类
+     */
+    @Binds
+    @Singleton
+    abstract fun bindStoreRepository(
+        impl: StoreRepositoryImpl
+    ): StoreRepository
 }

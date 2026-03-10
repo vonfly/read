@@ -47,13 +47,14 @@ fun BookListContent(
     onBookLongPress: (String) -> Unit,
     onDeleteConfirm: (String) -> Unit,
     onDeleteDismiss: () -> Unit,
+    onTabClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         bottomBar = {
             TabBar(
                 selectedIndex = 0,
-                onTabClick = { /* 本期禁用其他 Tab */ }
+                onTabClick = onTabClick
             )
         },
         containerColor = Background
@@ -230,7 +231,8 @@ private fun BookListContentPreview() {
             onBookClick = {},
             onBookLongPress = {},
             onDeleteConfirm = {},
-            onDeleteDismiss = {}
+            onDeleteDismiss = {},
+            onTabClick = {}
         )
     }
 }
@@ -247,7 +249,8 @@ private fun BookListContentEmptyPreview() {
             onBookClick = {},
             onBookLongPress = {},
             onDeleteConfirm = {},
-            onDeleteDismiss = {}
+            onDeleteDismiss = {},
+            onTabClick = {}
         )
     }
 }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.vonfly.read.ui.screen.booklist.BookListScreen
+import com.vonfly.read.ui.screen.bookstore.StoreScreen
 
 @Composable
 fun AppNavHost(
@@ -20,6 +21,22 @@ fun AppNavHost(
                 onNavigateToReader = { bookId ->
                     // TODO: 后续实现阅读器页面后启用
                     // navController.navigate(ReaderRoute(bookId))
+                },
+                onNavigateToStore = {
+                    navController.navigate(StoreRoute) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+        composable<StoreRoute> {
+            StoreScreen(
+                onNavigateToBookDetail = { bookId ->
+                    // TODO: 后续实现书籍详情页后启用
+                    // navController.navigate(BookDetailRoute(bookId))
+                },
+                onNavigateToBookList = {
+                    navController.popBackStack(BookListRoute, inclusive = false)
                 }
             )
         }
