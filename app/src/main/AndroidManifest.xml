@@ -16,6 +16,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:taskAffinity="com.vonfly.read"
             android:theme="@style/Theme.Read">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
