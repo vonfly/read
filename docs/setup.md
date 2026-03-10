@@ -21,7 +21,8 @@
 [versions]
 agp                           = "8.7.3"
 kotlin                        = "2.0.21"
-compose-bom                   = "2026.02.01"
+ksp                           = "2.0.21-1.0.28"
+compose-bom                   = "2025.02.00"
 hilt                          = "2.52"
 navigation                    = "2.8.9"
 room                          = "2.7.1"
@@ -33,7 +34,7 @@ coroutines                    = "1.9.0"
 lifecycle                     = "2.8.7"
 kotlinx-serialization         = "1.7.3"
 kotlinx-collections-immutable = "0.3.8"
-paging                        = "3.4.1"
+paging                        = "3.3.5"
 
 [libraries]
 # Compose BOM（统一管理所有 Compose 子库版本）
@@ -41,6 +42,8 @@ compose-bom                = { group = "androidx.compose", name = "compose-bom",
 compose-ui                 = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-tooling         = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-test-manifest   = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-ui-test-junit4     = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-material3          = { group = "androidx.compose.material3", name = "material3" }
 compose-activity           = { group = "androidx.activity", name = "activity-compose", version = "1.9.3" }
 
@@ -89,6 +92,11 @@ paging-compose             = { group = "androidx.paging", name = "paging-compose
 # Core
 core-ktx                   = { group = "androidx.core", name = "core-ktx", version = "1.15.0" }
 
+# Test
+junit                      = { group = "junit", name = "junit", version = "4.13.2" }
+androidx-junit             = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
+androidx-espresso-core     = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.1" }
+
 [plugins]
 android-application        = { id = "com.android.application", version.ref = "agp" }
 android-library            = { id = "com.android.library", version.ref = "agp" }
@@ -96,9 +104,14 @@ kotlin-android             = { id = "org.jetbrains.kotlin.android", version.ref 
 kotlin-compose             = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization       = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 hilt                       = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-ksp                        = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.28" }
+ksp                        = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room                       = { id = "androidx.room", version.ref = "room" }
 ```
+
+> ⚠️ **注意**：
+> - `ksp` 版本必须在 `[versions]` 中单独定义，格式为 `{kotlinVersion}-{kspVersion}`
+> - `compose-bom` 使用稳定版本 `2025.02.00`，避免使用预览版本
+> - `paging` 使用 `3.3.5`（稳定版本）
 
 ---
 
@@ -115,6 +128,11 @@ plugins {
     alias(libs.plugins.room)
 }
 
+// Kotlin JVM Toolchain - 确保所有 Kotlin 任务使用相同的 JVM 目标
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace = "com.yourcompany.yourapp"
     compileSdk = 35
@@ -125,6 +143,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -139,7 +159,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions { jvmTarget = "17" }
+    // Kotlin 2.0+ 不再需要 kotlinOptions，使用上面的 kotlin { jvmToolchain(17) } 替代
 
     // Compose 编译器必须显式启用
     buildFeatures { compose = true }
@@ -203,12 +223,47 @@ dependencies {
 
     // Core
     implementation(libs.core.ktx)
+
+    // Test
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(composeBom)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
 }
 ```
 
+> ⚠️ **注意**：
+> - Kotlin 2.0+ 已移除 `kotlinOptions`，使用 `kotlin { jvmToolchain(17) }` 替代
+> - `testInstrumentationRunner` 必须在 `defaultConfig` 中声明，否则 Android Test 无法运行
+> - `kotlin { jvmToolchain(17) }` 必须放在 `android {}` 块之前，确保 KSP 和 Kotlin 编译器使用相同的 JVM 目标
+
 ---
 
-## 第四步：`build.gradle.kts`（项目根目录）
+## 第四步：`gradle.properties`（项目根目录）
+
+确保 `gradle.properties` 包含以下配置：
+
+```properties
+# Project-wide Gradle settings.
+org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+
+# Kotlin code style
+kotlin.code.style=official
+
+# AndroidX（必须启用，否则使用 AndroidX 库会报错）
+android.useAndroidX=true
+
+# 非传递 R 类（减少 R 类大小，推荐启用）
+android.nonTransitiveRClass=true
+```
+
+> ⚠️ **重要**：`android.useAndroidX=true` 是必须的，否则使用任何 AndroidX 库（包括 Compose）都会构建失败。
+
+---
+
+## 第五步：`build.gradle.kts`（项目根目录）
 
 ```kotlin
 plugins {
@@ -224,7 +279,7 @@ plugins {
 
 ---
 
-## 第五步：最小可运行代码（4 个文件）
+## 第六步：最小可运行代码（4 个文件）
 
 ### `MyApp.kt`（Application 类）
 
@@ -329,7 +384,7 @@ fun AppNavHost(
 
 ---
 
-## 第六步：验证
+## 第七步：验证
 
 在 Android Studio 中：
 1. **Build → Make Project**（确认无编译错误）
@@ -340,6 +395,8 @@ fun AppNavHost(
 1. `AndroidManifest.xml` 忘记加 `android:name=".MyApp"`
 2. `ksp` 版本与 `kotlin` 版本不匹配（`ksp = "2.0.21-1.0.28"` 对应 `kotlin = "2.0.21"`）
 3. `buildFeatures { compose = true }` 被误删
+4. 使用 AGP 9.0+ 与 Kotlin 2.0+ 插件冲突（本项目使用 AGP 8.7.3 避免此问题）
+5. `compose-bom` 版本不存在（使用稳定版本 `2025.02.00`）
 
 ---
 
