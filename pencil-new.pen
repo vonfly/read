@@ -3345,11 +3345,143 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
+          "id": "FXpjj",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "$--background",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "C8kas",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "6PNTs",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "zycWp",
+              "name": "readingContent1",
+              "width": 375,
+              "height": 618,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "K1pnu",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "iRJG7",
+                  "name": "para2",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    在市局会议室里，汪淼见到了几个陌生人。一个戴眼镜的中年人先开口了：",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "VajYh",
+                  "name": "para3",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    \"汪教授，我是丁仪，理论物理专业。请问您听说过科学边界这个组织吗？\"",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F9nRV",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "TNMPY",
+                  "name": "TimeText",
+                  "fill": "$--foreground-tertiary",
+                  "content": "14:30",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "WladT",
+                  "name": "PageText",
+                  "fill": "$--foreground-tertiary",
+                  "content": "1/128",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
           "id": "32lpu",
+          "x": 0,
+          "y": 0,
           "name": "TopBar",
           "width": 375,
           "height": 72,
@@ -3398,67 +3530,17 @@
               "id": "sATb6",
               "type": "ref",
               "ref": "qI6FJ",
-              "name": "ReadingTopActions"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "zycWp",
-          "name": "readingContent1",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "K1pnu",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "iRJG7",
-              "name": "para2",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    在市局会议室里，汪淼见到了几个陌生人。一个戴眼镜的中年人先开口了：",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "VajYh",
-              "name": "para3",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    \"汪教授，我是丁仪，理论物理专业。请问您听说过科学边界这个组织吗？\"",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "name": "ReadingTopActions",
+              "x": 241,
+              "y": 24
             }
           ]
         },
         {
           "type": "frame",
           "id": "60HKn",
+          "x": 0,
+          "y": 690,
           "name": "BottomBar",
           "width": 375,
           "height": 122,
@@ -3585,6 +3667,8 @@
         {
           "type": "frame",
           "id": "XIJLf",
+          "x": 235,
+          "y": 72,
           "name": "DropdownMenu",
           "width": 120,
           "fill": "$--card",
@@ -3719,65 +3803,95 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "xOg8M",
-          "name": "Header",
+          "id": "djvUL",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
           "width": 375,
-          "height": 72,
+          "height": 812,
+          "fill": "$--background",
           "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "bLnpX",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "2DBZ4",
-          "name": "readingContent",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
-          "children": [
+              "type": "frame",
+              "id": "xOg8M",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bLnpX",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
             {
-              "type": "text",
-              "id": "N9OwM",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "2DBZ4",
+              "name": "readingContent",
+              "width": 375,
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "N9OwM",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "buYmh",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "64iSu",
+          "x": 0,
+          "y": 574,
           "name": "BottomBar",
           "width": 375,
           "height": 238,
@@ -4002,65 +4116,95 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "MIuNC",
-          "name": "Header",
+          "id": "wLDeO",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
           "width": 375,
-          "height": 72,
+          "height": 812,
+          "fill": "$--background",
           "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "vNa5t",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "soJmI",
-          "name": "readingContent",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
-          "children": [
+              "type": "frame",
+              "id": "MIuNC",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vNa5t",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
             {
-              "type": "text",
-              "id": "5Hu6V",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "soJmI",
+              "name": "readingContent",
+              "width": 375,
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "5Hu6V",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "F6XkK",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "qyGJ8",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -4473,65 +4617,95 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "VsDMd",
-          "name": "Header",
+          "id": "nsCUL",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
           "width": 375,
-          "height": 72,
+          "height": 812,
+          "fill": "$--background",
           "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "c7CXQ",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "U8TQC",
-          "name": "readingContent1",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
-          "children": [
+              "type": "frame",
+              "id": "VsDMd",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "c7CXQ",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
             {
-              "type": "text",
-              "id": "Px9OB",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "U8TQC",
+              "name": "readingContent1",
+              "width": 375,
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Px9OB",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "FxoWQ",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "FItXb",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -4805,65 +4979,80 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "UkNmJ",
-          "name": "Header",
+          "id": "iBspK",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
           "width": 375,
-          "height": 72,
+          "height": 812,
+          "fill": "$--background",
           "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "bsvKl",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "ySolw",
-          "name": "readingContent",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
-          "children": [
+              "type": "frame",
+              "id": "UkNmJ",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bsvKl",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
             {
-              "type": "text",
-              "id": "4ID5M",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "ySolw",
+              "name": "readingContent",
+              "width": 375,
+              "height": 10,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "4ID5M",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
             }
           ]
         },
         {
           "type": "frame",
           "id": "9rzHl",
+          "x": 0,
+          "y": 82,
           "name": "BottomBar",
           "width": 375,
           "height": 730,
@@ -5276,12 +5465,143 @@
       "name": "Read-Control-Bar",
       "width": 375,
       "height": 812,
-      "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
+          "id": "vbPOA",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "$--background",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "wdVoc",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pgxO2",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "1QeYT",
+              "name": "Content",
+              "width": 375,
+              "height": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "a5bta",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "2quZ9",
+                  "name": "para2",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    在市局会议室里，汪淼见到了几个陌生人。一个戴眼镜的中年人先开口了：",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "JE5Nz",
+                  "name": "para3",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    \"汪教授，我是丁仪，理论物理专业。请问您听说过科学边界这个组织吗？\"",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Gtip7",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "PsaFA",
+                  "name": "timeText",
+                  "fill": "$--foreground-tertiary",
+                  "content": "14:30",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "Ah7Vw",
+                  "name": "pageText",
+                  "fill": "$--foreground-tertiary",
+                  "content": "1/128",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
           "id": "Y1GAC",
+          "x": 0,
+          "y": 0,
           "name": "TopBar",
           "width": 375,
           "height": 72,
@@ -5336,65 +5656,13 @@
         },
         {
           "type": "frame",
-          "id": "PFI6P",
-          "name": "readingContent1",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "ZzLHP",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "Jw9yE",
-              "name": "para2",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    在市局会议室里，汪淼见到了几个陌生人。一个戴眼镜的中年人先开口了：",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "ZRcgB",
-              "name": "para3",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    \"汪教授，我是丁仪，理论物理专业。请问您听说过科学边界这个组织吗？\"",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "oUMLW",
+          "id": "aKck2",
+          "x": 0,
+          "y": 690,
           "name": "BottomBar",
           "width": 375,
           "height": 122,
-          "fill": "#F9F9F9CC",
+          "fill": "#F9F9F9FF",
           "cornerRadius": [
             16,
             16,
@@ -5428,7 +5696,7 @@
           "children": [
             {
               "type": "frame",
-              "id": "MpOvm",
+              "id": "14VQN",
               "name": "ProgressBar",
               "width": "fill_container",
               "height": 40,
@@ -5444,7 +5712,7 @@
               "children": [
                 {
                   "type": "frame",
-                  "id": "aR1ED",
+                  "id": "Q34jk",
                   "name": "prevBtn",
                   "width": 40,
                   "height": 40,
@@ -5455,7 +5723,7 @@
                   "children": [
                     {
                       "type": "icon_font",
-                      "id": "7Jgnn",
+                      "id": "4WVKY",
                       "name": "prevIcon",
                       "width": 24,
                       "height": 24,
@@ -5466,7 +5734,7 @@
                   ]
                 },
                 {
-                  "id": "iyDXl",
+                  "id": "SmJYi",
                   "type": "ref",
                   "ref": "uZ5JU",
                   "name": "progressTrack",
@@ -5483,7 +5751,7 @@
                 },
                 {
                   "type": "frame",
-                  "id": "M5JJv",
+                  "id": "Samx5",
                   "name": "nextBtn",
                   "width": 40,
                   "height": 40,
@@ -5494,7 +5762,7 @@
                   "children": [
                     {
                       "type": "icon_font",
-                      "id": "JztCX",
+                      "id": "O7Ip5",
                       "name": "nextIcon",
                       "width": 24,
                       "height": 24,
@@ -5507,7 +5775,7 @@
               ]
             },
             {
-              "id": "zSCT6",
+              "id": "d56MP",
               "type": "ref",
               "ref": "LI2k8",
               "name": "bottomControls"
@@ -5525,122 +5793,322 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "6qYK0",
-          "name": "Header",
+          "id": "nANCk",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "$--background",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "6qYK0",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nafHh",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AN1R4",
+              "name": "readingContent1",
+              "width": 375,
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YidgZ",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "ozln8",
+                  "name": "para2",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    在市局会议室里，汪淼见到了几个陌生人。一个戴眼镜的中年人先开口了：",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "6MDaG",
+                  "name": "para3",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    \"汪教授，我是丁仪，理论物理专业。请问您听说过科学边界这个组织吗？\"",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "aJ0Vt",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "b8MPa",
+                  "name": "TimeText",
+                  "fill": "$--foreground-tertiary",
+                  "content": "14:30",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "text",
+                  "id": "qm23F",
+                  "name": "PageText",
+                  "fill": "$--foreground-tertiary",
+                  "content": "1/128",
+                  "fontFamily": "Inter",
+                  "fontSize": 12,
+                  "fontWeight": "normal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "q5D5P",
+          "x": 0,
+          "y": 0,
+          "name": "TopBar",
+          "enabled": false,
           "width": 375,
           "height": 72,
-          "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "nafHh",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "AN1R4",
-          "name": "readingContent1",
-          "width": 375,
-          "height": "fill_container",
-          "layout": "vertical",
-          "gap": 20,
+          "fill": "#F9F9F9CC",
+          "effect": {
+            "type": "background_blur",
+            "radius": 20
+          },
           "padding": [
             0,
             20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "YidgZ",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "ozln8",
-              "name": "para2",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    在市局会议室里，汪淼见到了几个陌生人。一个戴眼镜的中年人先开口了：",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            },
-            {
-              "type": "text",
-              "id": "6MDaG",
-              "name": "para3",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
-              "width": "fill_container",
-              "content": "    \"汪教授，我是丁仪，理论物理专业。请问您听说过科学边界这个组织吗？\"",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "aJ0Vt",
-          "name": "Footer",
-          "width": 375,
-          "height": 24,
-          "padding": [
-            0,
-            24,
-            8,
-            24
           ],
           "justifyContent": "space_between",
           "alignItems": "center",
           "children": [
             {
-              "type": "text",
-              "id": "b8MPa",
-              "name": "TimeText",
-              "fill": "$--foreground-tertiary",
-              "content": "14:30",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "normal"
+              "type": "frame",
+              "id": "QnuNn",
+              "name": "topLeft",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "Wnx6c",
+                  "name": "backBtn",
+                  "width": 24,
+                  "height": 24,
+                  "iconFontName": "chevron-left",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--foreground"
+                },
+                {
+                  "type": "text",
+                  "id": "su0R2",
+                  "name": "bookTitle",
+                  "fill": "$--foreground",
+                  "content": "三体",
+                  "fontFamily": "Inter",
+                  "fontSize": 17,
+                  "fontWeight": "600"
+                }
+              ]
             },
             {
-              "type": "text",
-              "id": "qm23F",
-              "name": "PageText",
-              "fill": "$--foreground-tertiary",
-              "content": "1/128",
-              "fontFamily": "Inter",
-              "fontSize": 12,
-              "fontWeight": "normal"
+              "id": "ovq4s",
+              "type": "ref",
+              "ref": "qI6FJ",
+              "name": "ReadingTopActions"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SvdfD",
+          "x": 0,
+          "y": 690,
+          "name": "BottomBar",
+          "enabled": false,
+          "width": 375,
+          "height": 122,
+          "fill": "#F9F9F9FF",
+          "cornerRadius": [
+            16,
+            16,
+            0,
+            0
+          ],
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "top": 1
+            },
+            "fill": "#E8E8E8"
+          },
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000025",
+            "offset": {
+              "x": 0,
+              "y": 4
+            },
+            "blur": 20
+          },
+          "layout": "vertical",
+          "padding": [
+            16,
+            0,
+            0,
+            0
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "UdeVx",
+              "name": "ProgressBar",
+              "width": "fill_container",
+              "height": 40,
+              "gap": 12,
+              "padding": [
+                0,
+                20,
+                16,
+                20
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "TDBhk",
+                  "name": "prevBtn",
+                  "width": 40,
+                  "height": 40,
+                  "fill": "transparent",
+                  "cornerRadius": 20,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "0O3RJ",
+                      "name": "prevIcon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "chevron-left",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--foreground"
+                    }
+                  ]
+                },
+                {
+                  "id": "HbSus",
+                  "type": "ref",
+                  "ref": "uZ5JU",
+                  "name": "progressTrack",
+                  "width": "fill_container",
+                  "descendants": {
+                    "EflbK": {
+                      "width": 120,
+                      "fill": "#C5C5CA"
+                    },
+                    "4qwUO": {
+                      "x": 95
+                    }
+                  }
+                },
+                {
+                  "type": "frame",
+                  "id": "HlQIW",
+                  "name": "nextBtn",
+                  "width": 40,
+                  "height": 40,
+                  "fill": "transparent",
+                  "cornerRadius": 20,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "uotWl",
+                      "name": "nextIcon",
+                      "width": 24,
+                      "height": 24,
+                      "iconFontName": "chevron-right",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--foreground"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fwwwX",
+              "type": "ref",
+              "ref": "LI2k8",
+              "name": "bottomControls"
             }
           ]
         }
@@ -7468,39 +7936,95 @@
       "width": 375,
       "height": 812,
       "fill": "#1A1A1A",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "JlIHL",
-          "name": "readingContent1",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "Ef4sy",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "#1A1A1A",
           "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "3CcY0",
-              "name": "para1",
-              "fill": "#E5E5E5",
-              "textGrowth": "fixed-width",
+              "type": "frame",
+              "id": "ypavi",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "vEoZq",
+                  "name": "ChapterTitle",
+                  "fill": "#999999",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "JlIHL",
+              "name": "readingContent1",
               "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "3CcY0",
+                  "name": "para1",
+                  "fill": "#E5E5E5",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BEQiz",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "wtUPF",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -7788,32 +8312,6 @@
               }
             }
           ]
-        },
-        {
-          "type": "frame",
-          "id": "ypavi",
-          "name": "Header",
-          "width": 375,
-          "height": 72,
-          "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "vEoZq",
-              "name": "ChapterTitle",
-              "fill": "#999999",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
         }
       ]
     },
@@ -7826,39 +8324,95 @@
       "width": 375,
       "height": 812,
       "fill": "#F5F0E1",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "mRpuZ",
-          "name": "readingContent1",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "3wiib",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "#F5F0E1",
           "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "2WID7",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
+              "type": "frame",
+              "id": "9HG78",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "9tZcn",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "mRpuZ",
+              "name": "readingContent1",
               "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "2WID7",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "tNI3T",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "5LCBq",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -8121,32 +8675,6 @@
               }
             }
           ]
-        },
-        {
-          "type": "frame",
-          "id": "9HG78",
-          "name": "Header",
-          "width": 375,
-          "height": 72,
-          "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "9tZcn",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
         }
       ]
     },
@@ -8159,39 +8687,95 @@
       "width": 375,
       "height": 812,
       "fill": "#FFE4E8",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "Qj8tE",
-          "name": "readingContent1",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "GIF0h",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "#FFE4E8",
           "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "CjphP",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
+              "type": "frame",
+              "id": "NHqGL",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "bdNn6",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Qj8tE",
+              "name": "readingContent1",
               "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "CjphP",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ms002",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "NFC5i",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -8453,32 +9037,6 @@
               }
             }
           ]
-        },
-        {
-          "type": "frame",
-          "id": "NHqGL",
-          "name": "Header",
-          "width": 375,
-          "height": 72,
-          "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "bdNn6",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
         }
       ]
     },
@@ -8491,39 +9049,95 @@
       "width": 375,
       "height": 812,
       "fill": "#E8F5E9",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "ncU7q",
-          "name": "readingContent1",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "xlXaV",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "#E8F5E9",
           "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "AQx2K",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
+              "type": "frame",
+              "id": "Ylvee",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "pB97w",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ncU7q",
+              "name": "readingContent1",
               "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "AQx2K",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "xVxxp",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "lbgJA",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -8785,32 +9399,6 @@
               }
             }
           ]
-        },
-        {
-          "type": "frame",
-          "id": "Ylvee",
-          "name": "Header",
-          "width": 375,
-          "height": 72,
-          "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "pB97w",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
-            }
-          ]
         }
       ]
     },
@@ -8823,39 +9411,95 @@
       "width": 375,
       "height": 812,
       "fill": "#FDF8F0",
-      "layout": "vertical",
+      "layout": "none",
       "children": [
         {
           "type": "frame",
-          "id": "M1TUx",
-          "name": "readingContent1",
-          "width": "fill_container",
-          "height": "fill_container",
+          "id": "tA17q",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "#FDF8F0",
           "layout": "vertical",
-          "gap": 20,
-          "padding": [
-            0,
-            20
-          ],
           "children": [
             {
-              "type": "text",
-              "id": "7W3h4",
-              "name": "para1",
-              "fill": "#333333",
-              "textGrowth": "fixed-width",
+              "type": "frame",
+              "id": "7RsLK",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "DLNlk",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "M1TUx",
+              "name": "readingContent1",
               "width": "fill_container",
-              "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
-              "lineHeight": 1.8,
-              "fontFamily": "Inter",
-              "fontSize": 18,
-              "fontWeight": "normal"
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "7W3h4",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "    汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "lpuwA",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
             }
           ]
         },
         {
           "type": "frame",
           "id": "nYmxy",
+          "x": 0,
+          "y": 540,
           "name": "BottomBar",
           "width": 375,
           "height": 272,
@@ -9113,32 +9757,6 @@
                   "fontWeight": "600"
                 }
               }
-            }
-          ]
-        },
-        {
-          "type": "frame",
-          "id": "7RsLK",
-          "name": "Header",
-          "width": 375,
-          "height": 72,
-          "layout": "vertical",
-          "padding": [
-            28,
-            0,
-            0,
-            20
-          ],
-          "children": [
-            {
-              "type": "text",
-              "id": "DLNlk",
-              "name": "ChapterTitle",
-              "fill": "$--foreground-secondary",
-              "content": "第15章 科学边界(三)",
-              "fontFamily": "Inter",
-              "fontSize": 14,
-              "fontWeight": "500"
             }
           ]
         }
