@@ -5,9 +5,11 @@ import androidx.room.RoomDatabase
 import com.vonfly.read.data.local.dao.BookDao
 import com.vonfly.read.data.local.dao.BookDetailDao
 import com.vonfly.read.data.local.dao.ChapterDao
+import com.vonfly.read.data.local.dao.ReadingProgressDao
 import com.vonfly.read.data.local.entity.BookDetailEntity
 import com.vonfly.read.data.local.entity.BookEntity
 import com.vonfly.read.data.local.entity.ChapterEntity
+import com.vonfly.read.data.local.entity.ReadingProgressEntity
 
 /**
  * 应用 Room 数据库
@@ -19,9 +21,10 @@ import com.vonfly.read.data.local.entity.ChapterEntity
     entities = [
         BookEntity::class,
         BookDetailEntity::class,
-        ChapterEntity::class
+        ChapterEntity::class,
+        ReadingProgressEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -40,4 +43,9 @@ abstract class AppDatabase : RoomDatabase() {
      * 获取章节 DAO
      */
     abstract fun chapterDao(): ChapterDao
+
+    /**
+     * 获取阅读进度 DAO
+     */
+    abstract fun readingProgressDao(): ReadingProgressDao
 }

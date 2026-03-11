@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import com.vonfly.read.ui.screen.bookdetail.BookDetailScreen
 import com.vonfly.read.ui.screen.booklist.BookListScreen
 import com.vonfly.read.ui.screen.bookstore.StoreScreen
+import com.vonfly.read.ui.screen.reader.ReaderScreen
 
 @Composable
 fun AppNavHost(
@@ -35,8 +36,7 @@ fun AppNavHost(
             BookDetailScreen(
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToReader = { bookId ->
-                    // TODO: 后续实现阅读器页面后启用
-                    // navController.navigate(ReaderRoute(bookId))
+                    navController.navigate(ReaderRoute(bookId))
                 },
                 onNavigateToContents = { bookId ->
                     // TODO: 后续实现目录页面后启用
@@ -53,10 +53,10 @@ fun AppNavHost(
                 }
             )
         }
-        // TODO: 阅读器页面
-        // composable<ReaderRoute> {
-        //     val args = it.toRoute<ReaderRoute>()
-        //     ReaderScreen(bookId = args.bookId, onNavigateBack = { navController.popBackStack() })
-        // }
+        composable<ReaderRoute> {
+            ReaderScreen(
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
     }
 }

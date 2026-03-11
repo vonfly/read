@@ -2,9 +2,11 @@ package com.vonfly.read.di
 
 import com.vonfly.read.data.repository.BookDetailRepositoryImpl
 import com.vonfly.read.data.repository.BookRepositoryImpl
+import com.vonfly.read.data.repository.ReadingProgressRepositoryImpl
 import com.vonfly.read.data.repository.StoreRepositoryImpl
 import com.vonfly.read.domain.repository.BookDetailRepository
 import com.vonfly.read.domain.repository.BookRepository
+import com.vonfly.read.domain.repository.ReadingProgressRepository
 import com.vonfly.read.domain.repository.StoreRepository
 import dagger.Binds
 import dagger.Module
@@ -48,4 +50,13 @@ abstract class RepositoryModule {
     abstract fun bindBookDetailRepository(
         impl: BookDetailRepositoryImpl
     ): BookDetailRepository
+
+    /**
+     * 绑定阅读进度仓库接口到实现类
+     */
+    @Binds
+    @Singleton
+    abstract fun bindReadingProgressRepository(
+        impl: ReadingProgressRepositoryImpl
+    ): ReadingProgressRepository
 }

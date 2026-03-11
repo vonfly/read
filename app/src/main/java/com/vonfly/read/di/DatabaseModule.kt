@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.vonfly.read.data.local.AppDatabase
 import com.vonfly.read.data.local.dao.BookDao
+import com.vonfly.read.data.local.dao.ReadingProgressDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,4 +69,11 @@ object DatabaseModule {
     @Provides
     fun provideBookDao(database: AppDatabase): BookDao =
         database.bookDao()
+
+    /**
+     * 提供阅读进度 DAO
+     */
+    @Provides
+    fun provideReadingProgressDao(database: AppDatabase): ReadingProgressDao =
+        database.readingProgressDao()
 }
