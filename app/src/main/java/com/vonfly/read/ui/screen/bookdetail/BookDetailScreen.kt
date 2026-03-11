@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookDetailScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToReader: (String) -> Unit,
     onNavigateToContents: (String) -> Unit,
     viewModel: BookDetailViewModel = hiltViewModel()
 ) {
@@ -32,7 +31,6 @@ fun BookDetailScreen(
                     scope.launch { snackbarHostState.showSnackbar(event.message) }
                 }
                 BookDetailUiEvent.NavigateBack -> onNavigateBack()
-                is BookDetailUiEvent.NavigateToReader -> onNavigateToReader(event.bookId)
                 is BookDetailUiEvent.NavigateToContents -> onNavigateToContents(event.bookId)
             }
         }

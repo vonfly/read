@@ -29,7 +29,6 @@ data class BookDetailUiState(
 sealed class BookDetailUiEvent {
     data class ShowSnackbar(val message: String) : BookDetailUiEvent()
     data object NavigateBack : BookDetailUiEvent()
-    data class NavigateToReader(val bookId: String) : BookDetailUiEvent()
     data class NavigateToContents(val bookId: String) : BookDetailUiEvent()
 }
 
@@ -113,7 +112,7 @@ class BookDetailViewModel @Inject constructor(
 
     fun onReadNowClick() {
         viewModelScope.launch {
-            _event.send(BookDetailUiEvent.NavigateToReader(bookId))
+            _event.send(BookDetailUiEvent.ShowSnackbar("阅读器功能暂未开放"))
         }
     }
 
