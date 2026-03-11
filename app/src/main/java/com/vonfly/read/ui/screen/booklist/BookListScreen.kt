@@ -16,7 +16,7 @@ import com.vonfly.read.ui.theme.Background
 
 @Composable
 fun BookListScreen(
-    onNavigateToReader: (String) -> Unit,
+    onNavigateToBookDetail: (String) -> Unit,
     onNavigateToStore: () -> Unit,
     viewModel: BookListViewModel = hiltViewModel()
 ) {
@@ -30,7 +30,7 @@ fun BookListScreen(
         viewModel.event.collect { event ->
             when (event) {
                 is BookListUiEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
-                is BookListUiEvent.NavigateToReader -> onNavigateToReader(event.bookId)
+                is BookListUiEvent.NavigateToBookDetail -> onNavigateToBookDetail(event.bookId)
             }
         }
     }

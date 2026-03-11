@@ -31,7 +31,7 @@ data class BookListUiState(
 
 sealed class BookListUiEvent {
     data class ShowSnackbar(val message: String) : BookListUiEvent()
-    data class NavigateToReader(val bookId: String) : BookListUiEvent()
+    data class NavigateToBookDetail(val bookId: String) : BookListUiEvent()
 }
 
 @HiltViewModel
@@ -67,7 +67,7 @@ class BookListViewModel @Inject constructor(
 
     fun onBookClick(id: String) {
         viewModelScope.launch {
-            _event.send(BookListUiEvent.NavigateToReader(id))
+            _event.send(BookListUiEvent.NavigateToBookDetail(id))
         }
     }
 

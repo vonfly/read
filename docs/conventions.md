@@ -226,3 +226,53 @@ adb shell getconf PAGESIZE  # 输出 16384 表示模拟器使用 16KB 页
 - NDK 版本升级至 **r27 或更高**
 - 禁止硬编码页大小：~~`val PAGE_SIZE = 4096`~~ → 动态获取 `Os.sysconf(OsConstants._SC_PAGESIZE)`
 - 所有 native 库需用支持 16KB 对齐的 NDK 重新编译
+
+---
+
+## Compose 事件处理：避免 Snackbar 阻塞事件流
+
+这是一个**经典错误**：在 `LaunchedEffect` 中处理事件时，`snackbarHostState.showSnackbar()` 会阻塞协程，导致后续事件无法被处理。
+
+### ❌ 错误写法
+
+```kotlin
+LaunchedEffect(Unit) {
+    viewModel.event.collect { event ->
+        when (event) {
+            is UiEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)  // 阻塞！
+            UiEvent.NavigateBack -> onNavigateBack()  // Snackbar 显示期间无法处理
+        }
+    }
+}
+```
+
+**问题原因：**
+1. `collect` 是**顺序处理**事件的
+2. `showSnackbar()` 是**挂起函数**，会阻塞等待 Snackbar 被关闭
+3. 协程被阻塞后，后续事件在 Channel 中排队等待
+4. 用户点击返回 → `NavigateBack` 事件发送 → 但协程还在等 Snackbar 关闭 → **没反应**
+
+### ✅ 正确写法
+
+```kotlin
+val scope = rememberCoroutineScope()
+
+LaunchedEffect(Unit) {
+    viewModel.event.collect { event ->
+        when (event) {
+            is UiEvent.ShowSnackbar -> {
+                // 使用 launch 异步显示，不阻塞事件流
+                scope.launch { snackbarHostState.showSnackbar(event.message) }
+            }
+            UiEvent.NavigateBack -> onNavigateBack()  // 立即处理
+            is UiEvent.NavigateToXxx -> onNavigateToXxx(...)
+        }
+    }
+}
+```
+
+**关键点：**
+- `scope.launch` 创建新协程异步显示 Snackbar
+- 主事件流不被阻塞，后续事件（如导航）可以立即处理
+- 适用于所有**非关键性 UI 反馈**（Snackbar、Toast 等）
+- **关键性操作**（如导航）应该直接同步处理，不要用 `launch`
