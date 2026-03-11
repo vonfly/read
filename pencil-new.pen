@@ -332,7 +332,7 @@
               "name": "BottomControls",
               "reusable": true,
               "width": "fill_container",
-              "height": 56,
+              "height": 66,
               "padding": [
                 0,
                 20
@@ -344,7 +344,7 @@
                   "id": "UfV19",
                   "name": "catalogBtn",
                   "width": "fill_container",
-                  "height": 56,
+                  "height": 66,
                   "layout": "vertical",
                   "gap": 4,
                   "justifyContent": "center",
@@ -377,7 +377,7 @@
                   "id": "b9TZI",
                   "name": "brightnessBtn",
                   "width": "fill_container",
-                  "height": 56,
+                  "height": 66,
                   "layout": "vertical",
                   "gap": 4,
                   "justifyContent": "center",
@@ -410,7 +410,7 @@
                   "id": "OYiSk",
                   "name": "fontBtn",
                   "width": "fill_container",
-                  "height": 56,
+                  "height": 66,
                   "layout": "vertical",
                   "gap": 4,
                   "justifyContent": "center",
@@ -443,7 +443,7 @@
                   "id": "kowSL",
                   "name": "moreBtn",
                   "width": "fill_container",
-                  "height": 56,
+                  "height": 66,
                   "layout": "vertical",
                   "gap": 4,
                   "justifyContent": "center",
@@ -3345,13 +3345,11 @@
       "width": 375,
       "height": 812,
       "fill": "$--background",
-      "layout": "none",
+      "layout": "vertical",
       "children": [
         {
           "type": "frame",
           "id": "32lpu",
-          "x": 0,
-          "y": 0,
           "name": "TopBar",
           "width": 375,
           "height": 72,
@@ -3407,11 +3405,9 @@
         {
           "type": "frame",
           "id": "zycWp",
-          "x": 0,
-          "y": 72,
           "name": "readingContent1",
           "width": 375,
-          "height": 652,
+          "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
           "padding": [
@@ -3463,11 +3459,9 @@
         {
           "type": "frame",
           "id": "60HKn",
-          "x": 0,
-          "y": 700,
           "name": "BottomBar",
           "width": 375,
-          "height": 112,
+          "height": 122,
           "fill": "#F9F9F9CC",
           "cornerRadius": [
             16,
@@ -3591,8 +3585,6 @@
         {
           "type": "frame",
           "id": "XIJLf",
-          "x": 235,
-          "y": 92,
           "name": "DropdownMenu",
           "width": 120,
           "fill": "$--card",
@@ -3733,7 +3725,7 @@
           "type": "frame",
           "id": "xOg8M",
           "name": "Header",
-          "width": "fill_container",
+          "width": 375,
           "height": 72,
           "layout": "vertical",
           "padding": [
@@ -3759,7 +3751,7 @@
           "type": "frame",
           "id": "2DBZ4",
           "name": "readingContent",
-          "width": "fill_container",
+          "width": 375,
           "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
@@ -3788,7 +3780,7 @@
           "id": "64iSu",
           "name": "BottomBar",
           "width": 375,
-          "height": 228,
+          "height": 238,
           "fill": "#F9F9F9CC",
           "cornerRadius": [
             16,
@@ -4016,7 +4008,7 @@
           "type": "frame",
           "id": "MIuNC",
           "name": "Header",
-          "width": "fill_container",
+          "width": 375,
           "height": 72,
           "layout": "vertical",
           "padding": [
@@ -4042,7 +4034,7 @@
           "type": "frame",
           "id": "soJmI",
           "name": "readingContent",
-          "width": "fill_container",
+          "width": 375,
           "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
@@ -4071,7 +4063,7 @@
           "id": "qyGJ8",
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#F9F9F9CC",
           "cornerRadius": [
             16,
@@ -4478,7 +4470,7 @@
       "x": 743,
       "y": 850,
       "name": "Read-Brightness",
-      "width": "fill_container(375)",
+      "width": 375,
       "height": 812,
       "fill": "$--background",
       "layout": "vertical",
@@ -4487,7 +4479,7 @@
           "type": "frame",
           "id": "VsDMd",
           "name": "Header",
-          "width": "fill_container",
+          "width": 375,
           "height": 72,
           "layout": "vertical",
           "padding": [
@@ -4513,7 +4505,7 @@
           "type": "frame",
           "id": "U8TQC",
           "name": "readingContent1",
-          "width": "fill_container",
+          "width": 375,
           "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
@@ -4542,7 +4534,7 @@
           "id": "FItXb",
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#FFFFFFFF",
           "cornerRadius": [
             16,
@@ -4819,7 +4811,7 @@
           "type": "frame",
           "id": "UkNmJ",
           "name": "Header",
-          "width": "fill_container",
+          "width": 375,
           "height": 72,
           "layout": "vertical",
           "padding": [
@@ -4845,7 +4837,7 @@
           "type": "frame",
           "id": "ySolw",
           "name": "readingContent",
-          "width": "fill_container",
+          "width": 375,
           "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
@@ -5346,7 +5338,7 @@
           "type": "frame",
           "id": "PFI6P",
           "name": "readingContent1",
-          "width": "fill_container",
+          "width": 375,
           "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
@@ -5401,7 +5393,7 @@
           "id": "oUMLW",
           "name": "BottomBar",
           "width": 375,
-          "height": 112,
+          "height": 122,
           "fill": "#F9F9F9CC",
           "cornerRadius": [
             16,
@@ -5539,7 +5531,7 @@
           "type": "frame",
           "id": "6qYK0",
           "name": "Header",
-          "width": "fill_container",
+          "width": 375,
           "height": 72,
           "layout": "vertical",
           "padding": [
@@ -5565,7 +5557,7 @@
           "type": "frame",
           "id": "AN1R4",
           "name": "readingContent1",
-          "width": "fill_container",
+          "width": 375,
           "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
@@ -7476,16 +7468,14 @@
       "width": 375,
       "height": 812,
       "fill": "#1A1A1A",
-      "layout": "none",
+      "layout": "vertical",
       "children": [
         {
           "type": "frame",
           "id": "JlIHL",
-          "x": 0,
-          "y": 72,
           "name": "readingContent1",
-          "width": "fill_container(375)",
-          "height": 352,
+          "width": "fill_container",
+          "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
           "padding": [
@@ -7511,11 +7501,9 @@
         {
           "type": "frame",
           "id": "wtUPF",
-          "x": 0,
-          "y": 550,
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#2A2A2ACC",
           "cornerRadius": [
             16,
@@ -7596,9 +7584,10 @@
                       "ref": "uZ5JU",
                       "name": "brightnessSlider",
                       "width": "fill_container",
+                      "fill": "#3A3A3A",
                       "descendants": {
                         "EflbK": {
-                          "fill": "#5A5A5A",
+                          "fill": "#8A8A8A",
                           "width": 150
                         },
                         "4qwUO": {
@@ -7763,13 +7752,38 @@
               "type": "ref",
               "ref": "LI2k8",
               "name": "bottomControls2",
+              "height": 66,
               "descendants": {
+                "UfV19": {
+                  "width": "fill_container",
+                  "height": 66,
+                  "x": 20,
+                  "y": 0
+                },
+                "b9TZI": {
+                  "width": "fill_container",
+                  "height": 66,
+                  "x": 103.75,
+                  "y": 0
+                },
                 "o6lNU": {
                   "fill": "$--accent"
                 },
                 "Mu8Pa": {
                   "fill": "$--accent",
                   "fontWeight": "600"
+                },
+                "OYiSk": {
+                  "width": "fill_container",
+                  "height": 66,
+                  "x": 187.5,
+                  "y": 0
+                },
+                "kowSL": {
+                  "width": "fill_container",
+                  "height": 66,
+                  "x": 271.25,
+                  "y": 0
                 }
               }
             }
@@ -7778,8 +7792,6 @@
         {
           "type": "frame",
           "id": "ypavi",
-          "x": 0,
-          "y": 0,
           "name": "Header",
           "width": 375,
           "height": 72,
@@ -7814,16 +7826,14 @@
       "width": 375,
       "height": 812,
       "fill": "#F5F0E1",
-      "layout": "none",
+      "layout": "vertical",
       "children": [
         {
           "type": "frame",
           "id": "mRpuZ",
-          "x": 0,
-          "y": 72,
           "name": "readingContent1",
-          "width": "fill_container(375)",
-          "height": 352,
+          "width": "fill_container",
+          "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
           "padding": [
@@ -7849,11 +7859,9 @@
         {
           "type": "frame",
           "id": "5LCBq",
-          "x": 0,
-          "y": 550,
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#F5F0E1FF",
           "cornerRadius": [
             16,
@@ -8117,8 +8125,6 @@
         {
           "type": "frame",
           "id": "9HG78",
-          "x": 0,
-          "y": 0,
           "name": "Header",
           "width": 375,
           "height": 72,
@@ -8153,16 +8159,14 @@
       "width": 375,
       "height": 812,
       "fill": "#FFE4E8",
-      "layout": "none",
+      "layout": "vertical",
       "children": [
         {
           "type": "frame",
           "id": "Qj8tE",
-          "x": 0,
-          "y": 72,
           "name": "readingContent1",
-          "width": "fill_container(375)",
-          "height": 352,
+          "width": "fill_container",
+          "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
           "padding": [
@@ -8188,11 +8192,9 @@
         {
           "type": "frame",
           "id": "NFC5i",
-          "x": 0,
-          "y": 550,
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#FFE4E8FF",
           "cornerRadius": [
             16,
@@ -8455,8 +8457,6 @@
         {
           "type": "frame",
           "id": "NHqGL",
-          "x": 0,
-          "y": 0,
           "name": "Header",
           "width": 375,
           "height": 72,
@@ -8491,16 +8491,14 @@
       "width": 375,
       "height": 812,
       "fill": "#E8F5E9",
-      "layout": "none",
+      "layout": "vertical",
       "children": [
         {
           "type": "frame",
           "id": "ncU7q",
-          "x": 0,
-          "y": 72,
           "name": "readingContent1",
-          "width": "fill_container(375)",
-          "height": 352,
+          "width": "fill_container",
+          "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
           "padding": [
@@ -8526,11 +8524,9 @@
         {
           "type": "frame",
           "id": "lbgJA",
-          "x": 0,
-          "y": 550,
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#E8F5E9FF",
           "cornerRadius": [
             16,
@@ -8793,8 +8789,6 @@
         {
           "type": "frame",
           "id": "Ylvee",
-          "x": 0,
-          "y": 0,
           "name": "Header",
           "width": 375,
           "height": 72,
@@ -8829,16 +8823,14 @@
       "width": 375,
       "height": 812,
       "fill": "#FDF8F0",
-      "layout": "none",
+      "layout": "vertical",
       "children": [
         {
           "type": "frame",
           "id": "M1TUx",
-          "x": 0,
-          "y": 72,
           "name": "readingContent1",
-          "width": "fill_container(375)",
-          "height": 352,
+          "width": "fill_container",
+          "height": "fill_container",
           "layout": "vertical",
           "gap": 20,
           "padding": [
@@ -8864,11 +8856,9 @@
         {
           "type": "frame",
           "id": "nYmxy",
-          "x": 0,
-          "y": 550,
           "name": "BottomBar",
           "width": 375,
-          "height": 262,
+          "height": 272,
           "fill": "#FDF8F0FF",
           "cornerRadius": [
             16,
@@ -9129,8 +9119,6 @@
         {
           "type": "frame",
           "id": "7RsLK",
-          "x": 0,
-          "y": 0,
           "name": "Header",
           "width": 375,
           "height": 72,
