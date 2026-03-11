@@ -1,69 +1,73 @@
-# CLAUDE.md — 阅读器 App
+# 轻阅
 
-## 项目基础信息
+EPUB / TXT / PDF 阅读器，离线优先，Kotlin + Jetpack Compose + Room。
 
-```
-applicationId : com.vonfly.read
-minSdk        : 26
-targetSdk     : 36
-包名根目录      : com/vonfly/read/
-```
-
-## 架构约定
-
-通用规范由 `Android Developer` agent 保证，此处只补充本项目的额外要求：
-
-- **分层**：`data` → `domain` → `ui` → `di` → `core`（跨层工具类/扩展函数，禁止混入业务层）
-- **离线优先**：Room 是唯一数据真实来源，UI 只观察 Room 的 Flow；网络数据必须先写入 Room，再由 Room 通知 UI，禁止网络响应直接推送给 UI
-- **版本管理**：所有依赖版本从 `gradle/libs.versions.toml` 引用，禁止在代码或 `build.gradle.kts` 中硬编码版本号
-
-## 项目特殊约定
-
-> 以下是本项目独有的规则，AI 生成代码必须遵守。根据实际情况填写，删除不适用的条目。
-
-```
-# 数据
-# - 书籍 ID 格式：UUID v4 字符串
-# - 电子书格式支持：EPUB（epublib）、TXT（自研解析）、PDF（PdfRenderer）
-
-# 网络
-# - 所有请求 Header 携带 Authorization token（见 NetworkModule）
-# - 错误模型：使用 AppError sealed interface，见 @docs/conventions.md#apperror
-
-# 功能约定
-# - 分页统一用 Paging 3，不自实现
-# - 阅读进度前台翻页时协程直写 Room（500ms 防抖），进入后台时 WorkManager 同步服务端
-
-# DataStore 命名（全局唯一，防止多实例导致 IllegalStateException）
-# - 通用偏好（界面语言、通知等）：@AppDataStore → 文件名 "app_settings"
-# - 阅读器设置（字体、主题等）：@ReaderDataStore → 文件名 "reader_settings"
-# - 两个实例均在 DataStoreModule 中声明，通过 @Qualifier 区分注入
-# - 禁止在项目中声明第三个 DataStore 实例，新偏好必须复用以上两个
-```
-
-## Agent 路由规则
-
-涉及以下任务时委派给 `Android Developer` agent，不要自己处理：
-- 创建或修改 `.kt` 文件
-- 修改 `libs.versions.toml`
-- 调试 Android 编译错误 / Gradle 问题
-- 审查 Compose UI 或 ViewModel 架构
-
-## 延伸文档（按需读取）
-
-| 需要做什么 | 读取哪个文件 |
-|-----------|------------|
-| **从零初始化项目** | @docs/setup.md |
-| **开发新功能的完整流程** | @docs/workflow.md |
-| 新增依赖格式 / Kotlin 2.0 插件配置 | @docs/versions.md |
-| ViewModel / Screen / Content 写法 | @docs/templates/viewmodel.md |
-| Repository / Room / DataStore 写法 | @docs/templates/data-layer.md |
-| Navigation / Hilt Module / NetworkModule / DataStoreModule | @docs/templates/infrastructure.md |
-| 书架列表分页（Paging 3） | @docs/templates/paging.md |
-| 阅读器主题 / 字体 / 进度 / 常亮 / 长文本渲染 | @docs/templates/reader.md |
-| 低频场景（EntryPoint / 沉浸式 / UseCase / AppError）| @docs/conventions.md |
+**Android · minSdk 26 · targetSdk 35 · 包名 com.vonfly.read**
 
 ---
+
+## 常用命令
+
+```bash
+./gradlew assembleDebug          # 编译
+./gradlew test                   # 单元测试
+./gradlew connectedAndroidTest   # 仪器测试（需连接设备）
+./gradlew lint                   # Lint 检查
+```
+
+---
+
+## 架构约定（本项目强制，不可偏离）
+
+### 分层结构
+```
+data/       local（Room Entity/DAO）、remote（Retrofit/DTO）、repository（实现类）
+domain/     model（业务模型）、repository（接口）、usecase（单一 invoke）
+ui/         screen/[feature]/、component/、navigation/、theme/
+di/         Hilt Module
+core/       扩展函数、工具类、基类（跨层复用，不属于任何业务层）
+```
+
+---
+
+## 核心约束
+
+1. **每次只改一个文件**，编译通过后再继续
+2. **禁止凭记忆假设版本号**——先读 `gradle/libs.versions.toml`
+3. **离线优先**：Room 是唯一数据真实来源，网络数据必须先写入 Room 再通知 UI
+4. **DataStore 全局只有两个实例**：`@AppDataStore`（app_settings）和 `@ReaderDataStore`（reader_settings），禁止新增第三个
+5. **所有请求 Header 携带 Authorization token**，错误统一用 `AppError` sealed interface
+
+---
+
+## 架构
+
+Clean Architecture 三层分层，每个 Feature 三文件结构，状态管理用 UiState + UiEvent 双轨。
+详细规范见 `@docs/templates/viewmodel.md`。
+
+技术选型：Hilt · Room · Coroutines+Flow · DataStore · Coil · Retrofit+KotlinSerialization · Navigation 2.8+
+
+---
+
+## Agent 路由
+
+涉及 `.kt` 文件、`libs.versions.toml`、编译错误、Compose/ViewModel 架构时，委派给 `Android Developer` agent。
+
+---
+
+## 延伸文档
+
+| 什么时候读 | 文档 |
+|------------|------|
+| 新增 Feature，或不确定从哪里开始 | @docs/workflow.md |
+| 写 ViewModel、Screen、UiState、UiEvent | @docs/templates/viewmodel.md |
+| 写 Repository、DAO、Room Entity、DataStore | @docs/templates/data-layer.md |
+| 写 NavHost、Hilt Module、NetworkModule、DataStoreModule | @docs/templates/infrastructure.md |
+| 书架或任何列表需要分页 | @docs/templates/paging.md |
+| 写阅读器页面（翻页、字体、进度、长文本渲染） | @docs/templates/reader.md |
+| 用到 UseCase、AppError、沉浸式、HiltEntryPoint | @docs/conventions.md |
+| 从零初始化新项目 | @docs/setup.md |
+
 
 > 📌 维护提示：修改此文件或任意 `docs/` 文档后，请同步更新下方日期，并确认对应文件仍然存在。
 

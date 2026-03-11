@@ -14,7 +14,7 @@
         ↓
 Claude Code Plan 模式：生成 PLAN.md（审查后再执行）
         ↓
-Android Developer Agent 逐文件实现
+Claude Code 按 plan 执行（串行逐文件 或 并行多 Agent）
         ↓
 每个文件编译通过后继续下一个
         ↓
@@ -39,29 +39,30 @@ Android Developer Agent 逐文件实现
 # [功能名称] Spec
 
 ## 要解决的问题
-用一句话描述用户痛点或需求背景。
+描述用户痛点或需求背景。
 
-## 用户故事
-- 作为读者，我可以...，以便...
-- 作为读者，我可以...，以便...
+## 验收标准
+- [ ] 功能行为可验证的条目（如：点击书籍跳转阅读器并传入正确 bookId）
+- [ ] 边缘情况的处理结果（如：书架为空时显示占位图和导入按钮）
+- [ ] 错误状态的呈现（如：网络失败显示错误提示和重试按钮）
 
-## 验收标准（完成的定义）
-- [ ] 具体可验证的条件，避免模糊描述
-- [ ] 每条都可以用肉眼验证
+## 交互说明
+- 各入口的跳转目标或行为（本期不实现的写"显示 Toast"）
+- 有歧义的交互逻辑（如切换 Tab 是替换数据还是追加）
 
 ## 不在本期范围内
-- 明确排除的功能（防止 AI 过度实现，范围蔓延）
+- 明确排除的功能，防止 AI 过度实现
 
 ## 技术约束
-- 涉及哪些层（data / domain / ui）
-- 依赖哪些已有模块或数据结构
-- 特殊性能或兼容性要求
+- 数据来源：Mock / Room / API（必填，Claude Code 无法自行判断）
+- 复用组件：（如有则列出，不确定可留空让 Claude Code 自行搜索）
 ```
 
 **填写原则：**
-- 验收标准要具体，"流畅"不是标准，"列表滚动 60fps 无掉帧"才是
-- "不在本期范围内"很重要，AI 倾向于过度实现，明确排除能节省大量返工
-- 技术约束帮助 AI 快速定位已有代码，避免重复创建
+- 设计稿能表达的（尺寸、颜色、间距）不要写进 spec，通过 Pencil MCP 直接读取
+- 验收标准只写功能行为和状态处理，不写视觉规格（颜色/字号/间距）
+- "不在本期范围内"最重要，AI 倾向于过度实现，明确排除能节省大量返工
+- 技术约束只需填"数据来源"，其余路径、分层、状态管理由 CLAUDE.md 和 agent 保证
 
 ---
 
@@ -71,9 +72,20 @@ Android Developer Agent 逐文件实现
 
 ```
 读取 docs/features/[功能名]-spec.md，
+同时通过 Pencil MCP 读取设计稿中"[页面名称]"页面（无设计稿则删除此行），
 结合项目现有架构，把这个功能拆分成具体的实现任务。
 将完整计划写入 docs/features/[功能名]-plan.md，不要立即执行任何代码。
+
+计划文件格式要求：
+- 按依赖关系分批，同批内的任务互不依赖可并行，下一批依赖上一批完成
+- 每个任务注明文件路径和职责
+- 示例：
+  第一批（可并行）：domain/model/Book.kt、domain/repository/BookRepository.kt
+  第二批（依赖第一批）：data/repository/BookRepositoryImpl.kt
+  第三批（依赖第二批）：ui/screen/booklist/BookListViewModel.kt、BookListContent.kt
 ```
+
+> Pencil MCP 需要提前打开 Pencil 并加载设计稿文件，Claude Code 才能读取。
 
 **为什么先生成 PLAN.md 再执行？**
 - 任务中断或 session 超时后，可以直接读取计划文件继续，不用重新规划
@@ -86,31 +98,24 @@ Android Developer Agent 逐文件实现
 - [ ] 有没有遗漏的文件（如忘记更新 `AppNavHost.kt`）
 - [ ] 有没有多余的文件（AI 有时会生成不必要的抽象层）
 - [ ] 涉及新增依赖时，库名是否已在 `libs.versions.toml` 中存在
+- [ ] 同批次的任务之间确实没有互相依赖
 
 确认无误后，再按 Shift+Tab 退出 Plan 模式，开始执行。
 
 ---
 
-## Step 3：逐文件执行
+## Step 3：执行计划
 
-每次只让 AI 处理一个文件：
+### 默认方式：串行执行（推荐新手）
 
 ```
-按照 docs/features/[功能名]-plan.md 的计划，实现第 N 个文件 [文件路径]
+按照 docs/features/[功能名]-plan.md 的计划
 ```
 
-Android Developer Agent 会自动触发，按项目规范生成完整代码。
+Claude Code 会依次实现每个文件，每次自动运行编译命令验证，编译通过后自动推进，
+编译失败则自行修复，直到通过再继续。全程无需人工干预。
 
-**每个文件的节奏：**
-1. AI 生成代码
-2. 复制到 Android Studio
-3. Build → Make Project（确认无编译错误）
-4. 有错误 → 把完整报错信息贴回给 AI 修复
-5. 编译通过 → 继续下一个文件
-
-**禁止跳步：** 不要在上一个文件编译失败时就开始下一个，错误会累积。
-
----
+**禁止跳步：** 编译失败时不得继续下一个文件，必须修复当前文件后再推进。
 
 ## Step 4：验收与归档
 
@@ -150,7 +155,7 @@ feat([模块名]): 简短描述
 ## 技术实现
 - 使用的技术/架构
 
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+Co-Authored-By: vonfly <vonfly168@gmail.com>
 ```
 
 **推送命令：**
@@ -169,7 +174,7 @@ git commit -m "feat(booklist): 实现书架列表功能
 - 书架列表展示（3列网格布局）
 - 继续阅读卡片
 
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>"
+Co-Authored-By: vonfly <vonfly168@gmail.com>"
 
 # 推送到远程
 git push origin main
@@ -189,10 +194,11 @@ git push origin main
 
 ```
 读取 docs/features/[功能名]-plan.md，
-其中第 1-N 个文件已完成，从第 N+1 个文件继续实现。
+以下文件已完成：[已完成的文件列表]
+从下一个未完成的文件继续，每完成一个文件运行 ./gradlew assembleDebug 确认编译通过后再继续
 ```
 
-计划文件记录了完整的任务列表，不需要重新规划。
+plan 文件记录了完整的任务列表和依赖关系，不需要重新规划。
 
 ---
 
