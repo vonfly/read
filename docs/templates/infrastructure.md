@@ -145,6 +145,5 @@ object DataStoreModule {
         )
 }
 // ⚠️ 同一进程内每个文件名只能有一个 DataStore 实例，@Singleton 保证这一点
-// ⚠️ 禁止新增第三个实例，新的偏好必须复用以上两个（在 CLAUDE.md 中有约定）
 // 若需要结构化数据（非简单键值），改用 Proto DataStore，单独创建 ProtoDataStoreModule
 ```

@@ -79,11 +79,45 @@ Claude Code 按 plan 执行（串行逐文件 或 并行多 Agent）
 
 计划文件格式要求：
 - 按依赖关系分批，同批内的任务互不依赖可并行，下一批依赖上一批完成
-- 每个任务注明文件路径和职责
-- 示例：
-  第一批（可并行）：domain/model/Book.kt、domain/repository/BookRepository.kt
-  第二批（依赖第一批）：data/repository/BookRepositoryImpl.kt
-  第三批（依赖第二批）：ui/screen/booklist/BookListViewModel.kt、BookListContent.kt
+- 使用表格格式追踪进度，便于中断后继续
+- 状态符号：⬜ 待开始 | 🔄 进行中 | ✅ 已完成 | ❌ 编译失败
+
+**计划文件模板：**
+
+```markdown
+# [功能名称] - 实现计划
+
+## 状态概览
+- 创建时间：YYYY-MM-DD
+- 进度：0/N (0%)
+
+---
+
+## 第一批：领域层（可并行）
+
+| 状态 | 文件路径 | 职责 |
+|------|----------|------|
+| ⬜ | domain/model/Book.kt | 书籍数据模型 |
+| ⬜ | domain/repository/BookRepository.kt | Repository 接口 |
+
+---
+
+## 第二批：数据层（依赖第一批）
+
+| 状态 | 文件路径 | 职责 |
+|------|----------|------|
+| ⬜ | data/local/entity/BookEntity.kt | Room Entity |
+| ⬜ | data/repository/BookRepositoryImpl.kt | Repository 实现 |
+
+---
+
+## 第三批：UI 层（依赖第二批）
+
+| 状态 | 文件路径 | 职责 |
+|------|----------|------|
+| ⬜ | ui/screen/booklist/BookListViewModel.kt | ViewModel |
+| ⬜ | ui/screen/booklist/BookListScreen.kt | Screen + Content |
+```
 ```
 
 > Pencil MCP 需要提前打开 Pencil 并加载设计稿文件，Claude Code 才能读取。
@@ -115,6 +149,12 @@ Claude Code 按 plan 执行（串行逐文件 或 并行多 Agent）
 
 Claude Code 会依次实现每个文件，每次自动运行编译命令验证，编译通过后自动推进，
 编译失败则自行修复，直到通过再继续。全程无需人工干预。
+
+**状态更新规则：**
+- 开始文件前：将状态从 ⬜ 改为 🔄
+- 编译通过后：将状态从 🔄 改为 ✅
+- 编译失败时：将状态从 🔄 改为 ❌，修复后改为 ✅
+- 每批完成后：更新顶部进度（如 `3/8 (37%)`）
 
 **禁止跳步：** 编译失败时不得继续下一个文件，必须修复当前文件后再推进。
 
@@ -194,12 +234,15 @@ git push origin main
 如果 session 超时或被打断，下次继续时：
 
 ```
-读取 docs/features/[功能名]-plan.md，
-以下文件已完成：[已完成的文件列表]
-从下一个未完成的文件继续，每完成一个文件运行 ./gradlew assembleDebug 确认编译通过后再继续
+读取 docs/features/[功能名]-plan.md，从第一个 ⬜ 或 🔄 或 ❌ 的任务继续
 ```
 
-plan 文件记录了完整的任务列表和依赖关系，不需要重新规划。
+AI 会自动：
+1. 读取 plan 文件，识别已完成（✅）和未完成（⬜/🔄/❌）的任务
+2. 从第一个未完成任务开始继续实现
+3. 每完成一个文件更新 plan 文件状态
+
+**不需要手动列出已完成的文件**，plan 文件的状态列就是进度追踪器。
 
 ---
 
