@@ -1,6 +1,7 @@
 package com.vonfly.read.ui.screen.reader.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,6 +46,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vonfly.read.ui.theme.Accent
+import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.ForegroundTertiary
 
@@ -84,13 +87,20 @@ fun ReaderBottomBar(
     val borderColor = Color(0xFFE8E8E8)
 
     // 使用 Surface 组件来正确处理阴影和圆角
+    val bottomBarShape = RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius)
+
     androidx.compose.material3.Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(122.dp),
-        shape = RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius),
+            .height(122.dp)
+            .graphicsLayer {
+                shadowElevation = 20f
+                shape = bottomBarShape
+                spotShadowColor = shadowColor
+                ambientShadowColor = shadowColor
+            },
+        shape = bottomBarShape,
         color = bgColor,
-        shadowElevation = 20.dp,
         tonalElevation = 0.dp
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -306,6 +316,14 @@ private fun PageButton(
 
 /**
  * 底部控制按钮
+ *
+ * 设计规格来自 Pencil 设计稿 BottomControls 组件：
+ * - 按钮高度: 66dp (与容器相同)
+ * - 按钮宽度: fill_container (平均分配)
+ * - 整个按钮区域可点击
+ * - 图标尺寸: 22×22dp
+ * - 图标和文字间距: 4dp
+ * - 文字字号: 10sp
  */
 @Composable
 private fun ControlButton(
@@ -315,28 +333,30 @@ private fun ControlButton(
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier.height(66.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
+    Box(
+        modifier = modifier
+            .height(66.dp)
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier.size(22.dp)
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                tint = if (isSelected) Accent else ForegroundTertiary,
+                tint = if (isSelected) Accent else Foreground,
                 modifier = Modifier.size(22.dp)
             )
-        }
 
-        Text(
-            text = label,
-            fontSize = 10.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            color = if (isSelected) Accent else ForegroundTertiary
-        )
+            Text(
+                text = label,
+                fontSize = 10.sp,
+                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                color = if (isSelected) Accent else ForegroundTertiary
+            )
+        }
     }
 }

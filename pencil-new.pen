@@ -8,7 +8,7 @@
       "y": -951,
       "name": "Components",
       "width": 1155,
-      "height": 787,
+      "height": 824,
       "fill": "$--background",
       "layout": "vertical",
       "gap": 40,
@@ -5944,10 +5944,21 @@
           "name": "TopBar",
           "width": 375,
           "height": 72,
-          "fill": "#F9F9F9CC",
+          "fill": "#f9f9f9",
+          "stroke": {
+            "align": "inside",
+            "thickness": 0,
+            "fill": "#e8e8e8"
+          },
           "effect": {
-            "type": "background_blur",
-            "radius": 20
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000040",
+            "offset": {
+              "x": 0,
+              "y": 4
+            },
+            "blur": 4
           },
           "padding": [
             0,
@@ -5995,7 +6006,8 @@
               "y": 24,
               "descendants": {
                 "HVXoo": {
-                  "y": 1
+                  "y": 1,
+                  "fill": "$--accent"
                 },
                 "VQynk": {
                   "x": 46,
@@ -6058,11 +6070,8 @@
               "gap": 12,
               "padding": [
                 0,
-                20,
-                16,
                 20
               ],
-              "justifyContent": "space_between",
               "alignItems": "center",
               "children": [
                 {
@@ -6095,7 +6104,8 @@
                   "name": "progressTrack",
                   "width": "fill_container",
                   "x": 72,
-                  "y": -2,
+                  "y": 6,
+                  "height": 28,
                   "descendants": {
                     "EflbK": {
                       "width": 120,

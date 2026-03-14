@@ -54,7 +54,7 @@ fun ReaderFooter(
         modifier = modifier
             .fillMaxWidth()
             .height(24.dp)
-            .padding(horizontal = 24.dp),
+            .padding(start = 24.dp, end = 24.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

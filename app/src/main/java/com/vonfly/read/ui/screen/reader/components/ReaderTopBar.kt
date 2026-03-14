@@ -1,7 +1,5 @@
 package com.vonfly.read.ui.screen.reader.components
 
-import android.os.Build
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -9,13 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.LibraryAdd
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.LibraryAdd
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -23,14 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.ChevronLeft
+import com.composables.icons.lucide.BookPlus
+import com.composables.icons.lucide.Bookmark
+import com.composables.icons.lucide.Settings
 import com.vonfly.read.ui.theme.Accent
 import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.ForegroundSecondary
@@ -61,20 +55,15 @@ fun ReaderTopBar(
     isInShelf: Boolean = false,
     isBookmarked: Boolean = false
 ) {
-    // 设计稿背景色: #F9F9F9CC (80% 不透明度)
-    val backgroundColor = Color(0xFFF9F9F9).copy(alpha = 0.8f)
+    // 设计稿背景色: #F9F9F9 (实色)
+    val backgroundColor = Color(0xFFF9F9F9)
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
             .drawBehind {
-                // Android 12+ 支持背景模糊
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    drawRect(color = backgroundColor)
-                } else {
-                    drawRect(color = backgroundColor)
-                }
+                drawRect(color = backgroundColor)
             }
     ) {
         Row(
@@ -90,7 +79,7 @@ fun ReaderTopBar(
                 modifier = Modifier.size(24.dp)
             ) {
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Lucide.ChevronLeft,
                     contentDescription = "返回",
                     tint = Foreground,
                     modifier = Modifier.size(24.dp)
@@ -115,27 +104,27 @@ fun ReaderTopBar(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 加入书架 - 图标: book-plus (LibraryAdd)
+                // 加入书架 - Lucide 图标: BookPlus
                 // 颜色: 已加入书架时 Accent，未加入时 ForegroundSecondary
                 ActionButton(
-                    icon = if (isInShelf) Icons.Filled.LibraryAdd else Icons.Outlined.LibraryAdd,
+                    icon = Lucide.BookPlus,
                     contentDescription = "加入书架",
                     onClick = onAddToShelfClick,
                     tint = if (isInShelf) Accent else ForegroundSecondary
                 )
 
-                // 书签 - 图标: bookmark
+                // 书签 - Lucide 图标: Bookmark
                 // 颜色: 已添加书签时 Accent，未添加时 ForegroundSecondary
                 ActionButton(
-                    icon = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+                    icon = Lucide.Bookmark,
                     contentDescription = "书签",
                     onClick = onBookmarkClick,
                     tint = if (isBookmarked) Accent else ForegroundSecondary
                 )
 
-                // 设置 - 图标: settings, 颜色: ForegroundSecondary
+                // 设置 - Lucide 图标: Settings, 颜色: ForegroundSecondary
                 ActionButton(
-                    icon = Icons.Outlined.Settings,
+                    icon = Lucide.Settings,
                     contentDescription = "设置",
                     onClick = onSettingsClick,
                     tint = ForegroundSecondary
