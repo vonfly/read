@@ -86,7 +86,7 @@ class ProfileViewModel @Inject constructor(
 
     fun onBookmarksClick() {
         viewModelScope.launch {
-            _event.send(ProfileUiEvent.ShowSnackbar("书签功能开发中"))
+            _event.send(ProfileUiEvent.NavigateToBookmarks)
         }
     }
 

@@ -1,4 +1,4 @@
-package com.vonfly.read.ui.screen.profile
+package com.vonfly.read.ui.screen.bookmark
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,11 +17,9 @@ import com.vonfly.read.ui.theme.Background
 import kotlinx.coroutines.launch
 
 @Composable
-fun ProfileScreen(
-    onNavigateToBookList: () -> Unit,
-    onNavigateToStore: () -> Unit,
-    onNavigateToBookmarks: () -> Unit,
-    viewModel: ProfileViewModel = hiltViewModel()
+fun BookmarkScreen(
+    onNavigateBack: () -> Unit,
+    viewModel: BookmarkViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -30,24 +28,14 @@ fun ProfileScreen(
     LaunchedEffect(Unit) {
         viewModel.event.collect { event ->
             when (event) {
-                is ProfileUiEvent.ShowSnackbar -> {
+                is BookmarkUiEvent.ShowSnackbar -> {
                     // 使用 launch 异步显示，避免阻塞事件流
                     scope.launch { snackbarHostState.showSnackbar(event.message) }
                 }
-                is ProfileUiEvent.NavigateToBookmarks -> {
-                    onNavigateToBookmarks()
-                }
-                is ProfileUiEvent.NavigateToHistory -> {
-                    // 后续实现
-                }
-                is ProfileUiEvent.NavigateToDownloads -> {
-                    // 后续实现
-                }
-                is ProfileUiEvent.NavigateToSettings -> {
-                    // 后续实现
-                }
-                is ProfileUiEvent.NavigateToProfileEdit -> {
-                    // 后续实现
+                BookmarkUiEvent.NavigateBack -> onNavigateBack()
+                is BookmarkUiEvent.NavigateToReader -> {
+                    // 后续实现：跳转到阅读器对应位置
+                    onNavigateBack()
                 }
             }
         }
@@ -57,21 +45,10 @@ fun ProfileScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Background
     ) { innerPadding ->
-        ProfileContent(
+        BookmarkContent(
             uiState = uiState,
-            onProfileCardClick = viewModel::onProfileCardClick,
-            onSettingsClick = viewModel::onSettingsClick,
-            onBookmarksClick = viewModel::onBookmarksClick,
-            onHistoryClick = viewModel::onHistoryClick,
-            onDownloadsClick = viewModel::onDownloadsClick,
-            onDarkModeClick = viewModel::onDarkModeClick,
-            onTabClick = { tabIndex ->
-                when (tabIndex) {
-                    0 -> onNavigateToBookList()
-                    1 -> onNavigateToStore()
-                    // 2 是当前页面，不需要处理
-                }
-            },
+            onNavigateBack = viewModel::onNavigateBack,
+            onBookmarkClick = viewModel::onBookmarkClick,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)

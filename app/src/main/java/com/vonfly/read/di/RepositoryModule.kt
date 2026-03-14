@@ -3,10 +3,12 @@ package com.vonfly.read.di
 import com.vonfly.read.data.local.preferences.UserPreferencesRepositoryImpl
 import com.vonfly.read.data.repository.BookDetailRepositoryImpl
 import com.vonfly.read.data.repository.BookRepositoryImpl
+import com.vonfly.read.data.repository.BookmarkRepositoryImpl
 import com.vonfly.read.data.repository.ReadingProgressRepositoryImpl
 import com.vonfly.read.data.repository.StoreRepositoryImpl
 import com.vonfly.read.domain.repository.BookDetailRepository
 import com.vonfly.read.domain.repository.BookRepository
+import com.vonfly.read.domain.repository.BookmarkRepository
 import com.vonfly.read.domain.repository.ReadingProgressRepository
 import com.vonfly.read.domain.repository.StoreRepository
 import com.vonfly.read.domain.repository.UserPreferencesRepository
@@ -70,4 +72,13 @@ abstract class RepositoryModule {
     abstract fun bindUserPreferencesRepository(
         impl: UserPreferencesRepositoryImpl
     ): UserPreferencesRepository
+
+    /**
+     * 绑定书签仓库接口到实现类
+     */
+    @Binds
+    @Singleton
+    abstract fun bindBookmarkRepository(
+        impl: BookmarkRepositoryImpl
+    ): BookmarkRepository
 }

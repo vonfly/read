@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.vonfly.read.ui.screen.bookdetail.BookDetailScreen
 import com.vonfly.read.ui.screen.booklist.BookListScreen
+import com.vonfly.read.ui.screen.bookmark.BookmarkScreen
 import com.vonfly.read.ui.screen.bookstore.StoreScreen
 import com.vonfly.read.ui.screen.profile.ProfileScreen
 
@@ -69,7 +70,15 @@ fun AppNavHost(
                     navController.navigate(StoreRoute) {
                         launchSingleTop = true
                     }
+                },
+                onNavigateToBookmarks = {
+                    navController.navigate(BookmarkRoute)
                 }
+            )
+        }
+        composable<BookmarkRoute> {
+            BookmarkScreen(
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }
