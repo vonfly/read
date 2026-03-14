@@ -1,5 +1,6 @@
 package com.vonfly.read.di
 
+import com.vonfly.read.data.local.preferences.UserPreferencesRepositoryImpl
 import com.vonfly.read.data.repository.BookDetailRepositoryImpl
 import com.vonfly.read.data.repository.BookRepositoryImpl
 import com.vonfly.read.data.repository.ReadingProgressRepositoryImpl
@@ -8,6 +9,7 @@ import com.vonfly.read.domain.repository.BookDetailRepository
 import com.vonfly.read.domain.repository.BookRepository
 import com.vonfly.read.domain.repository.ReadingProgressRepository
 import com.vonfly.read.domain.repository.StoreRepository
+import com.vonfly.read.domain.repository.UserPreferencesRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -59,4 +61,13 @@ abstract class RepositoryModule {
     abstract fun bindReadingProgressRepository(
         impl: ReadingProgressRepositoryImpl
     ): ReadingProgressRepository
+
+    /**
+     * 绑定用户偏好仓库接口到实现类
+     */
+    @Binds
+    @Singleton
+    abstract fun bindUserPreferencesRepository(
+        impl: UserPreferencesRepositoryImpl
+    ): UserPreferencesRepository
 }

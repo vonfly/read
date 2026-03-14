@@ -13,6 +13,7 @@ import com.vonfly.read.ui.theme.Background
 fun StoreScreen(
     onNavigateToBookDetail: (String) -> Unit,
     onNavigateToBookList: () -> Unit,
+    onNavigateToProfile: () -> Unit,
     viewModel: StoreViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -43,7 +44,7 @@ fun StoreScreen(
         onTabClick = { tabIndex ->
             when (tabIndex) {
                 0 -> onNavigateToBookList()
-                // 2 -> onNavigateToProfile() // TODO: 我的页面
+                2 -> onNavigateToProfile()
             }
         },
         modifier = androidx.compose.ui.Modifier.fillMaxSize()

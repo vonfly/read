@@ -18,6 +18,7 @@ import com.vonfly.read.ui.theme.Background
 fun BookListScreen(
     onNavigateToBookDetail: (String) -> Unit,
     onNavigateToStore: () -> Unit,
+    onNavigateToProfile: () -> Unit,
     viewModel: BookListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -51,7 +52,7 @@ fun BookListScreen(
             onTabClick = { tabIndex ->
                 when (tabIndex) {
                     1 -> onNavigateToStore()
-                    // 2 -> onNavigateToProfile() // TODO: 我的页面
+                    2 -> onNavigateToProfile()
                 }
             },
             modifier = Modifier

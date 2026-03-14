@@ -9,6 +9,7 @@ import androidx.navigation.toRoute
 import com.vonfly.read.ui.screen.bookdetail.BookDetailScreen
 import com.vonfly.read.ui.screen.booklist.BookListScreen
 import com.vonfly.read.ui.screen.bookstore.StoreScreen
+import com.vonfly.read.ui.screen.profile.ProfileScreen
 
 @Composable
 fun AppNavHost(
@@ -25,6 +26,11 @@ fun AppNavHost(
                 },
                 onNavigateToStore = {
                     navController.navigate(StoreRoute) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateToProfile = {
+                    navController.navigate(ProfileRoute) {
                         launchSingleTop = true
                     }
                 }
@@ -46,6 +52,23 @@ fun AppNavHost(
                 },
                 onNavigateToBookList = {
                     navController.popBackStack(BookListRoute, inclusive = false)
+                },
+                onNavigateToProfile = {
+                    navController.navigate(ProfileRoute) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+        composable<ProfileRoute> {
+            ProfileScreen(
+                onNavigateToBookList = {
+                    navController.popBackStack(BookListRoute, inclusive = false)
+                },
+                onNavigateToStore = {
+                    navController.navigate(StoreRoute) {
+                        launchSingleTop = true
+                    }
                 }
             )
         }
