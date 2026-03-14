@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 fun BookDetailScreen(
     onNavigateBack: () -> Unit,
     onNavigateToContents: (String) -> Unit,
+    onNavigateToReader: (String) -> Unit,
     viewModel: BookDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -43,7 +44,7 @@ fun BookDetailScreen(
         onToggleDescriptionExpanded = viewModel::toggleDescriptionExpanded,
         onAddToShelfClick = viewModel::onAddToShelfClick,
         onDownloadClick = viewModel::onDownloadClick,
-        onReadNowClick = viewModel::onReadNowClick,
+        onReadNowClick = { onNavigateToReader(viewModel.bookId) },
         onChapterClick = viewModel::onChapterClick,
         onViewAllChaptersClick = viewModel::onViewAllChaptersClick,
         modifier = Modifier.fillMaxSize()

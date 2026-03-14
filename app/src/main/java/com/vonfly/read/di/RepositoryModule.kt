@@ -1,5 +1,6 @@
 package com.vonfly.read.di
 
+import com.vonfly.read.data.local.preferences.ReaderPreferencesRepositoryImpl
 import com.vonfly.read.data.local.preferences.UserPreferencesRepositoryImpl
 import com.vonfly.read.data.repository.BookDetailRepositoryImpl
 import com.vonfly.read.data.repository.BookRepositoryImpl
@@ -9,6 +10,7 @@ import com.vonfly.read.data.repository.StoreRepositoryImpl
 import com.vonfly.read.domain.repository.BookDetailRepository
 import com.vonfly.read.domain.repository.BookRepository
 import com.vonfly.read.domain.repository.BookmarkRepository
+import com.vonfly.read.domain.repository.ReaderPreferencesRepository
 import com.vonfly.read.domain.repository.ReadingProgressRepository
 import com.vonfly.read.domain.repository.StoreRepository
 import com.vonfly.read.domain.repository.UserPreferencesRepository
@@ -81,4 +83,13 @@ abstract class RepositoryModule {
     abstract fun bindBookmarkRepository(
         impl: BookmarkRepositoryImpl
     ): BookmarkRepository
+
+    /**
+     * 绑定阅读器偏好仓库接口到实现类
+     */
+    @Binds
+    @Singleton
+    abstract fun bindReaderPreferencesRepository(
+        impl: ReaderPreferencesRepositoryImpl
+    ): ReaderPreferencesRepository
 }

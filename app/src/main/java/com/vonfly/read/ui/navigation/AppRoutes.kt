@@ -7,3 +7,4 @@ import kotlinx.serialization.Serializable
 @Serializable object ProfileRoute
 @Serializable object BookmarkRoute
 @Serializable data class BookDetailRoute(val bookId: String)
+@Serializable data class ReaderRoute(val bookId: String)

@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.vonfly.read.di.qualifier.AppDataStore
+import com.vonfly.read.di.qualifier.ReaderDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,7 @@ import javax.inject.Singleton
  *
  * 提供 DataStore 实例：
  * - @AppDataStore: 用户偏好（文件名 "app_settings"）
+ * - @ReaderDataStore: 阅读器偏好（文件名 "reader_settings"）
  *
  * ⚠️ 同一进程内每个文件名只能有一个 DataStore 实例，@Singleton 保证这一点
  */
@@ -33,5 +35,15 @@ object DataStoreModule {
     ): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             produceFile = { context.preferencesDataStoreFile("app_settings") }
+        )
+
+    @Provides
+    @Singleton
+    @ReaderDataStore
+    fun provideReaderDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile("reader_settings") }
         )
 }

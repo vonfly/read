@@ -39,7 +39,7 @@ class BookDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val bookId: String = savedStateHandle["bookId"] ?: ""
+    val bookId: String = savedStateHandle["bookId"] ?: ""
 
     private val _uiState = MutableStateFlow(BookDetailUiState())
     val uiState: StateFlow<BookDetailUiState> = _uiState.asStateFlow()
