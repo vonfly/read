@@ -3,10 +3,13 @@ package com.vonfly.read.ui.screen.reader.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -20,11 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.composables.icons.lucide.Lucide
-import com.composables.icons.lucide.ChevronLeft
-import com.composables.icons.lucide.BookPlus
-import com.composables.icons.lucide.Bookmark
-import com.composables.icons.lucide.Settings
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.LibraryAdd
+import androidx.compose.material.icons.outlined.Settings
 import com.vonfly.read.ui.theme.Accent
 import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.ForegroundSecondary
@@ -61,6 +65,7 @@ fun ReaderTopBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.statusBars)
             .height(72.dp)
             .drawBehind {
                 drawRect(color = backgroundColor)
@@ -79,7 +84,7 @@ fun ReaderTopBar(
                 modifier = Modifier.size(24.dp)
             ) {
                 Icon(
-                    imageVector = Lucide.ChevronLeft,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "返回",
                     tint = Foreground,
                     modifier = Modifier.size(24.dp)
@@ -104,27 +109,27 @@ fun ReaderTopBar(
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 加入书架 - Lucide 图标: BookPlus
+                // 加入书架 - Material 图标: LibraryAdd
                 // 颜色: 已加入书架时 Accent，未加入时 ForegroundSecondary
                 ActionButton(
-                    icon = Lucide.BookPlus,
+                    icon = Icons.Outlined.LibraryAdd,
                     contentDescription = "加入书架",
                     onClick = onAddToShelfClick,
                     tint = if (isInShelf) Accent else ForegroundSecondary
                 )
 
-                // 书签 - Lucide 图标: Bookmark
+                // 书签 - Material 图标: BookmarkBorder / Bookmark
                 // 颜色: 已添加书签时 Accent，未添加时 ForegroundSecondary
                 ActionButton(
-                    icon = Lucide.Bookmark,
+                    icon = if (isBookmarked) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
                     contentDescription = "书签",
                     onClick = onBookmarkClick,
                     tint = if (isBookmarked) Accent else ForegroundSecondary
                 )
 
-                // 设置 - Lucide 图标: Settings, 颜色: ForegroundSecondary
+                // 设置 - Material 图标: Settings, 颜色: ForegroundSecondary
                 ActionButton(
-                    icon = Lucide.Settings,
+                    icon = Icons.Outlined.Settings,
                     contentDescription = "设置",
                     onClick = onSettingsClick,
                     tint = ForegroundSecondary

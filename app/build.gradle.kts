@@ -98,9 +98,6 @@ dependencies {
     // Image
     implementation(libs.coil.compose)
 
-    // Icons (Lucide)
-    implementation(libs.compose.icons.lucide)
-
     // Paging
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)

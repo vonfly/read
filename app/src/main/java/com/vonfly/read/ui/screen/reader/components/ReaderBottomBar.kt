@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -34,9 +35,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -54,11 +57,11 @@ import com.vonfly.read.ui.theme.ForegroundTertiary
  * 阅读器底部控制栏
  *
  * 设计规格来自 Pencil 设计稿 Read-Control-Bar 页面：
- * - 面板高度: 122dp
+ * - 面板高度: 132dp
  * - 顶部圆角: 16dp
  * - 背景色: #F9F9F9
- * - 阴影: blur 20, color #00000025 (15%), offset (0, 4)
  * - 顶部边框: 1px, 颜色 #E8E8E8
+ * - 顶部 padding: 16dp（边框上方）
  */
 @Composable
 fun ReaderBottomBar(
@@ -80,43 +83,50 @@ fun ReaderBottomBar(
         progress = (currentPage - 1).toFloat() / (totalPages - 1)
     }
 
-    // 设计稿规格
-    val cornerRadius = 16.dp
-    val shadowColor = Color(0x25000000) // 15% 不透明度
-    val bgColor = Color(0xFFF9F9F9)
-    val borderColor = Color(0xFFE8E8E8)
-
-    // 使用 Surface 组件来正确处理阴影和圆角
-    val bottomBarShape = RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius)
-
-    androidx.compose.material3.Surface(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(122.dp)
-            .graphicsLayer {
-                shadowElevation = 20f
-                shape = bottomBarShape
-                spotShadowColor = shadowColor
-                ambientShadowColor = shadowColor
-            },
-        shape = bottomBarShape,
-        color = bgColor,
-        tonalElevation = 0.dp
+            .height(132.dp)
+            .drawBehind {
+                drawIntoCanvas { canvas ->
+                    val paint = Paint().apply {
+                        asFrameworkPaint().apply {
+                            isAntiAlias = true
+                            color = android.graphics.Color.TRANSPARENT
+                            setShadowLayer(
+                                16f,   // blur radius
+                                0f,    // dx
+                                -6f,   // dy 负数 = 向上
+                                android.graphics.Color.argb(40, 0, 0, 0)
+                            )
+                        }
+                    }
+                    canvas.drawRoundRect(
+                        left = 0f,
+                        top = 0f,
+                        right = size.width,
+                        bottom = size.height,
+                        radiusX = 16.dp.toPx(),
+                        radiusY = 16.dp.toPx(),
+                        paint = paint
+                    )
+                }
+            }
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+            .background(Color(0xFFF9F9F9))
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            // 顶部边框线 - 1dp 高度，颜色 #E8E8E8
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(borderColor)
-            )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
 
-            // 进度条区域 - 设计稿 padding: [0, 20, 16, 20]
+            // 进度条区域 - 设计稿 padding: [0, 20, 16, 20], 高度 50dp
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 16.dp),
+                    .height(50.dp)  // 设计稿：固定高度 50dp
+                    .padding(start = 20.dp, end = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -293,6 +303,11 @@ private fun CustomProgressBar(
 
 /**
  * 翻页按钮
+ *
+ * 设计规格：
+ * - 按钮尺寸: 30×30dp
+ * - 圆角: 20dp（接近圆形）
+ * - 图标尺寸: 24×24dp
  */
 @Composable
 private fun PageButton(
@@ -300,10 +315,12 @@ private fun PageButton(
     onClick: () -> Unit,
     enabled: Boolean
 ) {
-    IconButton(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier.size(40.dp)
+    Box(
+        modifier = Modifier
+            .size(30.dp)  // 设计稿：30×30dp
+            .clip(RoundedCornerShape(20.dp))  // 设计稿：圆角 20dp
+            .clickable(onClick = onClick, enabled = enabled),
+        contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = icon,
