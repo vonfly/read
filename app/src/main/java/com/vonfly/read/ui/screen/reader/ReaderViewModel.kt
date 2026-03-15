@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vonfly.read.domain.model.Chapter
 import com.vonfly.read.domain.model.PageContent
 import com.vonfly.read.domain.model.ReaderSettings
 import com.vonfly.read.domain.model.ReadingProgress
@@ -36,7 +37,12 @@ data class ReaderUiState(
     val isControlsVisible: Boolean = false,
     val readerSettings: ReaderSettings = ReaderSettings(),
     val isInShelf: Boolean = false,
-    val isBookmarked: Boolean = false
+    val isBookmarked: Boolean = false,
+    // 目录面板相关
+    val chapters: ImmutableList<Chapter> = persistentListOf(),
+    val currentChapterIndex: Int = 0,
+    val visiblePanel: ReaderPanel? = null,
+    val isSortAscending: Boolean = true
 )
 
 sealed class ReaderUiEvent {
@@ -65,6 +71,29 @@ class ReaderViewModel @Inject constructor(
     init {
         loadContent()
         observeReaderSettings()
+        loadMockChapters()
+    }
+
+    private fun loadMockChapters() {
+        // Mock 章节数据（后续替换为真实数据）
+        val mockChapters = persistentListOf(
+            Chapter(id = "1", bookId = bookId, title = "第1章 科学边界(一)", index = 0, isFree = true),
+            Chapter(id = "2", bookId = bookId, title = "第2章 科学边界(二)", index = 1, isFree = true),
+            Chapter(id = "3", bookId = bookId, title = "第3章 科学边界(三)", index = 2, isFree = true),
+            Chapter(id = "4", bookId = bookId, title = "第4章 红岸工程(一)", index = 3, isFree = false),
+            Chapter(id = "5", bookId = bookId, title = "第5章 红岸工程(二)", index = 4, isFree = false),
+            Chapter(id = "6", bookId = bookId, title = "第6章 红岸工程(三)", index = 5, isFree = false),
+            Chapter(id = "7", bookId = bookId, title = "第7章 三体问题(一)", index = 6, isFree = false),
+            Chapter(id = "8", bookId = bookId, title = "第8章 三体问题(二)", index = 7, isFree = false),
+            Chapter(id = "9", bookId = bookId, title = "第9章 三体问题(三)", index = 8, isFree = false),
+            Chapter(id = "10", bookId = bookId, title = "第10章 地球往事(一)", index = 9, isFree = false),
+            Chapter(id = "11", bookId = bookId, title = "第11章 地球往事(二)", index = 10, isFree = false),
+            Chapter(id = "12", bookId = bookId, title = "第12章 地球往事(三)", index = 11, isFree = false),
+            Chapter(id = "13", bookId = bookId, title = "第13章 宇宙闪烁", index = 12, isFree = false),
+            Chapter(id = "14", bookId = bookId, title = "第14章 智子", index = 13, isFree = false),
+            Chapter(id = "15", bookId = bookId, title = "第15章 黑暗森林", index = 14, isFree = false)
+        )
+        _uiState.update { it.copy(chapters = mockChapters) }
     }
 
     private fun loadContent() {
@@ -167,10 +196,12 @@ class ReaderViewModel @Inject constructor(
         onPageChanged(newPageIndex)
     }
 
-    // 以下为设置按钮回调，本期仅 Toast
+    // 以下为设置按钮回调
     fun onCatalogClick() {
-        viewModelScope.launch {
-            _event.send(ReaderUiEvent.ShowSnackbar("目录功能开发中"))
+        _uiState.update { state ->
+            state.copy(
+                visiblePanel = if (state.visiblePanel == ReaderPanel.CATALOG) null else ReaderPanel.CATALOG
+            )
         }
     }
 
@@ -190,6 +221,30 @@ class ReaderViewModel @Inject constructor(
         viewModelScope.launch {
             _event.send(ReaderUiEvent.ShowSnackbar("更多设置开发中"))
         }
+    }
+
+    // 目录面板操作
+    fun toggleSortOrder() {
+        _uiState.update { it.copy(isSortAscending = !it.isSortAscending) }
+    }
+
+    fun onChapterClick(chapterIndex: Int) {
+        // 计算该章节的起始页索引
+        val chapters = _uiState.value.chapters
+        if (chapterIndex in chapters.indices) {
+            // 简化处理：跳转到对应章节的第一页（实际需要根据章节-页映射计算）
+            onPageChanged(chapterIndex)
+            _uiState.update { state ->
+                state.copy(
+                    currentChapterIndex = chapterIndex,
+                    visiblePanel = null
+                )
+            }
+        }
+    }
+
+    fun hidePanel() {
+        _uiState.update { it.copy(visiblePanel = null) }
     }
 
     // TopBar 操作按钮

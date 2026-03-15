@@ -3521,7 +3521,7 @@
           "name": "BottomBar",
           "width": 375,
           "height": 238,
-          "fill": "#F9F9F9CC",
+          "fill": "#f9f9f9",
           "cornerRadius": [
             16,
             16,
@@ -3879,7 +3879,7 @@
           "name": "BottomBar",
           "width": 375,
           "height": 272,
-          "fill": "#F9F9F9CC",
+          "fill": "#f9f9f9",
           "cornerRadius": [
             16,
             16,
@@ -4427,7 +4427,7 @@
           "name": "BottomBar",
           "width": 375,
           "height": 272,
-          "fill": "#FFFFFFFF",
+          "fill": "#f9f9f9",
           "cornerRadius": [
             16,
             16,
@@ -4569,7 +4569,7 @@
                       "name": "colorWhite",
                       "width": 40,
                       "height": 40,
-                      "fill": "#FFFFFF",
+                      "fill": "#f9f9f9",
                       "cornerRadius": 20,
                       "stroke": {
                         "align": "inside",
@@ -4831,8 +4831,7 @@
             "align": "inside",
             "thickness": {
               "top": 1
-            },
-            "fill": "#E8E8E8"
+            }
           },
           "effect": {
             "type": "shadow",
@@ -5493,7 +5492,7 @@
           "name": "BottomBar",
           "width": 375,
           "height": 132,
-          "fill": "#F9F9F9FF",
+          "fill": "#f9f9f9",
           "cornerRadius": [
             16,
             16,
@@ -8269,7 +8268,7 @@
                       "name": "colorWhite",
                       "width": 40,
                       "height": 40,
-                      "fill": "#FFFFFF",
+                      "fill": "#f9f9f9",
                       "cornerRadius": 20,
                       "stroke": {
                         "align": "inside",
@@ -8686,7 +8685,7 @@
                       "name": "colorWhite",
                       "width": 40,
                       "height": 40,
-                      "fill": "#FFFFFF",
+                      "fill": "#f9f9f9",
                       "cornerRadius": 20,
                       "stroke": {
                         "align": "inside",
@@ -9095,7 +9094,7 @@
                       "name": "colorWhite",
                       "width": 40,
                       "height": 40,
-                      "fill": "#FFFFFF",
+                      "fill": "#f9f9f9",
                       "cornerRadius": 20,
                       "stroke": {
                         "align": "inside",
@@ -9503,7 +9502,7 @@
                       "name": "colorWhite",
                       "width": 40,
                       "height": 40,
-                      "fill": "#FFFFFF",
+                      "fill": "#f9f9f9",
                       "cornerRadius": 20,
                       "stroke": {
                         "align": "inside",
@@ -9911,7 +9910,7 @@
                       "name": "colorWhite",
                       "width": 40,
                       "height": 40,
-                      "fill": "#FFFFFF",
+                      "fill": "#f9f9f9",
                       "cornerRadius": 20,
                       "stroke": {
                         "align": "inside",

@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vonfly.read.domain.model.PageContent
 import com.vonfly.read.domain.model.ReaderSettings
+import com.vonfly.read.ui.screen.reader.components.CatalogBottomPanel
 import com.vonfly.read.ui.screen.reader.components.ReaderBottomBar
 import com.vonfly.read.ui.screen.reader.components.ReaderFooter
 import com.vonfly.read.ui.screen.reader.components.ReaderTopBar
@@ -72,6 +73,9 @@ fun ReaderContent(
     onFontClick: () -> Unit,
     onBrightnessClick: () -> Unit,
     onMoreClick: () -> Unit,
+    onChapterClick: (Int) -> Unit,
+    onToggleSortOrder: () -> Unit,
+    hidePanel: () -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     isInShelf: Boolean = false,
@@ -136,16 +140,29 @@ fun ReaderContent(
             )
         }
 
-        // 控制栏（顶部 + 底部）
+        // 顶部控制栏 - 绑定 visiblePanel 状态（只有默认状态显示）
         AnimatedVisibility(
-            visible = uiState.isControlsVisible,
+            visible = uiState.isControlsVisible && uiState.visiblePanel == null,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.align(Alignment.TopCenter)
         ) {
+            ReaderTopBar(
+                bookTitle = uiState.bookTitle.ifEmpty { "三体" },
+                onNavigateBack = onNavigateBack,
+                onAddToShelfClick = onAddToShelfClick,
+                onBookmarkClick = onBookmarkClick,
+                onSettingsClick = onSettingsClick,
+                isInShelf = isInShelf,
+                isBookmarked = isBookmarked
+            )
+        }
+
+        // 底部面板 - 原地切换内容，无动画
+        if (uiState.isControlsVisible) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .align(Alignment.BottomCenter)
                     .pointerInput(Unit) {
                         // 使用 Main pass（子→父），先于外层处理并消费事件
                         awaitEachGesture {
@@ -153,35 +170,52 @@ fun ReaderContent(
                             down.consume()  // 消费 down 事件
                             val up = waitForUpOrCancellation()
                             up?.consume()   // 消费 up 事件
-                            // 事件已消费，外层的 awaitFirstDown(requireUnconsumed=true) 不会收到
                         }
                     }
             ) {
-                // 顶部控制栏
-                ReaderTopBar(
-                    bookTitle = uiState.bookTitle.ifEmpty { "三体" },
-                    onNavigateBack = onNavigateBack,
-                    onAddToShelfClick = onAddToShelfClick,
-                    onBookmarkClick = onBookmarkClick,
-                    onSettingsClick = onSettingsClick,
-                    isInShelf = isInShelf,
-                    isBookmarked = isBookmarked,
-                    modifier = Modifier.align(Alignment.TopCenter)
-                )
-
-                // 底部控制栏
-                ReaderBottomBar(
-                    currentPage = uiState.currentPageIndex + 1,
-                    totalPages = uiState.totalPages,
-                    onPreviousPage = onPreviousPage,
-                    onNextPage = onNextPage,
-                    onProgressChange = onProgressChange,
-                    onCatalogClick = onCatalogClick,
-                    onFontClick = onFontClick,
-                    onBrightnessClick = onBrightnessClick,
-                    onMoreClick = onMoreClick,
-                    modifier = Modifier.align(Alignment.BottomCenter)
-                )
+                when (uiState.visiblePanel) {
+                    null -> {
+                        // 默认控制栏：进度条 + 控制按钮
+                        ReaderBottomBar(
+                            currentPage = uiState.currentPageIndex + 1,
+                            totalPages = uiState.totalPages,
+                            onPreviousPage = onPreviousPage,
+                            onNextPage = onNextPage,
+                            onProgressChange = onProgressChange,
+                            onCatalogClick = onCatalogClick,
+                            onFontClick = onFontClick,
+                            onBrightnessClick = onBrightnessClick,
+                            onMoreClick = onMoreClick,
+                            activeButton = null
+                        )
+                    }
+                    ReaderPanel.CATALOG -> {
+                        // 目录模式：章节列表 + 控制按钮
+                        CatalogBottomPanel(
+                            chapters = uiState.chapters,
+                            currentChapterIndex = uiState.currentChapterIndex,
+                            isSortAscending = uiState.isSortAscending,
+                            onChapterClick = onChapterClick,
+                            onToggleSortOrder = onToggleSortOrder,
+                            onCatalogClick = onCatalogClick,
+                            onBrightnessClick = onBrightnessClick,
+                            onFontClick = onFontClick,
+                            onMoreClick = onMoreClick
+                        )
+                    }
+                    ReaderPanel.BRIGHTNESS -> {
+                        // 亮度面板（待实现）
+                        // TODO: 实现亮度面板
+                    }
+                    ReaderPanel.FONT -> {
+                        // 字体面板（待实现）
+                        // TODO: 实现字体面板
+                    }
+                    ReaderPanel.MORE -> {
+                        // 更多面板（待实现）
+                        // TODO: 实现更多面板
+                    }
+                }
             }
         }
 
@@ -300,6 +334,9 @@ private fun ReaderContentPreview() {
                 onFontClick = {},
                 onBrightnessClick = {},
                 onMoreClick = {},
+                onChapterClick = {},
+                onToggleSortOrder = {},
+                hidePanel = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }
@@ -344,6 +381,9 @@ private fun ReaderContentWithControlsPreview() {
                 onFontClick = {},
                 onBrightnessClick = {},
                 onMoreClick = {},
+                onChapterClick = {},
+                onToggleSortOrder = {},
+                hidePanel = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }

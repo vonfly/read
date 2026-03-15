@@ -48,8 +48,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vonfly.read.ui.screen.reader.ReaderPanel
 import com.vonfly.read.ui.theme.Accent
-import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.ForegroundTertiary
 
@@ -74,6 +74,7 @@ fun ReaderBottomBar(
     onFontClick: () -> Unit,
     onBrightnessClick: () -> Unit,
     onMoreClick: () -> Unit,
+    activeButton: ReaderPanel? = null,
     modifier: Modifier = Modifier
 ) {
     var progress by remember { mutableFloatStateOf(0f) }
@@ -168,7 +169,7 @@ fun ReaderBottomBar(
                 icon = Icons.AutoMirrored.Filled.List,
                 label = "目录",
                 onClick = onCatalogClick,
-                isSelected = false,
+                isSelected = activeButton == ReaderPanel.CATALOG,
                 modifier = Modifier.weight(1f)
             )
 
@@ -176,7 +177,7 @@ fun ReaderBottomBar(
                 icon = Icons.Outlined.WbSunny,
                 label = "亮度",
                 onClick = onBrightnessClick,
-                isSelected = false,
+                isSelected = activeButton == ReaderPanel.BRIGHTNESS,
                 modifier = Modifier.weight(1f)
             )
 
@@ -184,7 +185,7 @@ fun ReaderBottomBar(
                 icon = Icons.Outlined.Abc,
                 label = "字体",
                 onClick = onFontClick,
-                isSelected = false,
+                isSelected = activeButton == ReaderPanel.FONT,
                 modifier = Modifier.weight(1f)
             )
 
@@ -192,7 +193,7 @@ fun ReaderBottomBar(
                 icon = Icons.Outlined.MoreHoriz,
                 label = "更多",
                 onClick = onMoreClick,
-                isSelected = false,
+                isSelected = activeButton == ReaderPanel.MORE,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -375,5 +376,65 @@ private fun ControlButton(
                 color = if (isSelected) Accent else ForegroundTertiary
             )
         }
+    }
+}
+
+/**
+ * 底部控制按钮行（可复用组件）
+ *
+ * 只包含目录、亮度、字体、更多四个按钮，用于在面板中复用。
+ * 设计规格：
+ * - 高度: 66dp
+ * - 水平内边距: 20dp
+ * - 按钮平均分配空间
+ */
+@Composable
+fun BottomControlButtons(
+    onCatalogClick: () -> Unit,
+    onBrightnessClick: () -> Unit,
+    onFontClick: () -> Unit,
+    onMoreClick: () -> Unit,
+    activeButton: ReaderPanel? = null,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(66.dp)
+            .padding(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        ControlButton(
+            icon = Icons.AutoMirrored.Filled.List,
+            label = "目录",
+            onClick = onCatalogClick,
+            isSelected = activeButton == ReaderPanel.CATALOG,
+            modifier = Modifier.weight(1f)
+        )
+
+        ControlButton(
+            icon = Icons.Outlined.WbSunny,
+            label = "亮度",
+            onClick = onBrightnessClick,
+            isSelected = activeButton == ReaderPanel.BRIGHTNESS,
+            modifier = Modifier.weight(1f)
+        )
+
+        ControlButton(
+            icon = Icons.Outlined.Abc,
+            label = "字体",
+            onClick = onFontClick,
+            isSelected = activeButton == ReaderPanel.FONT,
+            modifier = Modifier.weight(1f)
+        )
+
+        ControlButton(
+            icon = Icons.Outlined.MoreHoriz,
+            label = "更多",
+            onClick = onMoreClick,
+            isSelected = activeButton == ReaderPanel.MORE,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
