@@ -38,10 +38,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vonfly.read.domain.model.PageContent
 import com.vonfly.read.domain.model.ReaderSettings
+import com.vonfly.read.domain.model.PageTurnMode
+import com.vonfly.read.ui.screen.reader.components.AutoPageConfigPanel
+import com.vonfly.read.ui.screen.reader.components.AutoScrollReader
 import com.vonfly.read.ui.screen.reader.components.BrightnessBottomPanel
 import com.vonfly.read.ui.screen.reader.components.CatalogBottomPanel
 import com.vonfly.read.ui.screen.reader.components.FontBottomPanel
 import com.vonfly.read.ui.screen.reader.components.MoreBottomPanel
+import com.vonfly.read.ui.screen.reader.components.PageTurnCover
+import com.vonfly.read.ui.screen.reader.components.PageTurnSlide
 import com.vonfly.read.ui.screen.reader.components.ReaderBottomBar
 import com.vonfly.read.ui.screen.reader.components.ReaderFooter
 import com.vonfly.read.ui.screen.reader.components.ReaderTopBar
@@ -58,6 +63,7 @@ fun ReaderContent(
     onNavigateBack: () -> Unit,
     onPreviousPage: () -> Unit,
     onNextPage: () -> Unit,
+    onPageChange: (Int) -> Unit,
     onProgressChange: (Float) -> Unit,
     onAddToShelfClick: () -> Unit,
     onBookmarkClick: () -> Unit,
@@ -76,6 +82,10 @@ fun ReaderContent(
     onLetterSpacingChange: (Float) -> Unit,
     onPageTurnModeChange: (com.vonfly.read.domain.model.PageTurnMode) -> Unit,
     onAutoPageEnabledChange: (Boolean) -> Unit,
+    onAutoPageSpeedChange: (Float) -> Unit,
+    onAutoPageIntervalChange: (Int) -> Unit,
+    setAutoPagePaused: (Boolean) -> Unit,
+    onScrollToBottom: () -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     isInShelf: Boolean = false,
@@ -85,34 +95,7 @@ fun ReaderContent(
     val colorScheme = settings.colorScheme
 
     Box(
-        modifier = modifier
-            .background(colorScheme.background)
-            .pointerInput(uiState.isControlsVisible) {
-                // 使用 Main pass（默认），内层 Initial pass 先处理
-                awaitEachGesture {
-                    awaitFirstDown()
-                    val up = waitForUpOrCancellation()
-
-                    if (up != null) {
-                        if (uiState.isControlsVisible) {
-                            // 面板已弹出，点击任何区域都隐藏面板
-                            onScreenClick()
-                        } else {
-                            // 面板未弹出，根据点击区域执行不同操作
-                            val screenWidth = size.width
-                            val tapX = up.position.x
-                            val leftZone = screenWidth * 0.35f
-                            val rightZone = screenWidth * 0.65f
-
-                            when {
-                                tapX < leftZone -> onPreviousPage()      // 左边区域：上一页
-                                tapX > rightZone -> onNextPage()         // 右边区域：下一页
-                                else -> onScreenClick()                  // 中间区域：显示控制栏
-                            }
-                        }
-                    }
-                }
-            }
+        modifier = modifier.background(colorScheme.background)
     ) {
         if (uiState.isLoading) {
             // 加载状态
@@ -123,14 +106,135 @@ fun ReaderContent(
                 CircularProgressIndicator()
             }
         } else if (uiState.pages.isNotEmpty()) {
-            // 阅读内容
-            ReaderPageLayer(
-                page = uiState.pages[uiState.currentPageIndex],
-                chapterTitle = uiState.chapterTitle,
-                modifier = Modifier.fillMaxSize()
-            )
+            // 自动滚动模式
+            if (uiState.readerSettings.autoPageEnabled) {
+                // 自动滚动模式
+                Box(modifier = Modifier.fillMaxSize()) {
+                    AutoScrollReader(
+                        pages = uiState.pages,
+                        currentPageIndex = uiState.currentPageIndex,
+                        chapterTitle = uiState.chapterTitle,
+                        speed = uiState.readerSettings.autoPageSpeed,
+                        isPaused = uiState.autoPagePaused,
+                        currentColorScheme = uiState.readerSettings.colorScheme,
+                        onPageChange = onPageChange,
+                        onPause = { setAutoPagePaused(true) },
+                        onScrollToBottom = onScrollToBottom,
+                        modifier = Modifier.fillMaxSize()
+                    )
 
-            // 底部状态栏（时间 + 页码）
+                    // 暂停时显示配置面板 + 透明遮罩层（点击恢复滚动）
+                    if (uiState.autoPagePaused) {
+                        // 透明遮罩层 - 点击恢复滚动
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    awaitEachGesture {
+                                        val down = awaitFirstDown()
+                                        down.consume()
+                                        val up = waitForUpOrCancellation()
+                                        up?.consume()
+                                        // 点击遮罩层恢复滚动
+                                        setAutoPagePaused(false)
+                                    }
+                                }
+                        )
+
+                        // 配置面板（面板自身不消费点击，让遮罩层处理）
+                        AutoPageConfigPanel(
+                            autoPageEnabled = true,
+                            autoPageSpeed = uiState.readerSettings.autoPageSpeed,
+                            autoPageInterval = uiState.readerSettings.autoPageInterval,
+                            currentColorScheme = uiState.readerSettings.colorScheme,
+                            onAutoPageEnabledChange = onAutoPageEnabledChange,
+                            onAutoPageSpeedChange = onAutoPageSpeedChange,
+                            onAutoPageIntervalChange = onAutoPageIntervalChange,
+                            onCatalogClick = onCatalogClick,
+                            onBrightnessClick = onBrightnessClick,
+                            onFontClick = onFontClick,
+                            onMoreClick = { setAutoPagePaused(false) },
+                            modifier = Modifier.align(Alignment.BottomCenter)
+                        )
+                    }
+                }
+            } else {
+                // 正常翻页模式
+                // 根据控制栏可见性和翻页模式渲染内容
+                if (uiState.isControlsVisible) {
+                // 面板已弹出，点击内容区域隐藏面板
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                awaitFirstDown()
+                                val up = waitForUpOrCancellation()
+                                if (up != null) {
+                                    onScreenClick()
+                                }
+                            }
+                        }
+                ) {
+                    ReaderPageLayer(
+                        page = uiState.pages[uiState.currentPageIndex],
+                        chapterTitle = uiState.chapterTitle,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            } else {
+                // 面板未弹出，根据翻页模式渲染对应组件
+                when (uiState.readerSettings.pageTurnMode) {
+                    PageTurnMode.SLIDE -> PageTurnSlide(
+                        pages = uiState.pages,
+                        currentPageIndex = uiState.currentPageIndex,
+                        chapterTitle = uiState.chapterTitle,
+                        onPageChange = onPageChange,
+                        onScreenClick = onScreenClick,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    PageTurnMode.COVER -> PageTurnCover(
+                        page = uiState.pages[uiState.currentPageIndex],
+                        chapterTitle = uiState.chapterTitle,
+                        onPreviousPage = onPreviousPage,
+                        onNextPage = onNextPage,
+                        onScreenClick = onScreenClick,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    PageTurnMode.REAL -> {
+                        // 仿真翻页暂不实现，使用简单切换
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    awaitEachGesture {
+                                        awaitFirstDown()
+                                        val up = waitForUpOrCancellation()
+                                        if (up != null) {
+                                            val screenWidth = size.width
+                                            val tapX = up.position.x
+                                            val leftZone = screenWidth * 0.35f
+                                            val rightZone = screenWidth * 0.65f
+                                            when {
+                                                tapX < leftZone -> onPreviousPage()
+                                                tapX > rightZone -> onNextPage()
+                                                else -> onScreenClick()
+                                            }
+                                        }
+                                    }
+                                }
+                        ) {
+                            ReaderPageLayer(
+                                page = uiState.pages[uiState.currentPageIndex],
+                                chapterTitle = uiState.chapterTitle,
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
+                    }
+                }
+            }
+
+            // 底部状态栏（时间 + 页码）- 仅正常翻页模式显示
             ReaderFooter(
                 currentPage = uiState.currentPageIndex + 1,
                 totalPages = uiState.totalPages,
@@ -138,6 +242,7 @@ fun ReaderContent(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 8.dp)
             )
+            }
         }
 
         // 顶部控制栏 - 绑定 visiblePanel 状态（只有默认状态显示）
@@ -362,6 +467,7 @@ private fun ReaderContentPreview() {
                 onNavigateBack = {},
                 onPreviousPage = {},
                 onNextPage = {},
+                onPageChange = {},
                 onProgressChange = {},
                 onAddToShelfClick = {},
                 onBookmarkClick = {},
@@ -380,6 +486,10 @@ private fun ReaderContentPreview() {
                 onLetterSpacingChange = {},
                 onPageTurnModeChange = {},
                 onAutoPageEnabledChange = {},
+                onAutoPageSpeedChange = {},
+                onAutoPageIntervalChange = {},
+                setAutoPagePaused = {},
+                onScrollToBottom = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }
@@ -416,6 +526,7 @@ private fun ReaderContentWithControlsPreview() {
                 onNavigateBack = {},
                 onPreviousPage = {},
                 onNextPage = {},
+                onPageChange = {},
                 onProgressChange = {},
                 onAddToShelfClick = {},
                 onBookmarkClick = {},
@@ -434,6 +545,10 @@ private fun ReaderContentWithControlsPreview() {
                 onLetterSpacingChange = {},
                 onPageTurnModeChange = {},
                 onAutoPageEnabledChange = {},
+                onAutoPageSpeedChange = {},
+                onAutoPageIntervalChange = {},
+                setAutoPagePaused = {},
+                onScrollToBottom = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }

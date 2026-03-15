@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.vonfly.read.di.qualifier.ReaderDataStore
 import com.vonfly.read.domain.model.PageTurnMode
@@ -49,7 +50,9 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
                 pageTurnMode = PageTurnMode.valueOf(
                     preferences[PAGE_TURN_MODE] ?: DEFAULT_PAGE_TURN_MODE
                 ),
-                autoPageEnabled = preferences[AUTO_PAGE_ENABLED] ?: DEFAULT_AUTO_PAGE_ENABLED
+                autoPageEnabled = preferences[AUTO_PAGE_ENABLED] ?: DEFAULT_AUTO_PAGE_ENABLED,
+                autoPageSpeed = preferences[AUTO_PAGE_SPEED] ?: DEFAULT_AUTO_PAGE_SPEED,
+                autoPageInterval = preferences[AUTO_PAGE_INTERVAL] ?: DEFAULT_AUTO_PAGE_INTERVAL
             )
         }
 
@@ -95,6 +98,18 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateAutoPageSpeed(speed: Float) {
+        dataStore.edit { preferences ->
+            preferences[AUTO_PAGE_SPEED] = speed.coerceIn(1.0f, 3.0f)
+        }
+    }
+
+    override suspend fun updateAutoPageInterval(intervalSeconds: Int) {
+        dataStore.edit { preferences ->
+            preferences[AUTO_PAGE_INTERVAL] = intervalSeconds.coerceIn(1, 10)
+        }
+    }
+
     companion object {
         private const val DEFAULT_FONT_SIZE = 18f
         private const val DEFAULT_LINE_HEIGHT = 1.8f
@@ -102,6 +117,8 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
         private const val DEFAULT_LETTER_SPACING = 0f
         private const val DEFAULT_PAGE_TURN_MODE = "SLIDE"
         private const val DEFAULT_AUTO_PAGE_ENABLED = false
+        private const val DEFAULT_AUTO_PAGE_SPEED = 1.0f
+        private const val DEFAULT_AUTO_PAGE_INTERVAL = 5
 
         private val FONT_SIZE = floatPreferencesKey("reader_font_size")
         private val LINE_HEIGHT = floatPreferencesKey("reader_line_height")
@@ -110,5 +127,7 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
         private val LETTER_SPACING = floatPreferencesKey("reader_letter_spacing")
         private val PAGE_TURN_MODE = stringPreferencesKey("reader_page_turn_mode")
         private val AUTO_PAGE_ENABLED = booleanPreferencesKey("reader_auto_page_enabled")
+        private val AUTO_PAGE_SPEED = floatPreferencesKey("reader_auto_page_speed")
+        private val AUTO_PAGE_INTERVAL = intPreferencesKey("reader_auto_page_interval")
     }
 }

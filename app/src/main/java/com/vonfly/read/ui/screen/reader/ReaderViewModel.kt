@@ -45,7 +45,9 @@ data class ReaderUiState(
     val chapters: ImmutableList<Chapter> = persistentListOf(),
     val currentChapterIndex: Int = 0,
     val visiblePanel: ReaderPanel? = null,
-    val isSortAscending: Boolean = true
+    val isSortAscending: Boolean = true,
+    // 自动滚动相关
+    val autoPagePaused: Boolean = false  // 自动滚动是否暂停
 )
 
 sealed class ReaderUiEvent {
@@ -70,6 +72,7 @@ class ReaderViewModel @Inject constructor(
     val event = _event.receiveAsFlow()
 
     private var saveProgressJob: Job? = null
+    private var autoPageJob: Job? = null
 
     init {
         loadContent()
@@ -246,7 +249,94 @@ class ReaderViewModel @Inject constructor(
     fun onAutoPageEnabledChange(enabled: Boolean) {
         viewModelScope.launch {
             readerPreferencesRepository.updateAutoPageEnabled(enabled)
+            if (enabled) {
+                // 开启自动滚动：隐藏所有面板，开始滚动
+                _uiState.update { it.copy(
+                    isControlsVisible = false,
+                    visiblePanel = null,
+                    autoPagePaused = false
+                )}
+                stopAutoPage()  // 停止旧的定时翻页逻辑（如果有）
+            } else {
+                // 关闭自动滚动
+                stopAutoPage()
+                _uiState.update { it.copy(autoPagePaused = false) }
+            }
         }
+    }
+
+    fun setAutoPagePaused(paused: Boolean) {
+        _uiState.update { it.copy(autoPagePaused = paused) }
+    }
+
+    fun onScrollToBottom() {
+        viewModelScope.launch {
+            _event.send(ReaderUiEvent.ShowSnackbar("已到达最后一页"))
+            // 停止自动滚动
+            readerPreferencesRepository.updateAutoPageEnabled(false)
+            _uiState.update { it.copy(autoPagePaused = false) }
+        }
+    }
+
+    fun onAutoPageSpeedChange(speed: Float) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateAutoPageSpeed(speed)
+            // 如果自动翻页正在运行，重启以应用新速度
+            if (_uiState.value.readerSettings.autoPageEnabled) {
+                restartAutoPage()
+            }
+        }
+    }
+
+    fun onAutoPageIntervalChange(intervalSeconds: Int) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateAutoPageInterval(intervalSeconds)
+            // 如果自动翻页正在运行，重启以应用新间隔
+            if (_uiState.value.readerSettings.autoPageEnabled) {
+                restartAutoPage()
+            }
+        }
+    }
+
+    private fun startAutoPage() {
+        autoPageJob?.cancel()
+        autoPageJob = viewModelScope.launch {
+            val intervalSeconds = _uiState.value.readerSettings.autoPageInterval
+            delay(intervalSeconds * 1000L)  // 初始延迟
+            while (_uiState.value.readerSettings.autoPageEnabled) {
+                val currentPageIndex = _uiState.value.currentPageIndex
+                val totalPages = _uiState.value.totalPages
+                if (currentPageIndex < totalPages - 1) {
+                    onPageChanged(currentPageIndex + 1)
+                } else {
+                    // 已经是最后一页，停止自动翻页
+                    readerPreferencesRepository.updateAutoPageEnabled(false)
+                    _event.send(ReaderUiEvent.ShowSnackbar("已到达最后一页，自动翻页已停止"))
+                    break
+                }
+                // 等待间隔时间（考虑速度倍数）
+                val speed = _uiState.value.readerSettings.autoPageSpeed
+                val adjustedInterval = (intervalSeconds * 1000L / speed).toLong()
+                delay(adjustedInterval)
+            }
+        }
+    }
+
+    private fun stopAutoPage() {
+        autoPageJob?.cancel()
+        autoPageJob = null
+    }
+
+    private fun restartAutoPage() {
+        if (_uiState.value.readerSettings.autoPageEnabled) {
+            stopAutoPage()
+            startAutoPage()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        autoPageJob?.cancel()
     }
 
     // 目录面板操作

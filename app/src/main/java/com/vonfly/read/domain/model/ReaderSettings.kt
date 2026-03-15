@@ -17,7 +17,9 @@ data class ReaderSettings(
     val colorScheme: ReaderColorScheme = ReaderColorScheme.Default,
     val brightness: Float = 1.0f,  // 亮度值 0.0-1.0，默认 100%
     val pageTurnMode: PageTurnMode = PageTurnMode.SLIDE,  // 翻页方式，默认滑动
-    val autoPageEnabled: Boolean = false  // 自动翻页开关，默认关闭
+    val autoPageEnabled: Boolean = false,  // 自动翻页开关，默认关闭
+    val autoPageSpeed: Float = 1.0f,  // 自动翻页速度倍数，1.0-3.0，默认 1x
+    val autoPageInterval: Int = 5  // 自动翻页间隔秒数，1-10 秒，默认 5 秒
 )
 
 /**

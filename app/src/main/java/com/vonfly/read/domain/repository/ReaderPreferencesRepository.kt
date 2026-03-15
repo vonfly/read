@@ -66,4 +66,18 @@ interface ReaderPreferencesRepository {
      * @param enabled 是否启用自动翻页
      */
     suspend fun updateAutoPageEnabled(enabled: Boolean)
+
+    /**
+     * 更新自动翻页速度倍数
+     *
+     * @param speed 速度倍数（1.0-3.0）
+     */
+    suspend fun updateAutoPageSpeed(speed: Float)
+
+    /**
+     * 更新自动翻页间隔秒数
+     *
+     * @param intervalSeconds 间隔秒数（1-10 秒）
+     */
+    suspend fun updateAutoPageInterval(intervalSeconds: Int)
 }
