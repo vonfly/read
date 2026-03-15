@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 data class ReaderSettings(
     val fontSize: TextUnit = 18.sp,
     val lineHeight: Float = 1.8f,
+    val letterSpacing: Float = 0f,  // 字间距（sp 单位倍数），默认 0
     val colorScheme: ReaderColorScheme = ReaderColorScheme.Default,
     val brightness: Float = 1.0f  // 亮度值 0.0-1.0，默认 100%
 )

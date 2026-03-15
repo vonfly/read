@@ -162,7 +162,6 @@ ScreenName (宽×高, fill=background, layout=vertical)
 
 ```
 读取 docs/features/[功能名]-spec.md，
-同时通过 Pencil MCP 读取设计稿中"[页面名称]"页面，
 结合项目现有架构，把这个功能拆分成具体的实现任务。
 将完整计划写入 docs/features/[功能名]-plan.md，不要立即执行任何代码。
 等我阅读完没有问题再进行下一步操作

@@ -44,4 +44,11 @@ interface ReaderPreferencesRepository {
      * @param brightness 亮度值（0.0-1.0）
      */
     suspend fun updateBrightness(brightness: Float)
+
+    /**
+     * 更新字间距
+     *
+     * @param letterSpacing 字间距（sp 单位倍数）
+     */
+    suspend fun updateLetterSpacing(letterSpacing: Float)
 }

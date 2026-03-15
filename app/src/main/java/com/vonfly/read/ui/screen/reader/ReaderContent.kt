@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.sp
 import com.vonfly.read.domain.model.PageContent
 import com.vonfly.read.domain.model.ReaderSettings
 import com.vonfly.read.ui.screen.reader.components.BrightnessBottomPanel
-import com.vonfly.read.ui.screen.reader.components.BrightnessBottomPanel
 import com.vonfly.read.ui.screen.reader.components.CatalogBottomPanel
+import com.vonfly.read.ui.screen.reader.components.FontBottomPanel
 import com.vonfly.read.ui.screen.reader.components.ReaderBottomBar
 import com.vonfly.read.ui.screen.reader.components.ReaderFooter
 import com.vonfly.read.ui.screen.reader.components.ReaderTopBar
@@ -70,6 +70,9 @@ fun ReaderContent(
     hidePanel: () -> Unit,
     onBrightnessChange: (Float) -> Unit,
     onColorSchemeChange: (com.vonfly.read.domain.model.ReaderColorScheme) -> Unit,
+    onFontSizeChange: (Float) -> Unit,
+    onLineHeightChange: (Float) -> Unit,
+    onLetterSpacingChange: (Float) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     isInShelf: Boolean = false,
@@ -229,8 +232,19 @@ fun ReaderContent(
                         )
                     }
                     ReaderPanel.FONT -> {
-                        // 字体面板（待实现）
-                        // TODO: 实现字体面板
+                        FontBottomPanel(
+                            fontSize = settings.fontSize.value,
+                            lineHeight = settings.lineHeight,
+                            letterSpacing = settings.letterSpacing,
+                            currentColorScheme = colorScheme,
+                            onFontSizeChange = onFontSizeChange,
+                            onLineHeightChange = onLineHeightChange,
+                            onLetterSpacingChange = onLetterSpacingChange,
+                            onCatalogClick = onCatalogClick,
+                            onBrightnessClick = onBrightnessClick,
+                            onFontClick = onFontClick,
+                            onMoreClick = onMoreClick
+                        )
                     }
                     ReaderPanel.MORE -> {
                         // 更多面板（待实现）
@@ -293,7 +307,8 @@ private fun ReaderPageLayer(
             Text(
                 text = paragraph,
                 fontSize = settings.fontSize,
-                lineHeight = settings.fontSize * 1.3f, // 设计稿 1.8 对应 Compose 1.3
+                lineHeight = settings.fontSize * settings.lineHeight,
+                letterSpacing = settings.letterSpacing.sp,
                 color = colorScheme.text
                 // 不添加任何点击/长按 modifier，让所有点击事件传播到外层 pointerInput
                 // TODO: 后续如需长按复制功能，在 LazyColumn 层级使用更底层的手势检测
@@ -350,6 +365,9 @@ private fun ReaderContentPreview() {
                 hidePanel = {},
                 onBrightnessChange = {},
                 onColorSchemeChange = {},
+                onFontSizeChange = {},
+                onLineHeightChange = {},
+                onLetterSpacingChange = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }
@@ -399,6 +417,9 @@ private fun ReaderContentWithControlsPreview() {
                 hidePanel = {},
                 onBrightnessChange = {},
                 onColorSchemeChange = {},
+                onFontSizeChange = {},
+                onLineHeightChange = {},
+                onLetterSpacingChange = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }

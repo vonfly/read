@@ -39,6 +39,7 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
             ReaderSettings(
                 fontSize = (preferences[FONT_SIZE] ?: DEFAULT_FONT_SIZE).sp,
                 lineHeight = preferences[LINE_HEIGHT] ?: DEFAULT_LINE_HEIGHT,
+                letterSpacing = preferences[LETTER_SPACING] ?: DEFAULT_LETTER_SPACING,
                 colorScheme = ReaderColorScheme.entries.find {
                     it.name == preferences[COLOR_SCHEME]
                 } ?: ReaderColorScheme.Default,
@@ -70,14 +71,22 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateLetterSpacing(letterSpacing: Float) {
+        dataStore.edit { preferences ->
+            preferences[LETTER_SPACING] = letterSpacing
+        }
+    }
+
     companion object {
         private const val DEFAULT_FONT_SIZE = 18f
         private const val DEFAULT_LINE_HEIGHT = 1.8f
         private const val DEFAULT_BRIGHTNESS = 1.0f
+        private const val DEFAULT_LETTER_SPACING = 0f
 
         private val FONT_SIZE = floatPreferencesKey("reader_font_size")
         private val LINE_HEIGHT = floatPreferencesKey("reader_line_height")
         private val COLOR_SCHEME = stringPreferencesKey("reader_color_scheme")
         private val BRIGHTNESS = floatPreferencesKey("reader_brightness")
+        private val LETTER_SPACING = floatPreferencesKey("reader_letter_spacing")
     }
 }

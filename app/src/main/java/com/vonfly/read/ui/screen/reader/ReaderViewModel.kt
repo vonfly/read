@@ -212,8 +212,10 @@ class ReaderViewModel @Inject constructor(
     }
 
     fun onFontClick() {
-        viewModelScope.launch {
-            _event.send(ReaderUiEvent.ShowSnackbar("字体设置开发中"))
+        _uiState.update { state ->
+            state.copy(
+                visiblePanel = if (state.visiblePanel == ReaderPanel.FONT) null else ReaderPanel.FONT
+            )
         }
     }
 
@@ -292,6 +294,25 @@ class ReaderViewModel @Inject constructor(
     fun onColorSchemeChange(colorScheme: ReaderColorScheme) {
         viewModelScope.launch {
             readerPreferencesRepository.updateColorScheme(colorScheme.name)
+        }
+    }
+
+    // 字体面板相关方法
+    fun onFontSizeChange(fontSize: Float) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateFontSize(fontSize)
+        }
+    }
+
+    fun onLineHeightChange(lineHeight: Float) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateLineHeight(lineHeight)
+        }
+    }
+
+    fun onLetterSpacingChange(letterSpacing: Float) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateLetterSpacing(letterSpacing)
         }
     }
 }
