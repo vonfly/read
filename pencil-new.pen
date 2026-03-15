@@ -11134,6 +11134,298 @@
           }
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "xy7bB",
+      "x": 1899,
+      "y": 850,
+      "name": "Read-Page-Turn-Auto",
+      "width": 375,
+      "height": 812,
+      "fill": "$--background",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "tS9Q0",
+          "x": 0,
+          "y": 0,
+          "name": "ReadingLayer",
+          "width": 375,
+          "height": 812,
+          "fill": "$--background",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "kMkBQ",
+              "name": "Header",
+              "width": 375,
+              "height": 72,
+              "layout": "vertical",
+              "padding": [
+                28,
+                0,
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "cDLNT",
+                  "name": "ChapterTitle",
+                  "fill": "$--foreground-secondary",
+                  "content": "第15章 科学边界(三)",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "NS0DW",
+              "name": "readingContent",
+              "width": 375,
+              "height": 716,
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                0,
+                20
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "YBe6v",
+                  "name": "para1",
+                  "fill": "#333333",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "汪淼是个搞纳米材料的。这天下午，他刚从学校回家，就接到一个陌生女人的电话，说是市公安局的，请他去一下。",
+                  "lineHeight": 1.8,
+                  "fontFamily": "Inter",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "94InY",
+              "name": "Footer",
+              "width": 375,
+              "height": 24,
+              "padding": [
+                0,
+                24,
+                8,
+                24
+              ],
+              "justifyContent": "space_between",
+              "alignItems": "center"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "J8dPf",
+          "x": 0,
+          "y": 662,
+          "name": "BottomBar",
+          "width": 375,
+          "height": 150,
+          "fill": "#f9f9f9",
+          "cornerRadius": [
+            16,
+            16,
+            0,
+            0
+          ],
+          "stroke": {
+            "align": "inside",
+            "thickness": {
+              "top": 1
+            }
+          },
+          "effect": {
+            "type": "shadow",
+            "shadowType": "outer",
+            "color": "#00000025",
+            "offset": {
+              "x": 0,
+              "y": 4
+            },
+            "blur": 20
+          },
+          "layout": "vertical",
+          "padding": [
+            16,
+            0,
+            0,
+            0
+          ],
+          "justifyContent": "end",
+          "children": [
+            {
+              "type": "frame",
+              "id": "RKDuR",
+              "name": "panel",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 32,
+              "padding": [
+                6,
+                20,
+                20,
+                20
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "iWMda",
+                  "name": "speedSection",
+                  "width": "fill_container",
+                  "height": 28,
+                  "gap": 12,
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "kb8MX",
+                      "fill": "$--foreground",
+                      "content": "速度",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RS9XJ",
+                      "name": "speedOptions",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "lkJEk",
+                          "name": "opt1",
+                          "width": 44,
+                          "height": 28,
+                          "fill": "$--accent",
+                          "cornerRadius": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "7zvrV",
+                              "fill": "#FFFFFF",
+                              "content": "1x",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZWOmZ",
+                          "name": "opt15",
+                          "width": 44,
+                          "height": 28,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ghrS5",
+                              "fill": "$--foreground-secondary",
+                              "content": "1.5x",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "KokqP",
+                          "name": "opt2",
+                          "width": 44,
+                          "height": 28,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bM4pn",
+                              "fill": "$--foreground-secondary",
+                              "content": "2x",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YFeNS",
+                          "name": "opt3",
+                          "width": 44,
+                          "height": 28,
+                          "fill": "#F5F5F5",
+                          "cornerRadius": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "y3roW",
+                              "fill": "$--foreground-secondary",
+                              "content": "3x",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zDehj",
+                  "name": "exitBtn",
+                  "width": "fill_container",
+                  "height": 44,
+                  "fill": "$--accent",
+                  "cornerRadius": 22,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "bzvrg",
+                      "fill": "#FFFFFF",
+                      "content": "退出自动翻页",
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "variables": {

@@ -9,19 +9,19 @@
 - **覆盖（COVER）**：新页面从右侧覆盖旧页面 ✅
 - **仿真（REAL）**：仿真翻页效果（本期暂不实现）
 
-### 自动翻页（滚动模式）✅
+### 自动翻页（整章滚动模式）✅
 
 **交互流程**：
 1. 更多面板开启"自动翻页"开关
 2. 开启后**隐藏所有面板**，进入自动滚动模式
-3. 内容**从下往上自动滚动**（类似字幕滚动）
+3. 内容**从下往上自动滚动**（整章连续滚动，不是逐页切换）
 4. 点击屏幕任意位置 → **停止滚动** + 显示配置面板
 5. 再次点击屏幕（面板外区域）→ **隐藏面板** + **恢复滚动**
 6. 点击"退出自动翻页"按钮 → **关闭自动翻页模式**
 
 **效果**：
-- 内容连续向上滚动，不是整页翻
-- 滚动到当前页底部时自动加载下一页内容
+- 所有页面的段落合并成一个列表，连续向上滚动
+- 滚动到章节底部时触发回调（可跳转下一章）
 - 速度可通过配置面板调整（1x, 1.5x, 2x, 3x）
 
 ## 设计规格
@@ -61,6 +61,8 @@
 
 ### 自动滚动组件（AutoScrollReader）✅
 
+**整章滚动模式**：将所有页面的段落合并成一个列表，从下往上连续滚动。
+
 | 属性 | 值 |
 |------|-----|
 | 实现方式 | LazyColumn + LaunchedEffect + scroll { scrollBy() } |
@@ -68,7 +70,7 @@
 | 基础滚动速度 | 60px/s（速度1x） |
 | 点击行为 | 停止滚动，触发 onPause 回调 |
 | 布局检测 | 等待 50ms 确保布局完成 |
-| 底部检测 | 累计滚动超过 50px 后才判断 |
+| 底部检测 | 累计滚动超过 50px 后才判断，使用 viewportEndOffset |
 
 **滚动速度计算**：
 ```
@@ -79,10 +81,17 @@
 3x = 180px/s
 ```
 
-**跨页滚动**：
-- 当滚动到当前页面底部时，自动切换到下一页
-- 内容无缝衔接，滚动位置重置到顶部继续滚动
-- 到达最后一页底部时停止滚动并提示
+**段落类型**：
+- `ParagraphItem.Title`：章节标题（14sp, Medium, ForegroundSecondary）
+- `ParagraphItem.Text`：正文段落（使用用户设置的字体大小、行高、字间距）
+
+**内容内边距**：
+| 位置 | 值 |
+|------|-----|
+| start | 20dp |
+| end | 20dp |
+| top | 28dp |
+| bottom | 72dp（留出 Footer 空间） |
 
 ### 自动翻页配置面板（AutoPageConfigPanel）✅
 
@@ -165,13 +174,13 @@ AutoPageConfigPanel (150dp)
 ### 自动滚动验收 ✅
 
 - [x] 开启自动翻页后，隐藏所有面板，开始滚动
-- [x] 内容从下往上连续滚动（不是整页翻）
+- [x] 内容从下往上连续滚动（整章滚动，不是逐页切换）
 - [x] 滚动速度可配置（1x, 1.5x, 2x, 3x）
 - [x] 点击屏幕停止滚动，显示配置面板
 - [x] 再次点击屏幕（面板外）隐藏面板，恢复滚动
 - [x] 点击"退出自动翻页"按钮，退出自动翻页模式
-- [x] 滚动到当前页底部时自动切换到下一页继续滚动
-- [x] 到达最后一页底部时停止并提示"已到达最后一页"
+- [x] 滚动到章节底部时触发 onScrollToBottom 回调
+- [x] 到达章节底部时停止并提示"已到达最后一页"
 - [x] 速度设置持久化
 
 ### 配置面板验收 ✅
@@ -195,7 +204,7 @@ AutoPageConfigPanel (150dp)
 | 配置面板显示时点击面板外区域 | 隐藏面板，恢复滚动 |
 | 配置面板点击"退出自动翻页" | 停止滚动，隐藏面板，退出自动翻页模式 |
 | 修改速度 | 立即生效，调整滚动速度 |
-| 滚动到最后一页底部 | 停止滚动，显示提示 |
+| 滚动到章节底部 | 停止滚动，显示提示 |
 
 ### 状态流转图
 
@@ -240,7 +249,7 @@ AutoPageConfigPanel (150dp)
 |------|------|------|
 | PageTurnSlide | PageTurnSlide.kt | 滑动翻页组件 ✅ |
 | PageTurnCover | PageTurnCover.kt | 覆盖翻页组件 ✅ |
-| AutoScrollReader | AutoScrollReader.kt | 自动滚动阅读组件 ✅ |
+| AutoScrollReader | AutoScrollReader.kt | 自动滚动阅读组件（整章滚动） ✅ |
 | AutoPageConfigPanel | AutoPageConfigPanel.kt | 自动翻页配置面板 ✅ |
 
 ---
@@ -253,8 +262,10 @@ AutoPageConfigPanel (150dp)
 ReaderContent
 ├── if (autoPageEnabled)
 │   └── Box
-│       ├── AutoScrollReader (LazyColumn 自动滚动)
-│       │   └── 内容区域
+│       ├── AutoScrollReader (LazyColumn 整章滚动)
+│       │   └── LazyColumn
+│       │       ├── ParagraphItem.Title (章节标题)
+│       │       └── ParagraphItem.Text (正文段落) × N
 │       └── if (autoPagePaused)
 │           ├── 透明遮罩层（点击恢复滚动）
 │           └── AutoPageConfigPanel（配置面板）
@@ -288,12 +299,12 @@ AutoPageConfigPanel (150dp)
 
 | 属性 | 设计值 | Compose 实现 | 状态 |
 |------|--------|--------------|------|
-| 滚动方式 | 从下往上 | `LazyListState.scroll { scrollBy(-amount) }` | ✅ |
+| 滚动方式 | 从下往上 | `LazyListState.scroll { scrollBy(scrollPerFrame) }` 正值 | ✅ |
 | 滚动速度 | 60-180px/s | `60f * speed / 60f` 每帧 | ✅ |
 | 点击暂停 | 停止+显示面板 | `pointerInput` + `onPause` 回调 | ✅ |
-| 跨页处理 | 自动加载下一页 | 监听 `layoutInfo` 到底部 | ✅ |
 | 布局检测 | 等待布局完成 | `isLayoutComplete` + 50ms 延迟 | ✅ |
-| 底部检测 | 避免误判 | `totalScrolled > 50f` 阈值 | ✅ |
+| 底部检测 | 避免误判 | `totalScrolled > 50f` 阈值 + `viewportEndOffset` | ✅ |
+| 段落合并 | 整章滚动 | `buildList` 合并所有段落 | ✅ |
 
 ### AutoPageConfigPanel 组件 ✅
 
@@ -325,59 +336,79 @@ AutoPageConfigPanel (150dp)
 
 ## 关键实现细节
 
-### AutoScrollReader 滚动逻辑
+### AutoScrollReader 滚动逻辑（整章滚动模式）
 
 ```kotlin
 @Composable
 fun AutoScrollReader(
     pages: ImmutableList<PageContent>,
-    currentPageIndex: Int,
     chapterTitle: String,
     speed: Float,
     isPaused: Boolean,
     currentColorScheme: ReaderColorScheme,
-    onPageChange: (Int) -> Unit,
-    onPause: () -> Unit,
     onScrollToBottom: () -> Unit,
-    modifier: Modifier = Modifier
+    onPause: () -> Unit,
+    modifier: Modifier = Modifier,
+    // 保留参数签名兼容性，但不再使用
+    currentPageIndex: Int = 0,
+    onPageChange: (Int) -> Unit = {}
 ) {
+    val settings = LocalReaderSettings.current
     val listState = rememberLazyListState()
-    var renderedPageIndex by remember { mutableIntStateOf(currentPageIndex) }
+
+    // 合并所有段落到一个列表（整章滚动）
+    val allParagraphs: List<ParagraphItem> = remember(pages, chapterTitle) {
+        buildList {
+            if (chapterTitle.isNotEmpty()) {
+                add(ParagraphItem.Title(chapterTitle))
+            }
+            pages.forEach { page ->
+                page.paragraphs.forEach { paragraph ->
+                    add(ParagraphItem.Text(paragraph))
+                }
+            }
+        }
+    }
+
+    // 布局完成状态
     var isLayoutComplete by remember { mutableStateOf(false) }
+    // 累计滚动距离（用于避免误判底部）
+    var totalScrolled by remember { mutableFloatStateOf(0f) }
+
+    // 监听布局完成
+    LaunchedEffect(allParagraphs) {
+        delay(50)
+        isLayoutComplete = true
+    }
 
     // 自动滚动逻辑
-    LaunchedEffect(speed, isPaused, renderedPageIndex, isLayoutComplete) {
-        if (!isPaused && pages.isNotEmpty() && isLayoutComplete) {
+    LaunchedEffect(speed, isPaused, isLayoutComplete, allParagraphs.isNotEmpty()) {
+        if (!isPaused && allParagraphs.isNotEmpty() && isLayoutComplete) {
             val pixelsPerSecond = 60f * speed  // 基础速度 60px/s
             val frameDelayMs = 16L
             val scrollPerFrame = pixelsPerSecond / 60f
-            var totalScrolled = 0f
 
-            while (true) {
+            while (isActive) {
                 val layoutInfo = listState.layoutInfo
                 val lastVisibleItem = layoutInfo.visibleItemsInfo.lastOrNull()
 
-                val isAtBottom = if (lastVisibleItem != null) {
+                val isAtBottom = if (lastVisibleItem != null && layoutInfo.totalItemsCount > 0) {
                     val isLastItem = lastVisibleItem.index == layoutInfo.totalItemsCount - 1
+                    val viewportEnd = layoutInfo.viewportEndOffset
                     val itemBottom = lastVisibleItem.offset + lastVisibleItem.size
-                    val viewportHeight = layoutInfo.viewportSize.height
-                    isLastItem && itemBottom <= viewportHeight && totalScrolled > 50f
-                } else false
+                    // 最后一项完全可见，且已经滚动了一定距离（避免误判）
+                    isLastItem && itemBottom <= viewportEnd && totalScrolled > 50f
+                } else {
+                    false
+                }
 
                 if (isAtBottom) {
-                    if (renderedPageIndex < pages.size - 1) {
-                        renderedPageIndex++
-                        onPageChange(renderedPageIndex)
-                        listState.scrollToItem(0)
-                        totalScrolled = 0f
-                        delay(100)
-                    } else {
-                        onScrollToBottom()
-                        break
-                    }
+                    onScrollToBottom()
+                    break
                 } else {
-                    scope.launch {
-                        listState.scroll { scrollBy(-scrollPerFrame) }
+                    // 继续向下滚动（正值 = 内容向上移动）
+                    listState.scroll {
+                        scrollBy(scrollPerFrame)
                     }
                     totalScrolled += scrollPerFrame
                     delay(frameDelayMs)
@@ -399,8 +430,47 @@ fun AutoScrollReader(
                 } else Modifier
             )
     ) {
-        LazyColumn(state = listState, ...) { ... }
+        LazyColumn(
+            state = listState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(
+                start = 20.dp,
+                end = 20.dp,
+                top = 28.dp,
+                bottom = 72.dp
+            )
+        ) {
+            items(count = allParagraphs.size, key = { "paragraph_$it" }) { index ->
+                when (val item = allParagraphs[index]) {
+                    is ParagraphItem.Title -> {
+                        Text(
+                            text = item.text,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = ForegroundSecondary
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                    is ParagraphItem.Text -> {
+                        Text(
+                            text = item.text,
+                            fontSize = settings.fontSize,
+                            lineHeight = settings.fontSize * settings.lineHeight,
+                            letterSpacing = settings.letterSpacing.sp,
+                            color = currentColorScheme.text
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                }
+            }
+        }
     }
+}
+
+// 段落项类型
+private sealed class ParagraphItem {
+    data class Title(val text: String) : ParagraphItem()
+    data class Text(val text: String) : ParagraphItem()
 }
 ```
 
@@ -411,9 +481,14 @@ fun AutoScrollReader(
 if (uiState.readerSettings.autoPageEnabled) {
     Box(modifier = Modifier.fillMaxSize()) {
         AutoScrollReader(
+            pages = uiState.pages,
+            chapterTitle = uiState.chapterTitle,
+            speed = uiState.readerSettings.autoPageSpeed,
             isPaused = uiState.autoPagePaused,
+            currentColorScheme = uiState.readerSettings.colorScheme,
+            onScrollToBottom = onScrollToBottom,
             onPause = { setAutoPagePaused(true) },
-            ...
+            modifier = Modifier.fillMaxSize()
         )
 
         if (uiState.autoPagePaused) {
@@ -440,4 +515,32 @@ if (uiState.readerSettings.autoPageEnabled) {
         }
     }
 }
+```
+
+---
+
+## 注意事项
+
+### scrollBy 方向
+
+在 Compose LazyListState.scroll 中：
+- **正值** = 向下滚动 = **内容向上移动** ✅ 本项目使用
+- **负值** = 向上滚动 = 内容向下移动
+
+```kotlin
+// 正确：内容向上移动（从下往上滚动）
+listState.scroll { scrollBy(scrollPerFrame) }  // scrollPerFrame > 0
+
+// 错误：内容向下移动
+listState.scroll { scrollBy(-scrollPerFrame) }
+```
+
+### 底部检测
+
+使用 `viewportEndOffset` 而不是 `viewportSize.height`，更准确地检测最后一项是否完全可见：
+
+```kotlin
+val viewportEnd = layoutInfo.viewportEndOffset
+val itemBottom = lastVisibleItem.offset + lastVisibleItem.size
+val isAtBottom = isLastItem && itemBottom <= viewportEnd && totalScrolled > 50f
 ```
