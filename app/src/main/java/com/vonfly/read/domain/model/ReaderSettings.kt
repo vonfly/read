@@ -15,7 +15,9 @@ data class ReaderSettings(
     val lineHeight: Float = 1.8f,
     val letterSpacing: Float = 0f,  // 字间距（sp 单位倍数），默认 0
     val colorScheme: ReaderColorScheme = ReaderColorScheme.Default,
-    val brightness: Float = 1.0f  // 亮度值 0.0-1.0，默认 100%
+    val brightness: Float = 1.0f,  // 亮度值 0.0-1.0，默认 100%
+    val pageTurnMode: PageTurnMode = PageTurnMode.SLIDE,  // 翻页方式，默认滑动
+    val autoPageEnabled: Boolean = false  // 自动翻页开关，默认关闭
 )
 
 /**

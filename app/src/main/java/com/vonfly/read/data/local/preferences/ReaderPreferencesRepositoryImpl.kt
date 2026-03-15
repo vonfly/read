@@ -5,10 +5,12 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.sp
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.vonfly.read.di.qualifier.ReaderDataStore
+import com.vonfly.read.domain.model.PageTurnMode
 import com.vonfly.read.domain.model.ReaderColorScheme
 import com.vonfly.read.domain.model.ReaderSettings
 import com.vonfly.read.domain.repository.ReaderPreferencesRepository
@@ -43,7 +45,11 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
                 colorScheme = ReaderColorScheme.entries.find {
                     it.name == preferences[COLOR_SCHEME]
                 } ?: ReaderColorScheme.Default,
-                brightness = preferences[BRIGHTNESS] ?: DEFAULT_BRIGHTNESS
+                brightness = preferences[BRIGHTNESS] ?: DEFAULT_BRIGHTNESS,
+                pageTurnMode = PageTurnMode.valueOf(
+                    preferences[PAGE_TURN_MODE] ?: DEFAULT_PAGE_TURN_MODE
+                ),
+                autoPageEnabled = preferences[AUTO_PAGE_ENABLED] ?: DEFAULT_AUTO_PAGE_ENABLED
             )
         }
 
@@ -77,16 +83,32 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updatePageTurnMode(mode: PageTurnMode) {
+        dataStore.edit { preferences ->
+            preferences[PAGE_TURN_MODE] = mode.name
+        }
+    }
+
+    override suspend fun updateAutoPageEnabled(enabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[AUTO_PAGE_ENABLED] = enabled
+        }
+    }
+
     companion object {
         private const val DEFAULT_FONT_SIZE = 18f
         private const val DEFAULT_LINE_HEIGHT = 1.8f
         private const val DEFAULT_BRIGHTNESS = 1.0f
         private const val DEFAULT_LETTER_SPACING = 0f
+        private const val DEFAULT_PAGE_TURN_MODE = "SLIDE"
+        private const val DEFAULT_AUTO_PAGE_ENABLED = false
 
         private val FONT_SIZE = floatPreferencesKey("reader_font_size")
         private val LINE_HEIGHT = floatPreferencesKey("reader_line_height")
         private val COLOR_SCHEME = stringPreferencesKey("reader_color_scheme")
         private val BRIGHTNESS = floatPreferencesKey("reader_brightness")
         private val LETTER_SPACING = floatPreferencesKey("reader_letter_spacing")
+        private val PAGE_TURN_MODE = stringPreferencesKey("reader_page_turn_mode")
+        private val AUTO_PAGE_ENABLED = booleanPreferencesKey("reader_auto_page_enabled")
     }
 }

@@ -1,5 +1,6 @@
 package com.vonfly.read.domain.repository
 
+import com.vonfly.read.domain.model.PageTurnMode
 import com.vonfly.read.domain.model.ReaderSettings
 import kotlinx.coroutines.flow.Flow
 
@@ -51,4 +52,18 @@ interface ReaderPreferencesRepository {
      * @param letterSpacing 字间距（sp 单位倍数）
      */
     suspend fun updateLetterSpacing(letterSpacing: Float)
+
+    /**
+     * 更新翻页方式
+     *
+     * @param mode 翻页方式
+     */
+    suspend fun updatePageTurnMode(mode: PageTurnMode)
+
+    /**
+     * 更新自动翻页开关
+     *
+     * @param enabled 是否启用自动翻页
+     */
+    suspend fun updateAutoPageEnabled(enabled: Boolean)
 }

@@ -41,6 +41,7 @@ import com.vonfly.read.domain.model.ReaderSettings
 import com.vonfly.read.ui.screen.reader.components.BrightnessBottomPanel
 import com.vonfly.read.ui.screen.reader.components.CatalogBottomPanel
 import com.vonfly.read.ui.screen.reader.components.FontBottomPanel
+import com.vonfly.read.ui.screen.reader.components.MoreBottomPanel
 import com.vonfly.read.ui.screen.reader.components.ReaderBottomBar
 import com.vonfly.read.ui.screen.reader.components.ReaderFooter
 import com.vonfly.read.ui.screen.reader.components.ReaderTopBar
@@ -73,6 +74,8 @@ fun ReaderContent(
     onFontSizeChange: (Float) -> Unit,
     onLineHeightChange: (Float) -> Unit,
     onLetterSpacingChange: (Float) -> Unit,
+    onPageTurnModeChange: (com.vonfly.read.domain.model.PageTurnMode) -> Unit,
+    onAutoPageEnabledChange: (Boolean) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     isInShelf: Boolean = false,
@@ -246,10 +249,17 @@ fun ReaderContent(
                             onMoreClick = onMoreClick
                         )
                     }
-                    ReaderPanel.MORE -> {
-                        // 更多面板（待实现）
-                        // TODO: 实现更多面板
-                    }
+                    ReaderPanel.MORE -> MoreBottomPanel(
+                        pageTurnMode = uiState.readerSettings.pageTurnMode,
+                        autoPageEnabled = uiState.readerSettings.autoPageEnabled,
+                        currentColorScheme = uiState.readerSettings.colorScheme,
+                        onPageTurnModeChange = onPageTurnModeChange,
+                        onAutoPageEnabledChange = onAutoPageEnabledChange,
+                        onCatalogClick = onCatalogClick,
+                        onFontClick = onFontClick,
+                        onBrightnessClick = onBrightnessClick,
+                        onMoreClick = onMoreClick
+                    )
                 }
             }
         }
@@ -368,6 +378,8 @@ private fun ReaderContentPreview() {
                 onFontSizeChange = {},
                 onLineHeightChange = {},
                 onLetterSpacingChange = {},
+                onPageTurnModeChange = {},
+                onAutoPageEnabledChange = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }
@@ -420,6 +432,8 @@ private fun ReaderContentWithControlsPreview() {
                 onFontSizeChange = {},
                 onLineHeightChange = {},
                 onLetterSpacingChange = {},
+                onPageTurnModeChange = {},
+                onAutoPageEnabledChange = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }

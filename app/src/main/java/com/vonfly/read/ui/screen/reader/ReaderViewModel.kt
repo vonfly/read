@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vonfly.read.domain.model.Chapter
 import com.vonfly.read.domain.model.PageContent
+import com.vonfly.read.domain.model.PageTurnMode
 import com.vonfly.read.domain.model.ReaderColorScheme
 import com.vonfly.read.domain.model.ReaderSettings
 import com.vonfly.read.domain.model.ReadingProgress
@@ -228,8 +229,23 @@ class ReaderViewModel @Inject constructor(
     }
 
     fun onMoreClick() {
+        _uiState.update { state ->
+            state.copy(
+                visiblePanel = if (state.visiblePanel == ReaderPanel.MORE) null else ReaderPanel.MORE
+            )
+        }
+    }
+
+    // 更多面板相关方法
+    fun onPageTurnModeChange(mode: PageTurnMode) {
         viewModelScope.launch {
-            _event.send(ReaderUiEvent.ShowSnackbar("更多设置开发中"))
+            readerPreferencesRepository.updatePageTurnMode(mode)
+        }
+    }
+
+    fun onAutoPageEnabledChange(enabled: Boolean) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateAutoPageEnabled(enabled)
         }
     }
 

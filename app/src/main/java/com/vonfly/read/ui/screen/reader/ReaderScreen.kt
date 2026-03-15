@@ -71,6 +71,8 @@ fun ReaderScreen(
             onFontSizeChange = viewModel::onFontSizeChange,
             onLineHeightChange = viewModel::onLineHeightChange,
             onLetterSpacingChange = viewModel::onLetterSpacingChange,
+            onPageTurnModeChange = viewModel::onPageTurnModeChange,
+            onAutoPageEnabledChange = viewModel::onAutoPageEnabledChange,
             isInShelf = uiState.isInShelf,
             isBookmarked = uiState.isBookmarked,
             snackbarHostState = snackbarHostState,
