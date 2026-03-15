@@ -62,6 +62,8 @@ fun ReaderScreen(
             onChapterClick = viewModel::onChapterClick,
             onToggleSortOrder = viewModel::toggleSortOrder,
             hidePanel = viewModel::hidePanel,
+            onBrightnessChange = viewModel::onBrightnessChange,
+            onColorSchemeChange = viewModel::onColorSchemeChange,
             isInShelf = uiState.isInShelf,
             isBookmarked = uiState.isBookmarked,
             snackbarHostState = snackbarHostState,

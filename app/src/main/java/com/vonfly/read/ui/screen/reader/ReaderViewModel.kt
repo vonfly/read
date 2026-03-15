@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vonfly.read.domain.model.Chapter
 import com.vonfly.read.domain.model.PageContent
+import com.vonfly.read.domain.model.ReaderColorScheme
 import com.vonfly.read.domain.model.ReaderSettings
 import com.vonfly.read.domain.model.ReadingProgress
 import com.vonfly.read.domain.repository.ReaderPreferencesRepository
@@ -215,8 +216,10 @@ class ReaderViewModel @Inject constructor(
     }
 
     fun onBrightnessClick() {
-        viewModelScope.launch {
-            _event.send(ReaderUiEvent.ShowSnackbar("亮度设置开发中"))
+        _uiState.update { state ->
+            state.copy(
+                visiblePanel = if (state.visiblePanel == ReaderPanel.BRIGHTNESS) null else ReaderPanel.BRIGHTNESS
+            )
         }
     }
 
@@ -272,6 +275,19 @@ class ReaderViewModel @Inject constructor(
     fun onSettingsClick() {
         viewModelScope.launch {
             _event.send(ReaderUiEvent.ShowSnackbar("设置功能开发中"))
+        }
+    }
+
+    // 亮度面板相关方法
+    fun onBrightnessChange(brightness: Float) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateBrightness(brightness)
+        }
+    }
+
+    fun onColorSchemeChange(colorScheme: ReaderColorScheme) {
+        viewModelScope.launch {
+            readerPreferencesRepository.updateColorScheme(colorScheme.name)
         }
     }
 }

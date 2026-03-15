@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vonfly.read.domain.model.PageContent
 import com.vonfly.read.domain.model.ReaderSettings
+import com.vonfly.read.ui.screen.reader.components.BrightnessBottomPanel
+import com.vonfly.read.ui.screen.reader.components.BrightnessBottomPanel
 import com.vonfly.read.ui.screen.reader.components.CatalogBottomPanel
 import com.vonfly.read.ui.screen.reader.components.ReaderBottomBar
 import com.vonfly.read.ui.screen.reader.components.ReaderFooter
@@ -66,6 +68,8 @@ fun ReaderContent(
     onChapterClick: (Int) -> Unit,
     onToggleSortOrder: () -> Unit,
     hidePanel: () -> Unit,
+    onBrightnessChange: (Float) -> Unit,
+    onColorSchemeChange: (com.vonfly.read.domain.model.ReaderColorScheme) -> Unit,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     isInShelf: Boolean = false,
@@ -209,8 +213,17 @@ fun ReaderContent(
                         )
                     }
                     ReaderPanel.BRIGHTNESS -> {
-                        // 亮度面板（待实现）
-                        // TODO: 实现亮度面板
+                        // 亮度面板
+                        BrightnessBottomPanel(
+                            brightness = uiState.readerSettings.brightness,
+                            currentColorScheme = uiState.readerSettings.colorScheme,
+                            onBrightnessChange = onBrightnessChange,
+                            onColorSchemeChange = onColorSchemeChange,
+                            onCatalogClick = onCatalogClick,
+                            onBrightnessClick = onBrightnessClick,
+                            onFontClick = onFontClick,
+                            onMoreClick = onMoreClick
+                        )
                     }
                     ReaderPanel.FONT -> {
                         // 字体面板（待实现）
@@ -332,6 +345,8 @@ private fun ReaderContentPreview() {
                 onChapterClick = {},
                 onToggleSortOrder = {},
                 hidePanel = {},
+                onBrightnessChange = {},
+                onColorSchemeChange = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }
@@ -379,6 +394,8 @@ private fun ReaderContentWithControlsPreview() {
                 onChapterClick = {},
                 onToggleSortOrder = {},
                 hidePanel = {},
+                onBrightnessChange = {},
+                onColorSchemeChange = {},
                 snackbarHostState = remember { SnackbarHostState() }
             )
         }

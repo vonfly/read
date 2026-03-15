@@ -98,6 +98,9 @@ dependencies {
     // Image
     implementation(libs.coil.compose)
 
+    // Material Icons Extended (for WbSunny, etc.)
+    implementation(libs.compose.material.icons.extended)
+
     // Paging
     implementation(libs.paging.runtime)
     implementation(libs.paging.compose)

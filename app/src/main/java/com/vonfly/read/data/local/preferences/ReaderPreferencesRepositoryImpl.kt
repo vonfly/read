@@ -41,7 +41,8 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
                 lineHeight = preferences[LINE_HEIGHT] ?: DEFAULT_LINE_HEIGHT,
                 colorScheme = ReaderColorScheme.entries.find {
                     it.name == preferences[COLOR_SCHEME]
-                } ?: ReaderColorScheme.Default
+                } ?: ReaderColorScheme.Default,
+                brightness = preferences[BRIGHTNESS] ?: DEFAULT_BRIGHTNESS
             )
         }
 
@@ -63,12 +64,20 @@ class ReaderPreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun updateBrightness(brightness: Float) {
+        dataStore.edit { preferences ->
+            preferences[BRIGHTNESS] = brightness
+        }
+    }
+
     companion object {
         private const val DEFAULT_FONT_SIZE = 18f
         private const val DEFAULT_LINE_HEIGHT = 1.8f
+        private const val DEFAULT_BRIGHTNESS = 1.0f
 
         private val FONT_SIZE = floatPreferencesKey("reader_font_size")
         private val LINE_HEIGHT = floatPreferencesKey("reader_line_height")
         private val COLOR_SCHEME = stringPreferencesKey("reader_color_scheme")
+        private val BRIGHTNESS = floatPreferencesKey("reader_brightness")
     }
 }

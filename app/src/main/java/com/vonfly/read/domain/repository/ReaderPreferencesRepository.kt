@@ -37,4 +37,11 @@ interface ReaderPreferencesRepository {
      * @param colorSchemeName 颜色主题名称
      */
     suspend fun updateColorScheme(colorSchemeName: String)
+
+    /**
+     * 更新亮度值
+     *
+     * @param brightness 亮度值（0.0-1.0）
+     */
+    suspend fun updateBrightness(brightness: Float)
 }
