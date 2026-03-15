@@ -4,9 +4,14 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -77,21 +83,29 @@ fun ReaderContent(
     Box(
         modifier = modifier
             .background(colorScheme.background)
-            .pointerInput(Unit) {
-                detectTapGestures { offset ->
-                    // 点击屏幕中央区域切换控制栏
-                    val screenWidth = size.width
-                    val screenHeight = size.height
-                    val centerX = screenWidth / 2
-                    val centerY = screenHeight / 2
-                    val tapZoneWidth = screenWidth * 0.3f
-                    val tapZoneHeight = screenHeight * 0.3f
+            .pointerInput(uiState.isControlsVisible) {
+                // 使用 Main pass（默认），内层 Initial pass 先处理
+                awaitEachGesture {
+                    awaitFirstDown()
+                    val up = waitForUpOrCancellation()
 
-                    val isInCenter = offset.x in (centerX - tapZoneWidth)..(centerX + tapZoneWidth) &&
-                            offset.y in (centerY - tapZoneHeight)..(centerY + tapZoneHeight)
+                    if (up != null) {
+                        if (uiState.isControlsVisible) {
+                            // 面板已弹出，点击任何区域都隐藏面板
+                            onScreenClick()
+                        } else {
+                            // 面板未弹出，根据点击区域执行不同操作
+                            val screenWidth = size.width
+                            val tapX = up.position.x
+                            val leftZone = screenWidth * 0.35f
+                            val rightZone = screenWidth * 0.65f
 
-                    if (isInCenter) {
-                        onScreenClick()
+                            when {
+                                tapX < leftZone -> onPreviousPage()      // 左边区域：上一页
+                                tapX > rightZone -> onNextPage()         // 右边区域：下一页
+                                else -> onScreenClick()                  // 中间区域：显示控制栏
+                            }
+                        }
                     }
                 }
             }
@@ -129,7 +143,20 @@ fun ReaderContent(
             exit = fadeOut(),
             modifier = Modifier.fillMaxSize()
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pointerInput(Unit) {
+                        // 使用 Main pass（子→父），先于外层处理并消费事件
+                        awaitEachGesture {
+                            val down = awaitFirstDown()
+                            down.consume()  // 消费 down 事件
+                            val up = waitForUpOrCancellation()
+                            up?.consume()   // 消费 up 事件
+                            // 事件已消费，外层的 awaitFirstDown(requireUnconsumed=true) 不会收到
+                        }
+                    }
+            ) {
                 // 顶部控制栏
                 ReaderTopBar(
                     bookTitle = uiState.bookTitle.ifEmpty { "三体" },
@@ -169,6 +196,7 @@ fun ReaderContent(
 /**
  * 阅读页面内容层
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun ReaderPageLayer(
     page: PageContent,
@@ -214,15 +242,16 @@ private fun ReaderPageLayer(
                 fontSize = settings.fontSize,
                 lineHeight = settings.fontSize * 1.3f, // 设计稿 1.8 对应 Compose 1.3
                 color = colorScheme.text,
-                modifier = Modifier.pointerInput(Unit) {
-                    detectTapGestures(
-                        onLongPress = {
-                            // 长按复制
-                            clipboardManager.setText(AnnotatedString(paragraph))
-                            Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
-                        }
-                    )
-                }
+                modifier = Modifier.combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,  // 无点击波纹效果
+                    onClick = {},  // 空实现，让点击事件继续传播到外层
+                    onLongClick = {
+                        // 长按复制
+                        clipboardManager.setText(AnnotatedString(paragraph))
+                        Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
+                    }
+                )
             )
         }
 

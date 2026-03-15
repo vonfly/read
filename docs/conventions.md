@@ -276,3 +276,188 @@ LaunchedEffect(Unit) {
 - 主事件流不被阻塞，后续事件（如导航）可以立即处理
 - 适用于所有**非关键性 UI 反馈**（Snackbar、Toast 等）
 - **关键性操作**（如导航）应该直接同步处理，不要用 `launch`
+
+---
+
+## 底部组件阴影向上投射（BottomBar / BottomSheet）
+
+### 问题
+
+Android Compose 的 `Modifier.shadow()` 和 `graphicsLayer { shadowElevation }` 阴影**只向下投射**。
+当组件位于屏幕底部时（如 BottomBar、BottomSheet），阴影会投射到屏幕外被裁掉，视觉上看不到阴影效果。
+
+### 尝试过但不生效的方案
+
+| 方案 | 阴影方向 | 问题 |
+|------|----------|------|
+| `Modifier.shadow(elevation, shape)` | 向下 | 被屏幕底部裁掉 |
+| `graphicsLayer { shadowElevation, clip = true }` | 向下 | 同上 |
+| `drawBehind` + `setShadowLayer(dy = 正数)` | 向下 | 同上 |
+
+### 解决方案
+
+使用 `drawBehind` + `setShadowLayer(dy = 负数)` 手动画向上投射的阴影：
+
+```kotlin
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+
+Box(
+    modifier = modifier
+        .fillMaxWidth()
+        .height(132.dp)
+        .drawBehind {
+            drawIntoCanvas { canvas ->
+                val paint = Paint().apply {
+                    asFrameworkPaint().apply {
+                        isAntiAlias = true
+                        color = android.graphics.Color.TRANSPARENT
+                        setShadowLayer(
+                            16f,   // blur radius
+                            0f,    // dx
+                            -6f,   // dy 负数 = 向上投射
+                            android.graphics.Color.argb(40, 0, 0, 0)  // 阴影颜色
+                        )
+                    }
+                }
+                canvas.drawRoundRect(
+                    left = 0f,
+                    top = 0f,
+                    right = size.width,
+                    bottom = size.height,
+                    radiusX = 16.dp.toPx(),
+                    radiusY = 16.dp.toPx(),
+                    paint = paint
+                )
+            }
+        }
+        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+        .background(Color(0xFFF9F9F9))
+) {
+    // 内容
+}
+```
+
+### 关键点
+
+1. `setShadowLayer` 的 `dy` 参数：**负数 = 向上投射**，正数 = 向下投射
+2. 必须先 `drawBehind` 画阴影，再 `clip` + `background` 裁剪和填充背景
+3. `Modifier.shadow()` 和 `graphicsLayer` 无法控制阴影方向，只向下
+
+### 注意事项
+
+- `setShadowLayer` 在某些低端设备或特定 Android 版本上可能表现不一致
+- 如果只需要简单阴影且组件不在屏幕边缘，优先用 `Modifier.shadow()`
+- 只有当组件在屏幕底部需要向上投射阴影时，才用此方案
+
+### 相关文件
+
+- `ui/screen/reader/components/ReaderBottomBar.kt`
+
+---
+
+## Compose 指针事件传播与消费机制
+
+### 问题场景
+
+嵌套组件都需要处理点击事件时，如何控制事件传播和消费？
+典型场景：阅读器外层处理翻页/显示控制栏，内层控制栏需要阻止事件传播到外层。
+
+### PointerEventPass 传播方向
+
+```
+Initial  → 父→子（外层先处理）
+Main     → 子→父（内层先处理）← 默认
+Final    → 子→父（内层先处理）
+```
+
+### 错误方案
+
+| 尝试 | 方案 | 失败原因 |
+|-----|------|---------|
+| 1 | 内层用 `combinedClickable` | `onClick` 即使是空的也会消费事件，但外层用 `Initial` pass 先处理 |
+| 2 | 外层用 `Initial` pass | `Initial` 是**父→子**，外层永远先处理 |
+| 3 | 内层用 `clickable` | `clickable` 用 `Main` pass，但外层用 `Initial` pass 先处理 |
+| 4 | 内层也用 `Initial` pass | `Initial` 是**父→子**，外层还是先处理 |
+
+### ✅ 正确方案
+
+**内外层都用 `Main` pass（默认），内层先收到事件并 `consume()`：**
+
+```kotlin
+// 外层：使用 Main pass（默认），requireUnconsumed=true 只接收未消费事件
+Box(
+    modifier = Modifier
+        .fillMaxSize()
+        .pointerInput(Unit) {
+            awaitEachGesture {
+                awaitFirstDown()  // 默认 requireUnconsumed=true
+                val up = waitForUpOrCancellation()
+                if (up != null) {
+                    // 处理翻页/显示控制栏
+                }
+            }
+        }
+) {
+    // 内层控制栏：使用 Main pass（子→父），先于外层处理
+    AnimatedVisibility(visible = isControlsVisible) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    awaitEachGesture {
+                        val down = awaitFirstDown()  // 先收到 down 事件
+                        down.consume()               // 消费 down
+                        val up = waitForUpOrCancellation()
+                        up?.consume()                // 消费 up
+                        // 事件已消费，外层的 awaitFirstDown(requireUnconsumed=true) 不会收到
+                    }
+                }
+        ) {
+            // 控制栏内容...
+        }
+    }
+}
+```
+
+### 事件传播流程图
+
+```
+用户点击控制栏区域
+    │
+    ▼ (Main pass: 子→父)
+┌─────────────────────────────────┐
+│ 内层 Box 先收到                  │
+│   awaitFirstDown() → consume()  │
+│   waitForUpOrCancellation()     │
+│   up.consume()                  │
+└─────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────┐
+│ 外层 Box 后收到                  │
+│   awaitFirstDown()              │
+│   → 事件已被消费，不触发         │
+└─────────────────────────────────┘
+```
+
+### 关键 API
+
+```kotlin
+// 接收 down 事件
+awaitFirstDown(requireUnconsumed: Boolean = true)  // 默认只接收未消费事件
+awaitFirstDown(pass: PointerEventPass = PointerEventPass.Main)  // 指定 pass
+
+// 等待 up 或取消
+waitForUpOrCancellation(): PointerInputChange?
+waitForUpOrCancellation(pass: PointerEventPass = PointerEventPass.Main)
+
+// 消费事件
+event.consume()  // 标记事件已消费
+event.isConsumed  // 检查是否已消费
+```
+
+### 相关文件
+
+- `ui/screen/reader/ReaderContent.kt`
