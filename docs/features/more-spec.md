@@ -80,7 +80,7 @@
 |------|-----|------|
 | 仿真 | `page_turn_real` | 仿真翻页效果 |
 | 覆盖 | `page_turn_cover` | 覆盖翻页效果 |
-| 滑动 | `page_turn_swipe` | 滑动翻页效果 |
+| 横滑 | `page_turn_swipe` | 横滑翻页效果 |
 
 **选项通用属性**
 | 属性 | 值 |
@@ -93,10 +93,10 @@
 **选中状态**
 | 属性 | 值 |
 |------|-----|
-| 背景 | 亮色: `#FFFFFF` / 深色: `#5A5A5A` |
+| 背景 | `$--accent` (Accent 橙红色，所有主题统一) |
 | 阴影 | blur=2, color=#00000020, offset=(0, 1) |
-| 文字颜色 | 亮色: `currentColorScheme.text` / 深色: `#E5E5EA` |
-| 文字字重 | 500 (Medium) |
+| 文字颜色 | `#FFFFFF` (白色，所有主题统一) |
+| 文字字重 | 600 (SemiBold) |
 
 **未选中状态**
 | 属性 | 值 |
@@ -157,16 +157,16 @@
 
 ## SegmentedControl 背景色（随主题变化）
 
-> 参考 font-spec.md 中的 SegmentedControl 设计规格
+> ⚠️ 注意：更多面板的翻页选项选中背景统一使用 Accent 色，不随主题变化
 
 | 主题 | SegmentedControl 背景 | 选中项背景 | 选中项文字色 |
 |------|------------------------|----------|----------|
-| Default | #F5F5F7 | #FFFFFF | currentColorScheme.text |
-| Sepia | #E8E0D1 | #FFFFFF | currentColorScheme.text |
-| Pink | #E8D4DA | #FFFFFF | currentColorScheme.text |
-| Green | #D4E8D5 | #FFFFFF | currentColorScheme.text |
-| Night | #3A3A3A | #5A5A5A | #E5E5EA |
-| Cream | #F0E8DC | #FFFFFF | currentColorScheme.text |
+| Default | #F5F5F7 | Accent | #FFFFFF |
+| Sepia | #E8E0D1 | Accent | #FFFFFF |
+| Pink | #E8D4DA | Accent | #FFFFFF |
+| Green | #D4E8D5 | Accent | #FFFFFF |
+| Night | #3A3A3A | Accent | #FFFFFF |
+| Cream | #F0E8DC | Accent | #FFFFFF |
 
 ---
 
@@ -298,7 +298,7 @@ ReaderContent
         │   └── SegmentedControl (40dp, 3个选项)
         │       ├── Option1 (36dp, "仿真") - 选中
         │       ├── Option2 (36dp, "覆盖") - 未选中
-        │       └── Option3 (36dp, "滑动") - 未选中
+        │       └── Option3 (36dp, "横滑") - 未选中
         ├── AutoPageSection (66dp, 自动翻页)
         │   ├── Title (14sp, "自动翻页") - 颜色随主题
         │   └── Toggle (51×31dp, 开关)
@@ -333,7 +333,7 @@ ReaderContent
 | 标题颜色 | 随主题 | `currentColorScheme.text` | ⬜ |
 | 选项高度 | 36dp | `height(36.dp)` | ⬜ |
 | 选项圆角 | 8dp | `RoundedCornerShape(8.dp)` | ⬜ |
-| 选中背景 | 亮色: #FFFFFF / 深色: #5A5A5A | - | ⬜ |
+| 选中背景 | Accent (所有主题统一) | `Accent` | ⬜ |
 | 未选中背景 | 亮色: #F5F5F5 / 深色: #3A3A3A | - | ⬜ |
 
 ### AutoPageSection

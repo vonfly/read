@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.text.font.FontWeight
@@ -121,6 +122,7 @@ fun MoreBottomPanel(
  * - 高度: 90dp
  * - 内边距: vertical: 12dp, horizontal: 20dp
  * - 间距: 12dp
+ * - 选项高度: 36dp
  */
 @Composable
 private fun PageTurnSection(
@@ -145,7 +147,7 @@ private fun PageTurnSection(
 
         // 分段控制器
         PageTurnSegmentedControl(
-            options = listOf("仿真", "覆盖", "滑动"),
+            options = listOf("仿真", "覆盖", "横滑"),
             selectedIndex = when (pageTurnMode) {
                 PageTurnMode.REAL -> 0
                 PageTurnMode.COVER -> 1
@@ -170,12 +172,11 @@ private fun PageTurnSection(
  *
  * 设计规格（来自 Pencil 设计稿 Read-More 页面 pageTurnOptions 2O5S6）：
  * - 容器无固定高度，wrap content
- * - justifyContent: space_between
- * - 选项间距: 12dp（gap）
+ * - justifyContent: space_between, gap: 12dp
  * - 每个选项: height 36dp, cornerRadius 8dp, width fill_container
  * - 选中背景: $--accent (Accent)
  * - 选中文字: #FFFFFF, fontWeight 600
- * - 未选中背景: #F5F5F5
+ * - 未选中背景: 亮色 #F5F5F5 / 深色 #3A3A3A
  * - 未选中文字: $--foreground-tertiary, fontWeight normal
  */
 @Composable
@@ -185,6 +186,16 @@ private fun PageTurnSegmentedControl(
     currentColorScheme: ReaderColorScheme,
     onOptionSelected: (Int) -> Unit
 ) {
+    // 深色模式判断
+    val isDarkTheme = currentColorScheme == ReaderColorScheme.Night
+
+    // 未选中背景色：亮色 #F5F5F5 / 深色 #3A3A3A
+    val unselectedBackgroundColor = if (isDarkTheme) {
+        Color(0xFF3A3A3A)
+    } else {
+        Color(0xFFF5F5F5)
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -201,7 +212,7 @@ private fun PageTurnSegmentedControl(
                         if (isSelected) {
                             Accent  // 选中状态：使用 Accent 色
                         } else {
-                            Color(0xFFF5F5F5)  // 未选中状态：浅灰色
+                            unselectedBackgroundColor
                         }
                     )
                     .clickable { onOptionSelected(index) },
@@ -265,7 +276,7 @@ private fun AutoPageSection(
  *
  * 设计规格（来自 Pencil 设计稿 Read-More 页面 autoPageToggle xOADb）：
  * - 轨道宽度: 51dp, 高度: 31dp, 圆角: 16dp, padding: 2dp
- * - 轨道颜色（关闭）: #E5E5EA
+ * - 轨道颜色（关闭）: 亮色 #E5E5EA / 深色 #3A3A3A
  * - 轨道颜色（开启）: Accent (#FF6B4A)
  * - 滑块尺寸: 27×27dp, 圆角: 14dp, 颜色: #FFFFFF
  * - 滑块阴影: blur=2, color=#00000020, offset=(0,1)
@@ -276,16 +287,22 @@ private fun AutoPageToggle(
     currentColorScheme: ReaderColorScheme,
     onEnabledChange: (Boolean) -> Unit
 ) {
-    // 轨道颜色
+    // 深色模式判断
+    val isDarkTheme = currentColorScheme == ReaderColorScheme.Night
+
+    // 轨道颜色：开启时用 Accent，关闭时根据主题
     val trackColor = if (enabled) {
         Accent
     } else {
-        Color(0xFFE5E5EA)  // 统一使用浅灰色
+        if (isDarkTheme) Color(0xFF3A3A3A) else Color(0xFFE5E5EA)
     }
 
-    // 滑块尺寸和内边距
+    // 滑块尺寸
     val thumbSize = 27.dp
-    val padding = 2.dp  // 滑块与轨道的间距
+    val trackPadding = 2.dp
+
+    // 滑块形状
+    val thumbShape = RoundedCornerShape(14.dp)
 
     Box(
         modifier = Modifier
@@ -294,40 +311,21 @@ private fun AutoPageToggle(
             .clip(RoundedCornerShape(16.dp))
             .background(trackColor)
             .clickable { onEnabledChange(!enabled) }
-            .padding(padding),
+            .padding(trackPadding),
         contentAlignment = if (enabled) Alignment.CenterEnd else Alignment.CenterStart
     ) {
+        // 滑块：使用 graphicsLayer 实现简洁的阴影效果
         Box(
             modifier = Modifier
                 .size(thumbSize)
-                .clip(RoundedCornerShape(14.dp))  // 设计稿圆角 14dp
-                .background(Color.White)
-                .drawBehind {
-                    // 滑块阴影: blur=2, color=#00000020, offset=(0,1)
-                    drawIntoCanvas { canvas ->
-                        val paint = Paint().apply {
-                            asFrameworkPaint().apply {
-                                isAntiAlias = true
-                                color = android.graphics.Color.TRANSPARENT
-                                setShadowLayer(
-                                    2f,   // blur radius
-                                    0f,   // dx
-                                    1f,   // dy
-                                    android.graphics.Color.argb(32, 0, 0, 0)  // #00000020
-                                )
-                            }
-                        }
-                        canvas.drawRoundRect(
-                            left = 0f,
-                            top = 0f,
-                            right = size.width,
-                            bottom = size.height,
-                            radiusX = 14.dp.toPx(),
-                            radiusY = 14.dp.toPx(),
-                            paint = paint
-                        )
-                    }
+                .graphicsLayer {
+                    shadowElevation = 2f
+                    shape = thumbShape
+                    spotShadowColor = Color(0x20000000)  // #00000020
+                    ambientShadowColor = Color.Transparent
+                    clip = true
                 }
+                .background(Color.White, thumbShape)
         )
     }
 }

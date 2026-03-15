@@ -19,10 +19,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.outlined.Abc
-import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.outlined.WbSunny
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -189,7 +189,7 @@ fun ReaderBottomBar(
             )
 
             ControlButton(
-                icon = Icons.Outlined.Abc,
+                icon = Icons.Filled.TextFields,
                 label = "字体",
                 onClick = onFontClick,
                 isSelected = activeButton == ReaderPanel.FONT,
@@ -198,7 +198,7 @@ fun ReaderBottomBar(
             )
 
             ControlButton(
-                icon = Icons.Outlined.MoreHoriz,
+                icon = Icons.Filled.Apps,
                 label = "更多",
                 onClick = onMoreClick,
                 isSelected = activeButton == ReaderPanel.MORE,
@@ -447,7 +447,7 @@ fun BottomControlButtons(
         )
 
         ControlButton(
-            icon = Icons.Outlined.Abc,
+            icon = Icons.Filled.TextFields,
             label = "字体",
             onClick = onFontClick,
             isSelected = activeButton == ReaderPanel.FONT,
@@ -456,7 +456,7 @@ fun BottomControlButtons(
         )
 
         ControlButton(
-            icon = Icons.Outlined.MoreHoriz,
+            icon = Icons.Filled.Apps,
             label = "更多",
             onClick = onMoreClick,
             isSelected = activeButton == ReaderPanel.MORE,

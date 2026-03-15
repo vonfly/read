@@ -21,7 +21,7 @@
 
 ### 目标
 实现完整的更多设置面板，支持：
-1. 翻页方式选择（仿真/覆盖/滑动）
+1. 翻页方式选择（仿真/覆盖/横滑）
 2. 自动翻页开关
 3. 设置持久化到 DataStore
 4. 面板切换交互
@@ -66,10 +66,10 @@
 MoreBottomPanel (238dp, 顶部圆角 16dp, 阴影向上)
 ├── PageTurnSection (90dp)
 │   ├── 标题 "翻页方式" (14sp, Medium)
-│   └── SegmentedControl (40dp, 3选项: 仿真/覆盖/滑动)
+│   └── SegmentedControl (40dp, 3选项: 仿真/覆盖/横滑)
 │       ├── Option1 (36dp, "仿真")
 │       ├── Option2 (36dp, "覆盖")
-│       └── Option3 (36dp, "滑动")
+│       └── Option3 (36dp, "横滑")
 │
 ├── AutoPageSection (66dp)
 │   ├── 标题 "自动翻页" (14sp, Medium)
@@ -85,7 +85,7 @@ MoreBottomPanel (238dp, 顶部圆角 16dp, 阴影向上)
 |------|-----|
 | 选项高度 | 36dp |
 | 选项圆角 | 8dp |
-| 选中背景 | 亮色: #FFFFFF / 深色: #5A5A5A |
+| 选中背景 | `$--accent` (Accent 橙红色，所有主题统一) |
 | 未选中背景 | 亮色: #F5F5F5 / 深色: #3A3A3A |
 | 选中阴影 | blur=2, color=#00000020, offset=(0, 1) |
 
@@ -130,7 +130,7 @@ package com.vonfly.read.domain.model
 enum class PageTurnMode {
     REAL,    // 仿真翻页
     COVER,   // 覆盖翻页
-    SLIDE    // 滑动翻页
+    SLIDE    // 横滑翻页
 }
 ```
 
@@ -267,7 +267,7 @@ ReaderPanel.MORE -> MoreBottomPanel(
 
 | 设置项 | 选项值 | 默认值 | 说明 |
 |--------|--------|--------|------|
-| 翻页方式 | REAL / COVER / SLIDE | SLIDE | 仿真/覆盖/滑动 |
+| 翻页方式 | REAL / COVER / SLIDE | SLIDE | 仿真/覆盖/横滑 |
 | 自动翻页 | true / false | false | 开关 |
 
 ---
