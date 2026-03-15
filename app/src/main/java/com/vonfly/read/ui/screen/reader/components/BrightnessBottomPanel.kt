@@ -3,6 +3,7 @@ package com.vonfly.read.ui.screen.reader.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,7 +33,11 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vonfly.read.domain.model.ReaderColorScheme
@@ -117,7 +123,8 @@ fun BrightnessBottomPanel(
                 onBrightnessClick = onBrightnessClick,
                 onFontClick = onFontClick,
                 onMoreClick = onMoreClick,
-                activeButton = ReaderPanel.BRIGHTNESS
+                activeButton = ReaderPanel.BRIGHTNESS,
+                currentColorScheme = currentColorScheme
             )
         }
     }
@@ -202,16 +209,13 @@ private fun BrightnessSlider(
     onBrightnessChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var sliderValue by remember { mutableFloatStateOf(brightness) }
-
-    // 同步外部亮度值
-    if (brightness != sliderValue) {
-        sliderValue = brightness
-    }
+    var trackWidth by remember { mutableFloatStateOf(0f) }
+    val density = LocalDensity.current
 
     // 设计稿规格
     val trackHeight = 28.dp
     val thumbSize = 24.dp
+    val thumbSizePx = with(density) { thumbSize.toPx() }
 
     // 从主题获取颜色
     val trackColor = currentColorScheme.sliderTrack
@@ -222,6 +226,19 @@ private fun BrightnessSlider(
     Box(
         modifier = modifier
             .height(trackHeight)
+            .onSizeChanged { size: IntSize ->
+                trackWidth = size.width.toFloat()
+            }
+            .pointerInput(Unit) {
+                detectDragGestures { change, _ ->
+                    change.consume()
+                    if (trackWidth > thumbSizePx) {
+                        val newX = (change.position.x - thumbSizePx / 2).coerceIn(0f, trackWidth - thumbSizePx)
+                        val newProgress = newX / (trackWidth - thumbSizePx)
+                        onBrightnessChange(newProgress.coerceIn(0f, 1f))
+                    }
+                }
+            }
     ) {
         // 轨道背景
         Box(
@@ -241,11 +258,22 @@ private fun BrightnessSlider(
                 .background(activeColor)
         )
 
-        // 滑块
+        // 滑块 - 参考 CustomProgressBar 的定位逻辑
+        val minWidthPx = with(density) { 26.dp.toPx() }
+        val readWidth = (trackWidth * brightness).coerceAtLeast(minWidthPx)
+        val offset1dp = with(density) { 1.dp.toPx() }
+        val minThumbOffsetPx = offset1dp
+        val maxOffset = (trackWidth - thumbSizePx).coerceAtLeast(minThumbOffsetPx)
+        val thumbOffsetX = if (maxOffset > minThumbOffsetPx) {
+            (readWidth - thumbSizePx - offset1dp).coerceIn(minThumbOffsetPx, maxOffset)
+        } else {
+            minThumbOffsetPx
+        }
+
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = (brightness * 100).dp - 12.dp) // 简化定位
+                .padding(start = with(density) { thumbOffsetX.toDp() })
                 .size(thumbSize)
                 .border(1.dp, thumbBorderColor, CircleShape)
                 .clip(CircleShape)

@@ -58,7 +58,7 @@ enum class ReaderColorScheme(
         text = Color(0xFF5B4636),
         panelBackground = Color(0xFFF5F0E1),
         sliderTrack = Color(0xFFE5E5EA),
-        sliderActive = Color(0xFFC5C5CA),
+        sliderActive = Color(0xFFC5B8A8),
         sliderThumbBorder = Color(0x25000000)
     ),
     // 粉色（护眼）
@@ -67,7 +67,7 @@ enum class ReaderColorScheme(
         text = Color(0xFF5B4636),
         panelBackground = Color(0xFFFFE4E8),
         sliderTrack = Color(0xFFE5E5EA),
-        sliderActive = Color(0xFFC5C5CA),
+        sliderActive = Color(0xFFE5A5A8),
         sliderThumbBorder = Color(0x25000000)
     ),
     // 绿色（护眼）
@@ -76,14 +76,14 @@ enum class ReaderColorScheme(
         text = Color(0xFF1A3A1A),
         panelBackground = Color(0xFFE8F5E9),
         sliderTrack = Color(0xFFE5E5EA),
-        sliderActive = Color(0xFFC5C5CA),
+        sliderActive = Color(0xFFA5C5A5),
         sliderThumbBorder = Color(0x25000000)
     ),
-    // 深色（夜间）- 面板背景使用半透明
+    // 深色（夜间）- 面板背景与内容区域相同
     Night(
         background = Color(0xFF1A1A1A),
         text = Color(0xFFE5E5EA),
-        panelBackground = Color(0xCC2A2A2A),  // #2A2A2ACC (80% opacity)
+        panelBackground = Color(0xFF1A1A1A),  // 与内容区域相同，不透明
         sliderTrack = Color(0xFF3A3A3A),
         sliderActive = Color(0xFF8A8A8A),
         sliderThumbBorder = Color(0x33FFFFFF)
@@ -94,7 +94,7 @@ enum class ReaderColorScheme(
         text = Color(0xFF5B4636),
         panelBackground = Color(0xFFFDF8F0),
         sliderTrack = Color(0xFFE5E5EA),
-        sliderActive = Color(0xFFC5C5CA),
+        sliderActive = Color(0xFFC5B8A8),
         sliderThumbBorder = Color(0x25000000)
     )
 }

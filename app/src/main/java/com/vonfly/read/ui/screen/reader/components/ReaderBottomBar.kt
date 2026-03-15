@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vonfly.read.domain.model.ReaderColorScheme
 import com.vonfly.read.ui.screen.reader.ReaderPanel
 import com.vonfly.read.ui.theme.Accent
 import com.vonfly.read.ui.theme.Foreground
@@ -59,7 +60,7 @@ import com.vonfly.read.ui.theme.ForegroundTertiary
  * 设计规格来自 Pencil 设计稿 Read-Control-Bar 页面：
  * - 面板高度: 132dp
  * - 顶部圆角: 16dp
- * - 背景色: #F9F9F9
+ * - 背景色: #F9F9F9 (默认)，随主题变化
  * - 顶部边框: 1px, 颜色 #E8E8E8
  * - 顶部 padding: 16dp（边框上方）
  */
@@ -67,6 +68,7 @@ import com.vonfly.read.ui.theme.ForegroundTertiary
 fun ReaderBottomBar(
     currentPage: Int,
     totalPages: Int,
+    currentColorScheme: ReaderColorScheme,
     onPreviousPage: () -> Unit,
     onNextPage: () -> Unit,
     onProgressChange: (Float) -> Unit,
@@ -114,7 +116,7 @@ fun ReaderBottomBar(
                 }
             }
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-            .background(Color(0xFFF9F9F9))
+            .background(currentColorScheme.panelBackground)
     ) {
         Column(
             modifier = Modifier
@@ -141,6 +143,7 @@ fun ReaderBottomBar(
             // 进度条
             CustomProgressBar(
                 progress = progress,
+                currentColorScheme = currentColorScheme,
                 onProgressChange = { newProgress ->
                     progress = newProgress
                     onProgressChange(newProgress)
@@ -166,10 +169,11 @@ fun ReaderBottomBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             ControlButton(
-                icon = Icons.AutoMirrored.Filled.List,
-                label = "目录",
-                onClick = onCatalogClick,
-                isSelected = activeButton == ReaderPanel.CATALOG,
+                icon = Icons.Outlined.WbSunny,
+                label = "亮度",
+                onClick = onBrightnessClick,
+                isSelected = activeButton == ReaderPanel.BRIGHTNESS,
+                currentColorScheme = currentColorScheme,
                 modifier = Modifier.weight(1f)
             )
 
@@ -178,6 +182,7 @@ fun ReaderBottomBar(
                 label = "亮度",
                 onClick = onBrightnessClick,
                 isSelected = activeButton == ReaderPanel.BRIGHTNESS,
+                currentColorScheme = currentColorScheme,
                 modifier = Modifier.weight(1f)
             )
 
@@ -186,6 +191,7 @@ fun ReaderBottomBar(
                 label = "字体",
                 onClick = onFontClick,
                 isSelected = activeButton == ReaderPanel.FONT,
+                currentColorScheme = currentColorScheme,
                 modifier = Modifier.weight(1f)
             )
 
@@ -194,6 +200,7 @@ fun ReaderBottomBar(
                 label = "更多",
                 onClick = onMoreClick,
                 isSelected = activeButton == ReaderPanel.MORE,
+                currentColorScheme = currentColorScheme,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -206,14 +213,15 @@ fun ReaderBottomBar(
  *
  * 设计规格来自 Pencil 设计稿 ProgressBar 组件：
  * - 轨道高度: 28dp, 圆角 14dp
- * - 轨道背景色: #E5E5EA
- * - 已读部分: 高度 28dp, 圆角 14dp, 颜色 #C5C5CA, 阴影 blur 4
+ * - 轨道背景色: #E5E5EA (亮色) / #3A3A3A (深色)
+ * - 已读部分: 高度 28dp, 圆角 14dp, 颜色 #C5C5CA (亮色) / #8A8A8A (深色)
  * - 滑块: 24×24dp, 圆角 12dp (圆形), 白色 #FFFFFF, y=2dp
  * - 滑块阴影: blur 2, color #00000025, offset (0, 1)
  */
 @Composable
 private fun CustomProgressBar(
     progress: Float,
+    currentColorScheme: ReaderColorScheme,
     onProgressChange: (Float) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -225,11 +233,11 @@ private fun CustomProgressBar(
     val thumbSize = 24.dp
     val thumbSizePx = with(density) { thumbSize.toPx() }
 
-    // 颜色
-    val trackColor = Color(0xFFE5E5EA)       // 轨道背景
-    val activeColor = Color(0xFFC5C5CA)      // 已读部分
-    val thumbColor = Color.White             // 滑块
-    val thumbShadowColor = Color(0x25000000) // 滑块阴影 15%
+    // 使用主题颜色
+    val trackColor = currentColorScheme.sliderTrack
+    val activeColor = currentColorScheme.sliderActive
+    val thumbColor = Color.White
+    val thumbShadowColor = currentColorScheme.sliderThumbBorder
 
     Box(
         modifier = modifier
@@ -342,6 +350,7 @@ private fun PageButton(
  * - 图标尺寸: 22×22dp
  * - 图标和文字间距: 4dp
  * - 文字字号: 10sp
+ * - 颜色随主题变化
  */
 @Composable
 private fun ControlButton(
@@ -349,8 +358,13 @@ private fun ControlButton(
     label: String,
     onClick: () -> Unit,
     isSelected: Boolean,
+    currentColorScheme: ReaderColorScheme,
     modifier: Modifier = Modifier
 ) {
+    // 非选中状态使用主题文字色，选中状态使用 Accent 色
+    val iconColor = if (isSelected) Accent else currentColorScheme.text
+    val textColor = if (isSelected) Accent else currentColorScheme.text.copy(alpha = 0.6f)
+
     Box(
         modifier = modifier
             .height(66.dp)
@@ -365,7 +379,7 @@ private fun ControlButton(
             Icon(
                 imageVector = icon,
                 contentDescription = label,
-                tint = if (isSelected) Accent else Foreground,
+                tint = iconColor,
                 modifier = Modifier.size(22.dp)
             )
 
@@ -373,7 +387,7 @@ private fun ControlButton(
                 text = label,
                 fontSize = 10.sp,
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-                color = if (isSelected) Accent else ForegroundTertiary
+                color = textColor
             )
         }
     }
@@ -387,6 +401,7 @@ private fun ControlButton(
  * - 高度: 66dp
  * - 水平内边距: 20dp
  * - 按钮平均分配空间
+ * - 所有颜色随主题变化
  */
 @Composable
 fun BottomControlButtons(
@@ -395,6 +410,7 @@ fun BottomControlButtons(
     onFontClick: () -> Unit,
     onMoreClick: () -> Unit,
     activeButton: ReaderPanel? = null,
+    currentColorScheme: ReaderColorScheme,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -410,6 +426,7 @@ fun BottomControlButtons(
             label = "目录",
             onClick = onCatalogClick,
             isSelected = activeButton == ReaderPanel.CATALOG,
+            currentColorScheme = currentColorScheme,
             modifier = Modifier.weight(1f)
         )
 
@@ -418,6 +435,7 @@ fun BottomControlButtons(
             label = "亮度",
             onClick = onBrightnessClick,
             isSelected = activeButton == ReaderPanel.BRIGHTNESS,
+            currentColorScheme = currentColorScheme,
             modifier = Modifier.weight(1f)
         )
 
@@ -426,6 +444,7 @@ fun BottomControlButtons(
             label = "字体",
             onClick = onFontClick,
             isSelected = activeButton == ReaderPanel.FONT,
+            currentColorScheme = currentColorScheme,
             modifier = Modifier.weight(1f)
         )
 
@@ -434,6 +453,7 @@ fun BottomControlButtons(
             label = "更多",
             onClick = onMoreClick,
             isSelected = activeButton == ReaderPanel.MORE,
+            currentColorScheme = currentColorScheme,
             modifier = Modifier.weight(1f)
         )
     }

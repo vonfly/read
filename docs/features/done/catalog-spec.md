@@ -24,18 +24,32 @@
 | 宽度 | 375dp（fillMaxWidth） |
 | 高度 | 730dp（约占屏幕 90%） |
 | 圆角 | 顶部 16dp，底部 0dp |
-| 背景 | `#F9F9F9` |
-| 顶部边框 | 1dp（无颜色，使用背景分隔） |
+| 背景 | `currentColorScheme.panelBackground`（随主题变化） |
 | 阴影 | blur=20, color=`#00000025`, offset=(0, 4) |
 | 布局 | 垂直 |
 
+### 主题颜色适配
+
+> ⚠️ 所有面板内颜色都随主题变化，使用 `currentColorScheme: ReaderColorScheme`
+
+| 元素 | 亮色主题 | 深色（Night）主题 |
+|------|----------|-------------------|
+| 面板背景 | `currentColorScheme.panelBackground` | `currentColorScheme.panelBackground` |
+| 标题颜色 | `currentColorScheme.text` | `currentColorScheme.text` (#E5E5EA) |
+| 次要文字 | `currentColorScheme.text.copy(alpha = 0.6f)` | `currentColorScheme.text.copy(alpha = 0.6f)` |
+| 边框颜色 | `#F0F0F0` | `#3A3A3A` |
+| 章节标题（非当前）| `currentColorScheme.text.copy(alpha = 0.6f)` | `currentColorScheme.text.copy(alpha = 0.6f)` |
+| 锁图标 | `currentColorScheme.text.copy(alpha = 0.4f)` | `currentColorScheme.text.copy(alpha = 0.4f)` |
+
 ### Header（目录标题栏）
+
+> ⚠️ 所有颜色都随主题变化
 
 | 属性 | 值 |
 |------|-----|
 | 高度 | 56dp |
 | 水平内边距 | 20dp |
-| 底部边框 | 1dp, `#F0F0F0` |
+| 底部边框 | 1dp, 亮色主题 `#F0F0F0` / 深色主题 `#3A3A3A` |
 | 布局 | 水平，两端对齐，垂直居中 |
 
 **标题文字**
@@ -45,14 +59,14 @@
 | 字体 | Inter |
 | 字号 | 18sp |
 | 字重 | 600 (SemiBold) |
-| 颜色 | `$--foreground` → `Foreground` |
+| 颜色 | `currentColorScheme.text`（随主题变化） |
 
 **排序按钮**
 | 属性 | 值 |
 |------|-----|
 | 布局 | 水平，间距 4dp，垂直居中 |
-| 图标 | `arrow-up-down` (Lucide), 16dp, `$--foreground-secondary` |
-| 文字 | "正序" / "倒序", 14sp, normal, `$--foreground-secondary` |
+| 图标 | `arrow-up-down` (Lucide), 16dp, `currentColorScheme.text.copy(alpha = 0.6f)` |
+| 文字 | "正序" / "倒序", 14sp, normal, `currentColorScheme.text.copy(alpha = 0.6f)` |
 
 ### 目录列表（CatalogList）
 
@@ -72,13 +86,14 @@
 | 布局 | 水平，两端对齐，垂直居中 |
 | 宽度 | fillMaxWidth |
 
-**章节项类型**
+**章节项类型（主题适配）**
+
+> ⚠️ 所有颜色都随主题变化，使用 `currentColorScheme: ReaderColorScheme`
 
 | 类型 | 背景色 | 标题颜色 | 标题字重 | 右侧标记 |
 |------|--------|---------|---------|---------|
-| 当前章节 | `$--primary-light` → `PrimaryLight` | `$--primary` → `Primary` | 500 (Medium) | "当前" 12sp, 500, `$--primary` |
-| 免费章节 | 透明 | `$--foreground` → `Foreground` | normal | "免费" 12sp, 500, `$--success` |
-| 锁定章节 | 透明 | `$--foreground` → `Foreground` | normal | 锁图标 14dp, `$--foreground-tertiary` |
+| 当前章节 | `currentColorScheme.background.copy(alpha = 0.5f)` | `currentColorScheme.text` | 500 (Medium) | "当前" 12sp, 500, `currentColorScheme.text` |
+| 非当前章节 | 透明 | `currentColorScheme.text.copy(alpha = 0.6f)` | normal | "免费" 12sp, 500, `Success` 或 锁图标 14dp, `currentColorScheme.text.copy(alpha = 0.4f)` |
 
 **章节标题文字**
 | 属性 | 值 |
@@ -111,16 +126,18 @@
 
 ### UI 验收（视觉还原）
 - [ ] 面板圆角：顶部 16dp，底部 0dp
-- [ ] 面板背景色：`#F9F9F9`
+- [ ] 面板背景色：随主题变化 (`currentColorScheme.panelBackground`)
 - [ ] 面板阴影：blur=20, color=`#00000025`
-- [ ] Header 高度 56dp，底部边框 1dp `#F0F0F0`
-- [ ] 标题"目录"：18sp, SemiBold, `Foreground`
-- [ ] 排序按钮：图标 16dp + 文字 14sp, `ForegroundSecondary`
+- [ ] Header 高度 56dp，底部边框颜色随主题变化（亮色 `#F0F0F0` / 深色 `#3A3A3A`）
+- [ ] 标题"目录"：18sp, SemiBold, 颜色随主题变化
+- [ ] 排序按钮：图标 16dp + 文字 14sp, 颜色使用 60% 透明度
 - [ ] 章节项高度 48dp，内边距 20dp
-- [ ] 当前章节背景：`PrimaryLight`，标题 `Primary` Medium
-- [ ] 免费章节标签：`Success` 色
-- [ ] 锁定章节图标：14dp, `ForegroundTertiary`
+- [ ] 当前章节背景：50% 透明度的主题背景色，标题使用主题文字色 Medium
+- [ ] 非当前章节标题：60% 透明度的主题文字色
+- [ ] 免费章节标签：`Success` 色（绿色，不随主题变化）
+- [ ] 锁定章节图标：14dp, 40% 透明度的主题文字色
 - [ ] 底部控制按钮复用 `BottomControlButtons`，目录按钮高亮 `Accent`
+- [ ] **深色模式验证**：所有文字在深色背景上清晰可见
 
 ### 功能验收
 - [ ] 默认状态：TopBar 显示，底部显示进度条 + 控制按钮

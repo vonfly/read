@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.LibraryAdd
 import androidx.compose.material.icons.outlined.Settings
+import com.vonfly.read.domain.model.ReaderColorScheme
 import com.vonfly.read.ui.theme.Accent
 import com.vonfly.read.ui.theme.Foreground
 import com.vonfly.read.ui.theme.ForegroundSecondary
@@ -51,6 +52,7 @@ import com.vonfly.read.ui.theme.ForegroundSecondary
 @Composable
 fun ReaderTopBar(
     bookTitle: String,
+    currentColorScheme: ReaderColorScheme,
     onNavigateBack: () -> Unit,
     onAddToShelfClick: () -> Unit,
     onBookmarkClick: () -> Unit,
@@ -59,8 +61,8 @@ fun ReaderTopBar(
     isInShelf: Boolean = false,
     isBookmarked: Boolean = false
 ) {
-    // 设计稿背景色: #F9F9F9 (实色)
-    val backgroundColor = Color(0xFFF9F9F9)
+    // 使用主题背景色
+    val backgroundColor = currentColorScheme.panelBackground
 
     Box(
         modifier = modifier
@@ -78,7 +80,7 @@ fun ReaderTopBar(
                 .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 返回按钮 - 24×24 dp, 颜色: Foreground
+            // 返回按钮 - 24×24 dp, 颜色随主题
             IconButton(
                 onClick = onNavigateBack,
                 modifier = Modifier.size(24.dp)
@@ -86,17 +88,17 @@ fun ReaderTopBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "返回",
-                    tint = Foreground,
+                    tint = currentColorScheme.text,
                     modifier = Modifier.size(24.dp)
                 )
             }
 
-            // 书名 - 17 sp, SemiBold, Foreground
+            // 书名 - 17 sp, SemiBold, 颜色随主题
             Text(
                 text = bookTitle,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Foreground,
+                color = currentColorScheme.text,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier

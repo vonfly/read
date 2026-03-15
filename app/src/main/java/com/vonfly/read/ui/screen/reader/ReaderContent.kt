@@ -154,6 +154,7 @@ fun ReaderContent(
         ) {
             ReaderTopBar(
                 bookTitle = uiState.bookTitle.ifEmpty { "三体" },
+                currentColorScheme = uiState.readerSettings.colorScheme,
                 onNavigateBack = onNavigateBack,
                 onAddToShelfClick = onAddToShelfClick,
                 onBookmarkClick = onBookmarkClick,
@@ -188,6 +189,7 @@ fun ReaderContent(
                         ReaderBottomBar(
                             currentPage = uiState.currentPageIndex + 1,
                             totalPages = uiState.totalPages,
+                            currentColorScheme = uiState.readerSettings.colorScheme,
                             onPreviousPage = onPreviousPage,
                             onNextPage = onNextPage,
                             onProgressChange = onProgressChange,
@@ -204,6 +206,7 @@ fun ReaderContent(
                             chapters = uiState.chapters,
                             currentChapterIndex = uiState.currentChapterIndex,
                             isSortAscending = uiState.isSortAscending,
+                            currentColorScheme = uiState.readerSettings.colorScheme,
                             onChapterClick = onChapterClick,
                             onToggleSortOrder = onToggleSortOrder,
                             onCatalogClick = onCatalogClick,

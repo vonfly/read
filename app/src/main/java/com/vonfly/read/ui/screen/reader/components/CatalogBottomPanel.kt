@@ -32,12 +32,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vonfly.read.domain.model.Chapter
+import com.vonfly.read.domain.model.ReaderColorScheme
 import com.vonfly.read.ui.screen.reader.ReaderPanel
-import com.vonfly.read.ui.theme.Foreground
-import com.vonfly.read.ui.theme.ForegroundSecondary
-import com.vonfly.read.ui.theme.ForegroundTertiary
-import com.vonfly.read.ui.theme.Primary
-import com.vonfly.read.ui.theme.PrimaryLight
 import com.vonfly.read.ui.theme.Success
 import kotlinx.collections.immutable.ImmutableList
 
@@ -48,7 +44,7 @@ import kotlinx.collections.immutable.ImmutableList
  * 设计规格来自 Pencil 设计稿 Read-Contents 页面：
  * - 面板高度: 730dp
  * - 顶部圆角: 16dp
- * - 背景色: #F9F9F9
+ * - 背景色: 随主题变化 (默认 #F9F9F9)
  * - 阴影: blur=20, color=#00000025
  */
 @Composable
@@ -56,6 +52,7 @@ fun CatalogBottomPanel(
     chapters: ImmutableList<Chapter>,
     currentChapterIndex: Int,
     isSortAscending: Boolean,
+    currentColorScheme: ReaderColorScheme,
     onChapterClick: (Int) -> Unit,
     onToggleSortOrder: () -> Unit,
     onCatalogClick: () -> Unit,
@@ -100,11 +97,12 @@ fun CatalogBottomPanel(
                 }
             }
             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-            .background(Color(0xFFF9F9F9))
+            .background(currentColorScheme.panelBackground)
     ) {
         // Header - 高度 56dp
         CatalogHeader(
             isSortAscending = isSortAscending,
+            currentColorScheme = currentColorScheme,
             onToggleSortOrder = onToggleSortOrder
         )
 
@@ -125,6 +123,7 @@ fun CatalogBottomPanel(
                 ChapterItem(
                     chapter = chapter,
                     isCurrentChapter = isCurrentChapter,
+                    currentColorScheme = currentColorScheme,
                     onClick = { onChapterClick(originalIndex) }
                 )
             }
@@ -136,7 +135,8 @@ fun CatalogBottomPanel(
             onBrightnessClick = onBrightnessClick,
             onFontClick = onFontClick,
             onMoreClick = onMoreClick,
-            activeButton = ReaderPanel.CATALOG
+            activeButton = ReaderPanel.CATALOG,
+            currentColorScheme = currentColorScheme
         )
     }
 }
@@ -147,15 +147,25 @@ fun CatalogBottomPanel(
  * 设计规格：
  * - 高度: 56dp
  * - 水平内边距: 20dp
- * - 底部边框: 1dp, #F0F0F0
- * - 标题: 18sp, SemiBold, Foreground
- * - 排序按钮: 图标 16dp + 文字 14sp, ForegroundSecondary
+ * - 底部边框: 1dp, #F0F0F0（亮色主题）/ #3A3A3A（深色主题）
+ * - 标题: 18sp, SemiBold, 随主题变化
+ * - 排序按钮: 图标 16dp + 文字 14sp, 随主题变化（60% 透明度）
  */
 @Composable
 private fun CatalogHeader(
     isSortAscending: Boolean,
+    currentColorScheme: ReaderColorScheme,
     onToggleSortOrder: () -> Unit
 ) {
+    // 边框颜色：深色主题使用深色边框，亮色主题使用浅色边框
+    val dividerColor = if (currentColorScheme == ReaderColorScheme.Night) {
+        Color(0xFF3A3A3A)
+    } else {
+        Color(0xFFF0F0F0)
+    }
+    // 次要文字颜色：使用主题文字颜色的 60% 透明度
+    val secondaryTextColor = currentColorScheme.text.copy(alpha = 0.6f)
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -172,7 +182,7 @@ private fun CatalogHeader(
                 text = "目录",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Foreground
+                color = currentColorScheme.text
             )
 
             // 排序按钮
@@ -189,13 +199,13 @@ private fun CatalogHeader(
                     },
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
-                    tint = ForegroundSecondary
+                    tint = secondaryTextColor
                 )
                 Text(
                     text = if (isSortAscending) "正序" else "倒序",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
-                    color = ForegroundSecondary
+                    color = secondaryTextColor
                 )
             }
         }
@@ -204,7 +214,7 @@ private fun CatalogHeader(
         HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            color = Color(0xFFF0F0F0)
+            color = dividerColor
         )
     }
 }
@@ -216,20 +226,34 @@ private fun CatalogHeader(
  * - 高度: 48dp
  * - 水平内边距: 20dp
  * - 标题字号: 15sp
- * - 当前章节背景: PrimaryLight
- * - 当前章节标题: Primary, Medium
+ * - 当前章节背景: 主题背景色 50% 透明度
+ * - 当前章节标题: 主题文字色, Medium
+ * - 非当前章节标题: 主题文字色 60% 透明度, Normal
  * - 免费标签: Success, 12sp, 500
- * - 锁图标: 14dp, ForegroundTertiary
+ * - 锁图标: 14dp, 主题文字色 40% 透明度
  */
 @Composable
 private fun ChapterItem(
     chapter: Chapter,
     isCurrentChapter: Boolean,
+    currentColorScheme: ReaderColorScheme,
     onClick: () -> Unit
 ) {
-    val backgroundColor = if (isCurrentChapter) PrimaryLight else Color.Transparent
-    val titleColor = if (isCurrentChapter) Primary else Foreground
+    // 当前章节使用主题色高亮，其他章节透明背景
+    val backgroundColor = if (isCurrentChapter) {
+        currentColorScheme.background.copy(alpha = 0.5f)
+    } else {
+        Color.Transparent
+    }
+    // 所有章节都使用主题文字色，非当前章节降低透明度
+    val titleColor = if (isCurrentChapter) {
+        currentColorScheme.text
+    } else {
+        currentColorScheme.text.copy(alpha = 0.6f)
+    }
     val titleWeight = if (isCurrentChapter) FontWeight.Medium else FontWeight.Normal
+    // 锁图标颜色：使用主题文字色的 40% 透明度
+    val lockIconColor = currentColorScheme.text.copy(alpha = 0.4f)
 
     Row(
         modifier = Modifier
@@ -259,7 +283,7 @@ private fun ChapterItem(
                     text = "当前",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Primary
+                    color = currentColorScheme.text
                 )
             }
             chapter.isFree -> {
@@ -275,7 +299,7 @@ private fun ChapterItem(
                     imageVector = Icons.Outlined.Lock,
                     contentDescription = "锁定",
                     modifier = Modifier.size(14.dp),
-                    tint = ForegroundTertiary
+                    tint = lockIconColor
                 )
             }
         }
