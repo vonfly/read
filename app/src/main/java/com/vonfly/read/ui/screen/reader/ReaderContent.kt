@@ -1,18 +1,13 @@
 package com.vonfly.read.ui.screen.reader
 
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,13 +30,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -141,11 +131,22 @@ fun ReaderContent(
         }
 
         // 顶部控制栏 - 绑定 visiblePanel 状态（只有默认状态显示）
+        // 拦截顶部面板区域的点击事件，阻止传播到外层
         AnimatedVisibility(
             visible = uiState.isControlsVisible && uiState.visiblePanel == null,
             enter = fadeIn(),
             exit = fadeOut(),
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .pointerInput(Unit) {
+                    // 拦截点击事件但不做处理，阻止传播到外层
+                    awaitEachGesture {
+                        val down = awaitFirstDown()
+                        down.consume()
+                        val up = waitForUpOrCancellation()
+                        up?.consume()
+                    }
+                }
         ) {
             ReaderTopBar(
                 bookTitle = uiState.bookTitle.ifEmpty { "三体" },
@@ -159,17 +160,21 @@ fun ReaderContent(
         }
 
         // 底部面板 - 原地切换内容，无动画
+        // 拦截面板区域的点击事件，阻止传播到外层，避免点击空白区域隐藏面板
         if (uiState.isControlsVisible) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .pointerInput(Unit) {
-                        // 使用 Main pass（子→父），先于外层处理并消费事件
+                        // 拦截点击事件但不做处理，阻止传播到外层
+                        // 按钮点击会先被按钮自己消费，不受影响
                         awaitEachGesture {
                             val down = awaitFirstDown()
-                            down.consume()  // 消费 down 事件
+                            // 显式消费 down 事件，阻止传播到外层
+                            down.consume()
                             val up = waitForUpOrCancellation()
-                            up?.consume()   // 消费 up 事件
+                            // 消费 up 事件（如果存在）
+                            up?.consume()
                         }
                     }
             ) {
@@ -239,8 +244,6 @@ private fun ReaderPageLayer(
 ) {
     val settings = LocalReaderSettings.current
     val colorScheme = settings.colorScheme
-    val context = LocalContext.current
-    val clipboardManager = LocalClipboardManager.current
 
     LazyColumn(
         modifier = modifier.padding(horizontal = 20.dp),
@@ -275,17 +278,9 @@ private fun ReaderPageLayer(
                 text = paragraph,
                 fontSize = settings.fontSize,
                 lineHeight = settings.fontSize * 1.3f, // 设计稿 1.8 对应 Compose 1.3
-                color = colorScheme.text,
-                modifier = Modifier.combinedClickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,  // 无点击波纹效果
-                    onClick = {},  // 空实现，让点击事件继续传播到外层
-                    onLongClick = {
-                        // 长按复制
-                        clipboardManager.setText(AnnotatedString(paragraph))
-                        Toast.makeText(context, "已复制", Toast.LENGTH_SHORT).show()
-                    }
-                )
+                color = colorScheme.text
+                // 不添加任何点击/长按 modifier，让所有点击事件传播到外层 pointerInput
+                // TODO: 后续如需长按复制功能，在 LazyColumn 层级使用更底层的手势检测
             )
         }
 

@@ -95,10 +95,10 @@ fun ReaderBottomBar(
                             isAntiAlias = true
                             color = android.graphics.Color.TRANSPARENT
                             setShadowLayer(
-                                16f,   // blur radius
+                                20f,   // blur radius (设计稿 blur=20)
                                 0f,    // dx
-                                -6f,   // dy 负数 = 向上
-                                android.graphics.Color.argb(40, 0, 0, 0)
+                                -4f,   // dy 负数 = 向上
+                                android.graphics.Color.argb(37, 0, 0, 0)  // #00000025 ≈ 15%
                             )
                         }
                     }

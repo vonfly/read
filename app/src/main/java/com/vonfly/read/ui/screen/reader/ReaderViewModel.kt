@@ -75,23 +75,16 @@ class ReaderViewModel @Inject constructor(
     }
 
     private fun loadMockChapters() {
-        // Mock 章节数据（后续替换为真实数据）
+        // Mock 章节数据（与 totalPages 保持一致，当前为 7 页）
+        // TODO: 后续从后端获取真实章节数据和章节-页映射关系
         val mockChapters = persistentListOf(
-            Chapter(id = "1", bookId = bookId, title = "第1章 科学边界(一)", index = 0, isFree = true),
-            Chapter(id = "2", bookId = bookId, title = "第2章 科学边界(二)", index = 1, isFree = true),
-            Chapter(id = "3", bookId = bookId, title = "第3章 科学边界(三)", index = 2, isFree = true),
-            Chapter(id = "4", bookId = bookId, title = "第4章 红岸工程(一)", index = 3, isFree = false),
-            Chapter(id = "5", bookId = bookId, title = "第5章 红岸工程(二)", index = 4, isFree = false),
-            Chapter(id = "6", bookId = bookId, title = "第6章 红岸工程(三)", index = 5, isFree = false),
-            Chapter(id = "7", bookId = bookId, title = "第7章 三体问题(一)", index = 6, isFree = false),
-            Chapter(id = "8", bookId = bookId, title = "第8章 三体问题(二)", index = 7, isFree = false),
-            Chapter(id = "9", bookId = bookId, title = "第9章 三体问题(三)", index = 8, isFree = false),
-            Chapter(id = "10", bookId = bookId, title = "第10章 地球往事(一)", index = 9, isFree = false),
-            Chapter(id = "11", bookId = bookId, title = "第11章 地球往事(二)", index = 10, isFree = false),
-            Chapter(id = "12", bookId = bookId, title = "第12章 地球往事(三)", index = 11, isFree = false),
-            Chapter(id = "13", bookId = bookId, title = "第13章 宇宙闪烁", index = 12, isFree = false),
-            Chapter(id = "14", bookId = bookId, title = "第14章 智子", index = 13, isFree = false),
-            Chapter(id = "15", bookId = bookId, title = "第15章 黑暗森林", index = 14, isFree = false)
+            Chapter(id = "1", bookId = bookId, title = "第1章 科学边界", index = 0, isFree = true),
+            Chapter(id = "2", bookId = bookId, title = "第2章 红岸基地", index = 1, isFree = true),
+            Chapter(id = "3", bookId = bookId, title = "第3章 三体问题", index = 2, isFree = true),
+            Chapter(id = "4", bookId = bookId, title = "第4章 地球往事", index = 3, isFree = false),
+            Chapter(id = "5", bookId = bookId, title = "第5章 宇宙闪烁", index = 4, isFree = false),
+            Chapter(id = "6", bookId = bookId, title = "第6章 智子", index = 5, isFree = false),
+            Chapter(id = "7", bookId = bookId, title = "第7章 黑暗森林", index = 6, isFree = false)
         )
         _uiState.update { it.copy(chapters = mockChapters) }
     }
@@ -139,7 +132,10 @@ class ReaderViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 currentPageIndex = newPageIndex,
-                chapterTitle = pages[newPageIndex].chapterTitle ?: state.chapterTitle
+                chapterTitle = pages[newPageIndex].chapterTitle ?: state.chapterTitle,
+                // 当前使用 1:1 映射：页索引 = 章节索引
+                // TODO: 后续根据后端返回的章节-页映射关系计算
+                currentChapterIndex = newPageIndex
             )
         }
 
@@ -162,7 +158,14 @@ class ReaderViewModel @Inject constructor(
     }
 
     fun toggleControlsVisibility() {
-        _uiState.update { it.copy(isControlsVisible = !it.isControlsVisible) }
+        _uiState.update { state ->
+            val newVisible = !state.isControlsVisible
+            state.copy(
+                isControlsVisible = newVisible,
+                // 显示面板时重置为默认控制栏，隐藏时保留当前状态
+                visiblePanel = if (newVisible) null else state.visiblePanel
+            )
+        }
     }
 
     fun hideControls() {
@@ -229,15 +232,17 @@ class ReaderViewModel @Inject constructor(
     }
 
     fun onChapterClick(chapterIndex: Int) {
-        // 计算该章节的起始页索引
         val chapters = _uiState.value.chapters
         if (chapterIndex in chapters.indices) {
-            // 简化处理：跳转到对应章节的第一页（实际需要根据章节-页映射计算）
-            onPageChanged(chapterIndex)
+            // 当前使用 1:1 映射：章节索引 = 页索引
+            // TODO: 后续根据后端返回的章节-页映射关系计算
+            val targetPageIndex = chapterIndex
+            onPageChanged(targetPageIndex)
             _uiState.update { state ->
                 state.copy(
                     currentChapterIndex = chapterIndex,
-                    visiblePanel = null
+                    visiblePanel = null,
+                    isControlsVisible = false  // 隐藏所有面板
                 )
             }
         }
