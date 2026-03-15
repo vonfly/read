@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -42,7 +43,7 @@ import kotlinx.collections.immutable.ImmutableList
  *
  * 用于阅读器底部面板的目录模式，原地切换显示。
  * 设计规格来自 Pencil 设计稿 Read-Contents 页面：
- * - 面板高度: 730dp
+ * - 面板高度: 屏幕高度的 90%（适配不同屏幕尺寸）
  * - 顶部圆角: 16dp
  * - 背景色: 随主题变化 (默认 #F9F9F9)
  * - 阴影: blur=20, color=#00000025
@@ -70,7 +71,7 @@ fun CatalogBottomPanel(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height(730.dp)
+            .fillMaxHeight(0.9f)  // 面板高度为屏幕高度的 90%，适配不同屏幕尺寸
             .drawBehind {
                 drawIntoCanvas { canvas ->
                     val paint = Paint().apply {

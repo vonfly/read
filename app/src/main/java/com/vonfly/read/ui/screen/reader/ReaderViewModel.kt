@@ -1,5 +1,6 @@
 package com.vonfly.read.ui.screen.reader
 
+import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -121,6 +122,7 @@ class ReaderViewModel @Inject constructor(
     private fun observeReaderSettings() {
         viewModelScope.launch {
             readerPreferencesRepository.observeSettings().collect { settings ->
+                Log.d("ReaderViewModel", "observeReaderSettings: brightness=${settings.brightness}")
                 _uiState.update { it.copy(readerSettings = settings) }
             }
         }
@@ -280,8 +282,10 @@ class ReaderViewModel @Inject constructor(
 
     // 亮度面板相关方法
     fun onBrightnessChange(brightness: Float) {
+        Log.d("ReaderViewModel", "onBrightnessChange: brightness=$brightness")
         viewModelScope.launch {
             readerPreferencesRepository.updateBrightness(brightness)
+            Log.d("ReaderViewModel", "Brightness updated in DataStore")
         }
     }
 

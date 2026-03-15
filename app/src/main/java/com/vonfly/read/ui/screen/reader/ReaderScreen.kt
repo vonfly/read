@@ -1,6 +1,7 @@
 package com.vonfly.read.ui.screen.reader
 
 import android.app.Activity
+import android.util.Log
 import android.view.WindowManager
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHost
@@ -30,6 +31,9 @@ fun ReaderScreen(
 
     // 屏幕常亮
     KeepScreenOn(enabled = true)
+
+    // 应用屏幕亮度
+    ScreenBrightness(uiState.readerSettings.brightness)
 
     // 事件处理
     LaunchedEffect(Unit) {
@@ -85,6 +89,46 @@ private fun KeepScreenOn(enabled: Boolean = true) {
         }
         onDispose {
             window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
+    }
+}
+
+/**
+ * 屏幕亮度控制
+ *
+ * 通过修改 Window.attributes.screenBrightness 控制当前 Activity 的屏幕亮度。
+ * 注意：此设置只影响当前应用窗口，不会修改系统全局亮度。
+ *
+ * @param brightness 亮度值 0.0-1.0
+ */
+@Composable
+private fun ScreenBrightness(brightness: Float) {
+    val context = LocalContext.current
+    val activity = context as? Activity
+
+    // 调试日志
+    LaunchedEffect(brightness) {
+        Log.d("ReaderScreen", "ScreenBrightness: brightness=$brightness")
+    }
+
+    DisposableEffect(brightness) {
+        Log.d("ReaderScreen", "DisposableEffect: setting brightness=$brightness")
+        activity?.window?.let { window ->
+            val layoutParams = window.attributes
+            // 0.0 表示使用系统亮度，但为了用户体验，最小值设为 0.01
+            // 避免 0.0 时用户误认为功能失效
+            layoutParams.screenBrightness = brightness.coerceIn(0.01f, 1.0f)
+            window.attributes = layoutParams
+            Log.d("ReaderScreen", "Screen brightness set to: ${layoutParams.screenBrightness}")
+        }
+        onDispose {
+            // 离开阅读器时恢复系统默认亮度
+            Log.d("ReaderScreen", "onDispose: restoring system brightness")
+            activity?.window?.let { window ->
+                val layoutParams = window.attributes
+                layoutParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+                window.attributes = layoutParams
+            }
         }
     }
 }

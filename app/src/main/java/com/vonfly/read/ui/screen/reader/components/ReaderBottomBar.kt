@@ -137,7 +137,8 @@ fun ReaderBottomBar(
             PageButton(
                 icon = Icons.Default.ChevronLeft,
                 onClick = onPreviousPage,
-                enabled = currentPage > 1
+                enabled = currentPage > 1,
+                currentColorScheme = currentColorScheme
             )
 
             // 进度条
@@ -155,7 +156,8 @@ fun ReaderBottomBar(
             PageButton(
                 icon = Icons.Default.ChevronRight,
                 onClick = onNextPage,
-                enabled = currentPage < totalPages
+                enabled = currentPage < totalPages,
+                currentColorScheme = currentColorScheme
             )
         }
 
@@ -169,10 +171,10 @@ fun ReaderBottomBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             ControlButton(
-                icon = Icons.Outlined.WbSunny,
-                label = "亮度",
-                onClick = onBrightnessClick,
-                isSelected = activeButton == ReaderPanel.BRIGHTNESS,
+                icon = Icons.AutoMirrored.Filled.List,
+                label = "目录",
+                onClick = onCatalogClick,
+                isSelected = activeButton == ReaderPanel.CATALOG,
                 currentColorScheme = currentColorScheme,
                 modifier = Modifier.weight(1f)
             )
@@ -317,13 +319,18 @@ private fun CustomProgressBar(
  * - 按钮尺寸: 30×30dp
  * - 圆角: 20dp（接近圆形）
  * - 图标尺寸: 24×24dp
+ * - 颜色随主题变化
  */
 @Composable
 private fun PageButton(
     icon: ImageVector,
     onClick: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean,
+    currentColorScheme: ReaderColorScheme
 ) {
+    // 禁用状态使用 40% 透明度
+    val iconTint = if (enabled) currentColorScheme.text else currentColorScheme.text.copy(alpha = 0.4f)
+
     Box(
         modifier = Modifier
             .size(30.dp)  // 设计稿：30×30dp
@@ -335,7 +342,7 @@ private fun PageButton(
             imageVector = icon,
             contentDescription = null,
             modifier = Modifier.size(24.dp),
-            tint = if (enabled) Foreground else Color(0xFFCCCCCC)
+            tint = iconTint
         )
     }
 }

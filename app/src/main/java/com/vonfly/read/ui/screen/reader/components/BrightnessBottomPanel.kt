@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -201,6 +202,7 @@ private fun BrightnessSection(
  * 设计规格：
  * - 轨道高度: 28dp, 圆角 14dp
  * - 滑块: 24x24dp, 圆形, 白色 #FFFFFF
+ * - 最小已读宽度: 26dp，确保滑块始终在已读部分上
  */
 @Composable
 private fun BrightnessSlider(
@@ -249,18 +251,19 @@ private fun BrightnessSlider(
                 .background(trackColor)
         )
 
-        // 已读部分
+        // 已读部分 - 最小宽度 26dp，确保滑块始终在已读部分上
+        val minWidthPx = with(density) { 26.dp.toPx() }
+        val readWidth = (trackWidth * brightness).coerceAtLeast(minWidthPx)
         Box(
             modifier = Modifier
-                .fillMaxWidth(brightness)
+                .width(with(density) { readWidth.toDp() })
                 .height(trackHeight)
                 .clip(RoundedCornerShape(14.dp))
                 .background(activeColor)
         )
 
         // 滑块 - 参考 CustomProgressBar 的定位逻辑
-        val minWidthPx = with(density) { 26.dp.toPx() }
-        val readWidth = (trackWidth * brightness).coerceAtLeast(minWidthPx)
+        // 设计稿：滑块左边缘对齐已读部分右边缘，再向左偏移 1dp
         val offset1dp = with(density) { 1.dp.toPx() }
         val minThumbOffsetPx = offset1dp
         val maxOffset = (trackWidth - thumbSizePx).coerceAtLeast(minThumbOffsetPx)
@@ -273,7 +276,7 @@ private fun BrightnessSlider(
         Box(
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .padding(start = with(density) { thumbOffsetX.toDp() })
+                .offset(x = with(density) { thumbOffsetX.toDp() })
                 .size(thumbSize)
                 .border(1.dp, thumbBorderColor, CircleShape)
                 .clip(CircleShape)
